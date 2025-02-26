@@ -1,0 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body & Font */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #a1a1a1;
+  color: #333;
+}
+
+.home-page {
+  width: 100%;
+  margin: 0;
+  background-color: #fff;
+}
+
+/* ===== Header / Navbar ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ddd;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4caf50;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #4caf50;
+}
+
+.signup-container {
+  display: flex;
+  align-items: center;
+}
+
+.signup-button {
+  background-color: #4caf50; /* Green color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: #45a049;
+}

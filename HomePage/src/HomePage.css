@@ -1,0 +1,333 @@
+/* Reset some basic defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body & Font */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #a1a1a1;
+  color: #333;
+}
+
+.home-page {
+  width: 100%;
+  margin: 0;
+  background-color: #fff;
+}
+
+
+/* ===== Header / Navbar ===== */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ddd;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.brand-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #4CAF50;
+}
+
+.signup-container {
+  display: flex;
+  align-items: center;
+}
+
+.signup-button {
+  background-color: #4CAF50;  /* Green color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.signup-button:hover {
+  background-color: #45a049;
+}
+
+
+/* ===== Search Bar ===== */
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem 0;
+  background-color: #f2f2f2;
+}
+
+.search-input {
+  width: 50%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 25px 0 0 25px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.search-button {
+  padding: 0.8rem 1.5rem;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 0 25px 25px 0;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #45a049;
+}
+
+/* ===== Slideshow ===== */
+.slideshow-container {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  background-color: #ccc; /* fallback while images load */
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slide-caption {
+  position: absolute;
+  bottom: 20px;
+  left: 40px;
+  background-color: rgba(0,0,0,0.5);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.slide-caption h3 {
+  color: #fff;
+  margin: 0;
+}
+
+.slide-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0,0,0,0.4);
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  cursor: pointer;
+  font-size: 1.2rem;
+  z-index: 10;
+  transition: background-color 0.3s ease;
+}
+
+.slide-arrow:hover {
+  background-color: rgba(0,0,0,0.6);
+}
+
+.left-arrow {
+  left: 10px;
+}
+
+.right-arrow {
+  right: 10px;
+}
+
+/* ===== Rent/Offer Section ===== */
+.action-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.action-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.action-image {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  display: block;
+}
+
+.action-content {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0,0,0,0.3);
+  color: #fff;
+  text-align: center;
+  padding: 1rem;
+}
+
+.action-content h2 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.action-button {
+  padding: 0.7rem 1.5rem;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.action-button:hover {
+  background-color: #45a049;
+}
+
+/* ===== Offers Section ===== */
+.offers-section {
+  padding: 2rem;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: #4CAF50;
+}
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.offer-card {
+  background-color: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.offer-card-header h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.offer-card-body p {
+  margin: 0.3rem 0;
+  line-height: 1.4;
+}
+
+.details-button {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.details-button:hover {
+  background-color: #45a049;
+}
+
+/* ===== Footer ===== */
+.footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #fff;
+}

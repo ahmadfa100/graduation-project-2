@@ -1,13 +1,15 @@
 .divider {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 2rem 0;
+    align-items: center !important;
+    justify-content: center !important;
+   position: relative;
+    padding: 2rem ;
 }
 
 .divider-line {
+    
     flex: 1;
-    height: 1px;
+    height: 1px !important;
     background-color: #4caf50;
 }
 

@@ -1,0 +1,19 @@
+body {
+    font-family: 'Poppins', sans-serif !important;
+    color: #333 !important;
+  background-color: #f5f5f5;
+}
+#price {
+    color: white;
+    background: red;
+    padding: 5px 10px;
+    border-radius: 8px;
+    display: inline-block;
+}
+.custom-element {
+    all: unset;  /* Resets all styles */
+    display: block;  /* Ensures it remains visible */
+  width: 100%;
+  color: black;
+  }
+  

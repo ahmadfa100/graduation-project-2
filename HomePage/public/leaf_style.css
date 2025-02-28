@@ -1,0 +1,21 @@
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background-color: #4caf50;
+}
+
+.divider-icon {
+    margin: 0 1rem;
+}
+
+.divider-icon img {
+    width: 24px;
+    height: 24px;
+}

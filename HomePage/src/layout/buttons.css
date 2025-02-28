@@ -1,0 +1,42 @@
+.button-container {
+    display: flex;
+    gap: 30px;
+    position: relative;
+    left: 25%;
+  }
+  
+  .custom-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.3s ease;
+}
+  .like {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    border: 2px solid #007bff;
+    color: #007bff;
+    background: transparent;
+    padding: 8px 15px;
+    font-size: 24px;
+    font-weight: bolder;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .custom-button:hover {
+    background: #007bff;
+    color: white;
+  }
+  
+  .icon {
+   width: 24px;
+  }

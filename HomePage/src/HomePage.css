@@ -328,7 +328,28 @@ body {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer; /* Helps user see it’s interactive */
+  position: relative; /* Needed if we use a pseudo-element overlay */
 }
+
+/* Lift and stronger shadow on hover */
+.offer-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  border-color: #4CAF50; /* or any highlight color you prefer */
+}
+
+/* Optional subtle overlay on hover */
+.offer-item:hover::before {
+  content: '';
+  position: absolute;
+  inset: 0; /* fill the entire card area */
+  background-color: rgba(76, 175, 80, 0.05); /* subtle green overlay */
+  pointer-events: none; /* ensure clicks still pass through */
+  transition: background-color 0.3s ease;
+}
+
 
 /* Container for the image on the left */
 .offer-image-container {

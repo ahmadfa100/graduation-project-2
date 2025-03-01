@@ -11,7 +11,7 @@ function App() {
   return (
     <div>
      <Header></Header>
-      <AddOffer></AddOffer>
+     <Offferdetail  location="Irbid" size="2" RentalType="annul"  title="Distinctive agricultural land in west Irbid for rent" price="2000" description="This fertile agricultural land in west Irbid is an ideal choice for farming enthusiasts and professionals alike. Spanning over 2 dunums, the land features nutrient-rich soil perfect for growing a variety of crops, from vegetables to fruit trees. Its strategic location offers easy access to water resources and is well-connected to nearby markets and towns. The surrounding landscape ensures a peaceful environment, with ample sunlight and favorable weather conditions year-round. Whether you're looking to expand your agricultural business or start a new venture, this land provides excellent potential for high yields and sustainable farming."/>
       <Footer></Footer>
     </div>
   )

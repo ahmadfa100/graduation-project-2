@@ -1,0 +1,187 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    height: 90vh;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Chat Header */
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #fff;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.chat-header img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.chat-header h3 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Chat Messages */
+.chat-box {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    background-color: #fafafa;
+}
+
+/* Message Styling */
+.message {
+    /* Adjusted to 70% for better readability */
+    
+    max-width: 25rem;
+    padding: 10px 15px;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+/* Sent Message Alignment */
+.send {
+    align-self: flex-end; /* Align to the right */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Align content to the right */
+}
+
+.send .message {
+    background: #e1f8e2; /* Light green background for sent messages */
+    color: #333;
+}
+
+/* Received Message Alignment */
+.received {
+    align-self: flex-start; /* Align to the left */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align content to the left */
+}
+
+.received .message {
+    background: #e5e5ea; /* Light gray background for received messages */
+    color: #333;
+}
+
+/* Timestamp Alignment */
+.timestamp {
+    font-size: 11px;
+    color: #888;
+    margin-top: 5px;
+}
+
+.send .timestamp {
+    text-align: right; /* Align timestamp to the right for sent messages */
+}
+
+.received .timestamp {
+    text-align: left; /* Align timestamp to the left for received messages */
+}
+
+/* Image Message Styling */
+.image-message {
+    max-width: 50%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+/* Chat Input */
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 2px solid #e0e0e0;
+    background: #fff;
+    position: relative;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    border-radius: 20px;
+    background: #f2f2f2;
+    margin: 0 10px;
+}
+
+.chat-input button {
+    background: #4caf50;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+    margin-left: 10px;
+}
+
+.chat-input button:hover {
+    background: #45a049;
+}
+
+/* Camera & Upload Buttons */
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+.icon-btn:hover {
+    color: #333;
+}
+
+/* File Upload Input */
+.file-input {
+    display: none; /* Hide default input */
+}
+
+.upload-label {
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+    padding: 5px;
+    margin-right: 5px;
+}
+
+.upload-label:hover {
+    color: #333;
+}

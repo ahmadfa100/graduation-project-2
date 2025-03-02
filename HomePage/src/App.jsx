@@ -8,6 +8,7 @@ import ArticleDetail from "./ArticleDetail";
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 import AddOffer from "./addOffer";
+// <<<<<<< HEAD
 import "./App.css";
 import { Link } from 'react-router-dom';
 
@@ -23,6 +24,22 @@ function App() {
       <Footer />
     </Router>
   );
-}
+};
+// =======
+// import Chat from "./chat";
+// import"./App.css";
+
+
+// function App() {
+//   return (
+//     <div>
+     
+//     <Chat chat_title="Distinctive agricultural land in west Irbid for rent" offer_image="./Lands/Map.jpg"></Chat>
+      
+//     </div>
+//   )
+//   ;
+// >>>>>>> 99fb4fc6e41afbc606bdd395546988625b20ef45
+// }
 
 export default App;

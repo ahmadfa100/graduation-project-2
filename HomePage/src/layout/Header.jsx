@@ -14,8 +14,8 @@ const Header = () => {
       </div>
 
       <nav className="nav-links">
-        <a href="/">Home</a>
-        <a href="/areas">Areas</a>
+        <a href="./HomePage.js">Home</a>
+        <a href="./areas">Areas</a>
         <a href="/education">Education</a>
         <a href="/about">About</a>
       </nav>

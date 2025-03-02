@@ -1,11 +1,9 @@
-/* Reset some basic defaults */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Body & Font */
 body {
   font-family: 'Arial', sans-serif;
   background-color: #a1a1a1;
@@ -18,76 +16,6 @@ body {
   background-color: #fff;
 }
 
-
-/* ===== Header / Navbar ===== */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #f8f9fa;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid #ddd;
-  border-radius: 10px;
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -ms-border-radius: 10px;
-  -o-border-radius: 10px;
-}
-
-.logo-container {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.logo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-}
-
-.brand-name {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #4CAF50;
-}
-
-.nav-links {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-.nav-links a:hover {
-  color: #4CAF50;
-}
-
-.signup-container {
-  display: flex;
-  align-items: center;
-}
-
-.signup-button {
-  background-color: #4CAF50;  /* Green color */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-.signup-button:hover {
-  background-color: #45a049;
-}
 
 
 /* ===== Search Bar ===== */
@@ -124,135 +52,6 @@ body {
   background-color: #45a049;
 }
 
-/* ===== Slideshow ===== */
-.slideshow-container {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  overflow: hidden;
-  margin-bottom: 2rem;
-  background-color: #ccc; /* fallback while images load */
-}
-
-.slide {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.slide.active {
-  opacity: 1;
-}
-
-.slide-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.slide-caption {
-  position: absolute;
-  bottom: 20px;
-  left: 40px;
-  background-color: rgba(0,0,0,0.5);
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-}
-
-.slide-caption h3 {
-  color: #fff;
-  margin: 0;
-}
-
-.slide-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(0,0,0,0.4);
-  color: #fff;
-  border: none;
-  padding: 1rem;
-  cursor: pointer;
-  font-size: 1.2rem;
-  z-index: 10;
-  transition: background-color 0.3s ease;
-}
-
-.slide-arrow:hover {
-  background-color: rgba(0,0,0,0.6);
-}
-
-.left-arrow {
-  left: 10px;
-}
-
-.right-arrow {
-  right: 10px;
-}
-
-/* ===== Rent/Offer Section ===== */
-.action-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  padding: 2rem;
-  background-image: url("../public/Lands/green-tea-bud-leaves-green-tea-plantations-morning.jpg");
-  background-size: cover; /* Ensures it covers the div */
-  background-position: bottom;
-  background-color: rgba(255, 255, 255, 0.5); 
-  background-blend-mode: lighten;
-}
-
-.action-card {
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
-
-.action-image {
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  display: block;
-}
-
-.action-content {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background-color: rgba(0,0,0,0.3);
-  color: #fff;
-  text-align: center;
-  padding: 1rem;
-}
-
-.action-content h2 {
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-}
-
-.action-button {
-  padding: 0.7rem 1.5rem;
-  background-color: #4CAF50;
-  border: none;
-  border-radius: 20px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-}
-
-.action-button:hover {
-  background-color: #45a049;
-}
 
 /* ===== Offers Section ===== */
 .offers-section {
@@ -317,8 +116,7 @@ body {
   gap: 1rem;
 }
 
-/* Each offer is a horizontal "card" */
-/* ========== Updated OFFERS SECTION STYLES ========== */
+
 
 /* Each offer is a horizontal "card" */
 .offer-item {
@@ -329,31 +127,28 @@ body {
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  cursor: pointer; /* Helps user see it’s interactive */
-  position: relative; /* Needed if we use a pseudo-element overlay */
+  cursor: pointer; 
+  position: relative; 
 }
 
-/* Lift and stronger shadow on hover */
 .offer-item:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  border-color: #4CAF50; /* or any highlight color you prefer */
+  border-color: #4CAF50; 
 }
 
-/* Optional subtle overlay on hover */
 .offer-item:hover::before {
   content: '';
   position: absolute;
-  inset: 0; /* fill the entire card area */
-  background-color: rgba(76, 175, 80, 0.05); /* subtle green overlay */
-  pointer-events: none; /* ensure clicks still pass through */
+  inset: 0;
+  background-color: rgba(76, 175, 80, 0.05); 
+  pointer-events: none; 
   transition: background-color 0.3s ease;
 }
 
 
-/* Container for the image on the left */
 .offer-image-container {
-  width: 250px; /* adjust to your liking */
+  width: 250px; 
   min-width: 250px;
   max-height: 180px;
   overflow: hidden;
@@ -381,21 +176,21 @@ body {
 .offer-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;  /* ensures price is on the right */
+  justify-content: space-between;  
   margin-bottom: 0.5rem;
 }
 
 .offer-title {
   font-size: 1.2rem;
   margin: 0;
-  padding-right: 1rem; /* spacing between title and price if needed */
+  padding-right: 1rem; 
 }
 
 /* Price on the right - you can style it in red if you prefer */
 .offer-price {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #d32f2f; /* or #e60000 for a bright red */
+  color: #d32f2f;
 }
 
 /* Smaller text for area & lease period */
@@ -414,11 +209,10 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-/* Make the image container bigger to reduce white space on the right */
 .offer-image-container {
-  width: 350px;   /* Try 350px or 400px, adjust as needed */
+  width: 350px;   
   min-width: 350px;
-  max-height: 220px; /* You can adjust height too */
+  max-height: 220px; 
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -444,7 +238,7 @@ body {
 .offer-header {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* ensures price is on the right */
+  justify-content: space-between; 
   margin-bottom: 0.5rem;
 }
 
@@ -456,7 +250,7 @@ body {
 .offer-price {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #d32f2f; /* or any color you like for the price */
+  color: #d32f2f;
 }
 
 .offer-subtitle {
@@ -486,13 +280,10 @@ body {
   background-color: #45a049;
 }
 
-/* Example "favorite" heart button */
 .favorite-button {
   font-size: 1.1rem;
-  /* If you want the heart bigger or a different color, add more styles here */
 }
 
-/* The "More" or "Load More" button at the bottom */
 .more-button-container {
   text-align: center;
   margin-top: 1rem;
@@ -511,33 +302,8 @@ body {
 .more-button:hover {
   background-color: #45a049;
 }
-/* ===== Footer ===== */
-.footer {
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  padding: 2rem 1rem;
-  margin-top: 2rem;
-}
-
-.footer-links {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 1rem;
-}
-
-.footer-links a {
-  color: #ccc;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-  color: #fff;
-}
 
 .action-button svg {
-  font-size: 1.2rem;    /* Make icons a bit bigger */
-  color: white;         /* or any color */
+  font-size: 1.2rem;    
+  color: white;        
 }

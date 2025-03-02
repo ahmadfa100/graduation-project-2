@@ -1,0 +1,66 @@
+.agricultural-project {
+    margin-bottom: 3rem;
+  }
+  
+  .agricultural-project h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .section-intro {
+    margin-bottom: 2rem;
+    color: #555;
+  }
+  
+  .project-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start; 
+  }
+  
+  
+  .step-item {
+    flex: 1 1 250px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1rem;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .step-item h4 {
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  .step-item p {
+    color: #555;
+  }
+  
+  .green-button {
+    background-color: #4caf50; 
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
+  }
+  
+  .green-button:hover {
+    background-color: #45a049;
+  }
+  
+  .read-more-content {
+    margin-top: 1rem;
+    color: #555;
+  }
+  

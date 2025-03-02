@@ -11,8 +11,8 @@ body {
     display: inline-block;
 }
 .custom-element {
-    all: unset;  /* Resets all styles */
-    display: block;  /* Ensures it remains visible */
+    all: unset;  
+    display: block;  
   width: 100%;
   color: black;
   }

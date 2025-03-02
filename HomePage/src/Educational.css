@@ -1,0 +1,145 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #a1a1a1;
+    color: #333;
+  }
+  
+  .home-page {
+    width: 100%;
+    margin: 0;
+    background-color: #fff;
+  }
+  
+  .educational-content {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .cards-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+  
+  .card {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    flex: 1 1 300px;
+    max-width: 350px;
+    text-align: center;
+    padding: 1rem;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .card-image {
+  
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+  
+  }
+  
+  .card h3 {
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+  
+  .card p {
+    margin-bottom: 1rem;
+    color: #555;
+  }
+  
+  .green-button {
+    background-color: #4caf50; 
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+  
+  .green-button:hover {
+    background-color: #45a049;
+  }
+  
+  
+  
+  /* ===== Educational Videos Section ===== */
+  .educational-videos {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .educational-videos h2 {
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    color: #2c7d2f;
+  }
+  
+  .video-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+  
+  .video-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    max-width: 320px;
+    text-align: center;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .video-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  .video-placeholder {
+    width: 100%;
+    height: 180px;
+    background-color: #000;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .video-placeholder iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+  
+  .video-card p {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+
+  

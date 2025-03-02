@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Article Page</title>
+  <style>
+    /* Reset some default styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #fff; /* Page background is white */
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    /* Container with gray background and relative positioning */
+    .content-section {
+      max-width: 1200px;
+      background-color: #eaeaea;
+      margin: 60px auto; /* Centers horizontally, 60px spacing top/bottom */
+      padding: 60px 20px 20px; /* Extra top padding to accommodate the overlapping image */
+      position: relative; /* Needed for absolutely positioning the image */
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1); /* Subtle shadow around the container */
+    }
+
+    /* Overlapping image */
+    .content-section img {
+      position: absolute;
+      top: -80px; /* Moves the image above the container */
+      left: 50%;  /* Centers the image horizontally */
+      transform: translateX(-50%);
+      width: 220px; /* Fixed width for the image */
+      height: auto;
+      border-radius: 8px;  /* Rounds the image corners */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* Slight shadow to lift the image */
+    }
+
+    /* Center and constrain the text */
+    .content-section h2,
+    .content-section p {
+      text-align: center;
+      margin: 20px auto;
+      max-width: 500px; 
+    }
+
+    /* Simple media query for smaller screens */
+    @media (max-width: 600px) {
+      .content-section {
+        margin: 30px auto; 
+        padding: 80px 10px 20px; /* Adjust padding for mobile */
+      }
+      .content-section img {
+        width: 180px; /* Slightly smaller on mobile */
+        top: -60px;   /* Move it a bit less above the container */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="content-section">
+    <!-- Overlapping image with improved alt text -->
+    <img 
+      src="https://img.freepik.com/free-photo/copy-space-boy-holding-stack-books_23-2148469935.jpg"
+      alt="Smiling boy holding a stack of books">
+
+    <h2>Article Title</h2>
+    <p>
+      This is where your article text goes. The image at the top is
+      partially overlapping this gray section, matching the layout
+      you described.
+    </p>
+    <p>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+      Suspendisse in lacus id erat vestibulum aliquet.
+    </p>
+  </section>
+
+</body>
+</html>

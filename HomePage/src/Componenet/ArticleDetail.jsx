@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import '../style/AgriculturalProject.css';
+import '../style/ArticleDetail.css';
 import Header from "../layout/Header";
 import Footer from "../layout/Footer";
 
@@ -45,6 +45,7 @@ const ArticleDetail = () => {
   }
 
   return (
+    <>
     <div className="article-detail">
       <section className="content-section">
         <img src={article.image} alt={article.alt} />
@@ -54,6 +55,7 @@ const ArticleDetail = () => {
         ))}
       </section>
     </div>
+    </>
   );
 };
 

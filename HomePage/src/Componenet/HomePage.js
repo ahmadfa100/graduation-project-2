@@ -13,7 +13,11 @@ import Season from "./Season";
 import OffersSection from "./OffersSection ";
 
 import { FaPhone, FaComments, FaHeart, FaRegHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
 function HomePage() {
+  const navigate = useNavigate();
+
   const [favoriteOffers, setFavoriteOffers] = useState([]);
 
   const toggleFavorite = (offerId) => {
@@ -59,7 +63,12 @@ function HomePage() {
           />
           <div className="action-content">
             <h2>Offer Land</h2>
-            <button className="action-button card_home">Offer Land</button>
+            <button
+              className="action-button card_home"
+              onClick={() => navigate("/addOffer")}
+            >
+              Offer Land
+            </button>{" "}
           </div>
         </div>
       </div>

@@ -34,6 +34,10 @@
     margin: 20px auto;
     max-width: 500px;
   }
+  .article-detail {
+    margin-top: 100px; 
+  }
+  
   /* Responsive adjustments */
   @media (max-width: 600px) {
     .content-section {

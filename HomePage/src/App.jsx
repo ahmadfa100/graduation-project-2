@@ -41,7 +41,6 @@
 
 // export default App;
 
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./Componenet/HomePage";
@@ -53,21 +52,20 @@ import AddOffer from "./Componenet/addOffer";
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 import "./App.css";
-// import { Link } from "react-router-dom"; // Remove or comment out if unused
 
 function App() {
   return (
     <Router>
       <Header />
-      
+
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/offer" element={<Offferdetail />} />
         <Route path="/education" element={<Educational />} />
         <Route path="/article/:id" element={<ArticleDetail />} />
-        <Route path="/add-offer" element={<AddOffer />} />
+        <Route path="/AddOffer" element={<AddOffer />} />
       </Routes>
-      
+
       <Footer />
     </Router>
   );

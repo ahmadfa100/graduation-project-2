@@ -129,3 +129,16 @@
   .favorite-button {
     font-size: 1.1rem;
   }
+
+  .card_home:hover {
+    background-color: #88ee8b;
+  }
+
+  .card_home {
+    background-color: #4CAF50; /* Default background */
+    transition: background-color 0.3s ease;
+  }
+  
+  .card_home:hover {
+    background-color: #88ee8b; /* Hover background */
+  }

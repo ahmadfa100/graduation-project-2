@@ -1,5 +1,5 @@
 
-import"./addOffer.css";
+import"../style/addOffer.css";
 
 function unit_input(type,unit,message,name){
     return(

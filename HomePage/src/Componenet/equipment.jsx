@@ -1,5 +1,5 @@
 import React from 'react';
-import './Educational.css';
+import '../style/Educational.css';
 
 function JordanFarmingEquipment() {
   return (

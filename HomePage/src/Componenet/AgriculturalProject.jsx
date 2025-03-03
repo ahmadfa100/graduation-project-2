@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AgriculturalProject.css"; 
+import "../style/AgriculturalProject.css"; 
 
 export default function AgriculturalProject() {
   const [showMore1, setShowMore1] = useState(false);

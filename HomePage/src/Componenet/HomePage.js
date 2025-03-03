@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import './HomePage.css'; 
+import '../style/HomePage.css'; 
 
-import './layout/Header.css';  
-import './layout/Footer.css';  
-import Header from './layout/Header';  
-import Divider from './leaf';
-import Footer from './layout/Footer';  
+import '../layout/Header.css';  
+import '../layout/Footer.css';  
+import Header from '../layout/Header';  
+import Divider from '../layout/leaf';
+import Footer from '../layout/Footer';  
 
 import { offers } from './HomePage_data';
 
@@ -13,7 +13,6 @@ import Season from './Season';
 import OffersSection from './OffersSection ';
 
 import { FaPhone, FaComments, FaHeart, FaRegHeart } from 'react-icons/fa';
-
 function HomePage() {
   const [favoriteOffers, setFavoriteOffers] = useState([]);
 

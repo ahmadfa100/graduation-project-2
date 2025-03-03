@@ -1,4 +1,4 @@
-import "./layout/buttons.css";
+import "./buttons.css";
 import { useState } from "react";
 import { FaPhoneAlt, FaComments } from "react-icons/fa";
 

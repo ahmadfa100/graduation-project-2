@@ -5,16 +5,17 @@ import "./Header.css";
 const Header = () => {
   return (
     <header className="header">
-      <div className="logo-container">
+      <Link to="/" className="logo-container">
         <img src="./logo.jpg" alt="Logo" className="logo" />
         <span className="brand-name">Green Bridge</span>
-      </div>
+      </Link>
 
       <nav className="nav-links">
         <Link to="/">Home</Link>
         <Link to="/areas">Areas</Link>
         <Link to="/education">Education</Link>
         <Link to="/about">About</Link>
+        
       </nav>
 
       <div className="signup-container">

@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
-import './ArticleDetail.css'; 
-import Header from "./layout/Header";
-import Footer from "./layout/Footer";
+import '../style/AgriculturalProject.css';
+import Header from "../layout/Header";
+import Footer from "../layout/Footer";
 
 const articles = [
   {

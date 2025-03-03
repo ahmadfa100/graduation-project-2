@@ -1,5 +1,5 @@
 import React from "react";
-import "./chat.css";
+import "../style/chat.css";
 import { FaCamera, FaPaperPlane, FaUpload } from "react-icons/fa";
 
 function ChatInput() {

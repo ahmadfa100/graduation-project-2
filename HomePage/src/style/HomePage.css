@@ -108,7 +108,6 @@ body {
 .details-button:hover {
   background-color: #45a049;
 }
-/* ---- OFFERS LIST (Horizontal Cards) ---- */
 
 .offers-list {
   display: flex;
@@ -118,11 +117,10 @@ body {
 
 
 
-/* Each offer is a horizontal "card" */
 .offer-item {
   display: flex;
   background-color: #fff;
-  border: 1px solid #eee;
+  border: 1px solid #9b9b9b;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
@@ -172,7 +170,6 @@ body {
   justify-content: center;
 }
 
-/* Top row: Title + Price aligned horizontally */
 .offer-header {
   display: flex;
   align-items: center;
@@ -186,20 +183,17 @@ body {
   padding-right: 1rem; 
 }
 
-/* Price on the right - you can style it in red if you prefer */
 .offer-price {
   font-size: 1.2rem;
   font-weight: bold;
   color: #d32f2f;
 }
 
-/* Smaller text for area & lease period */
 .offer-subtitle {
   color: #666;
   margin: 0.3rem 0;
 }
 
-/* Buttons container */
 .offer-item {
   display: flex;
   background-color: #fff;
@@ -225,7 +219,6 @@ body {
   object-fit: cover;
 }
 
-/* Right side details */
 .offer-details {
   flex: 1;
   padding: 1rem;
@@ -234,7 +227,6 @@ body {
   justify-content: center;
 }
 
-/* Top row: Title + Price on the right */
 .offer-header {
   display: flex;
   align-items: center;
@@ -266,23 +258,14 @@ body {
 }
 
 /* Shared style for all action buttons */
-.action-button {
-  background-color: #4CAF50;
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  padding: 0.6rem 1.2rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.offer-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
 }
 
-.action-button:hover {
-  background-color: #45a049;
-}
+/* Shared style for all action buttons */
 
-.favorite-button {
-  font-size: 1.1rem;
-}
 
 .more-button-container {
   text-align: center;

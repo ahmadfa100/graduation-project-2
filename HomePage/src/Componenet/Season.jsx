@@ -1,7 +1,7 @@
 // Season.jsx
 import React, { useState, useEffect } from 'react';
-import { seasons } from './HomePage_data'; // Adjust path if needed
-import './Season.css'; // optional if you have custom slideshow styles
+import { seasons } from './HomePage_data'; 
+import '../style/Season.css'; 
 
 function Season() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,6 +20,7 @@ function Season() {
   const handleNextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % seasons.length);
   };
+
 
   return (
     <div className="slideshow-container">

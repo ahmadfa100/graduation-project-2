@@ -1,8 +1,8 @@
 import React from 'react';
-import './Educational.css'; 
-import './equipment.css';
-import './AgriculturalProject.css';
-import Divider from './leaf';
+import '../style/Educational.css'; 
+import '../style/equipment.css';
+import '../style/AgriculturalProject.css';
+import Divider from '../layout/leaf';
 
 
 import  JordanFarmingEquipment from './equipment'  

@@ -4,7 +4,7 @@
     height: 400px;
     overflow: hidden;
     margin-bottom: 2rem;
-    background-color: #ccc; /* fallback while images load */
+    background-color: #ccc; 
   }
   
   .slide {
@@ -76,7 +76,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     padding: 2rem;
-    background-image: url("../public/Lands/green-tea-bud-leaves-green-tea-plantations-morning.jpg");
+    background-image: url("../../public/Lands/green-tea-bud-leaves-green-tea-plantations-morning.jpg");
     background-size: cover; /* Ensures it covers the div */
     background-position: bottom;
     background-color: rgba(255, 255, 255, 0.5); 
@@ -113,17 +113,19 @@
   }
   
   .action-button {
-    padding: 0.7rem 1.5rem;
-    background-color: #4CAF50;
+    background-color: #007bff;
+    color: #fff;
     border: none;
     border-radius: 20px;
-    color: #fff;
+    padding: 0.6rem 1.2rem;
     cursor: pointer;
-    font-size: 1rem;
     transition: background-color 0.3s ease;
   }
   
   .action-button:hover {
-    background-color: #45a049;
+    background-color: #64afff;
   }
   
+  .favorite-button {
+    font-size: 1.1rem;
+  }

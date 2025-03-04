@@ -23,14 +23,15 @@
   margin-top: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .unit {
   position: relative;
   top: 10px;
   background-color: rgb(51, 184, 51);
-  padding: 10.9px 5px 10.9px;
+  padding: 8px 5px 8px;
+  width: 50px;
 height: fit-content;
   border-radius: 5px 0 0 5px;
   color: white;

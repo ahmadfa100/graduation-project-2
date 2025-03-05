@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+}
+.mission-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.mission-text {
+    flex: 1;
+    padding-right: 20px;
+}
+.mission-text h2 {
+    color: #4CAF50;
+}
+.mission-image img {
+    max-width: 200px;
+    border-radius: 10px;
+}

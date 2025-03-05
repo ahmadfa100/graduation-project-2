@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+}
+.signup-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 600px;
+}
+.signup-container h2 {
+    margin-bottom: 5px;
+}
+.input-group {
+    margin: 10px 0;
+}
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.gender-options {
+    display: flex;
+    justify-content:start;
+}
+.gender-options label {
+    display: flex;
+    align-items: center;
+}
+.signup-btn {
+    width: 100%;
+    padding: 10px;
+    background: #8ebf45;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.login-link {
+    font-size: 14px;
+    margin-top: 10px;
+}
+.login-link a {
+    color: blue;
+    text-decoration: none;
+}
+.input-group label{
+margin: left 0%;;
+}

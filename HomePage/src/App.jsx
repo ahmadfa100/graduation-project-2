@@ -10,25 +10,18 @@ import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 import AddOffer from "./Componenet/addOffer";
 import "./App.css";
-
+import AccountInf from "./Componenet/AccountInf";
+import About  from "./Componenet/about";
+import LogIn from "./Componenet/LogIn";
+import SignUp from "./Componenet/SignUp";
 function App() {
   return (
-    <Router>
-      <Header />
 
-      
- <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/offer" element={<Offferdetail />} />
-       <Route path="/education" element={<Educational />} />
-        <Route path="/article/:id" element={<ArticleDetail />} />
-      <Route path="/AddOffer" element={<AddOffer />} />
-   </Routes>
-
-     
-
-      <Footer />
-    </Router>
+<div>
+ <Header/>
+<LogIn/>
+ <Footer/>
+</div>
   );
 }
 

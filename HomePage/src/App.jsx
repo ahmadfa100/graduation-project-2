@@ -55,4 +55,35 @@ projects, recreational spaces, or future development. Spanning 2 dunums, this pr
    a viewing and explore the potential of this beautiful property!"
 
 
-></Offferdetail> */
+></Offferdetail> */import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./Component/HomePage";
+import OfferDetail from "./Component/OfferDetail";
+import Educational from "./Component/Educational";
+import ArticleDetail from "./Component/ArticleDetail";
+// import Chat from "./Component/Chat";
+
+import Header from "./layout/Header";
+import Footer from "./layout/Footer";
+import AddOffer from "./Component/AddOffer";
+import "./App.css";
+
+function App() {
+  return (
+    <Router>
+      <Header />
+
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/offer" element={<OfferDetail />} />
+        <Route path="/education" element={<Educational />} />
+        <Route path="/article/:id" element={<ArticleDetail />} />
+        <Route path="/add-offer" element={<AddOffer />} />
+      </Routes>
+
+      <Footer />
+    </Router>
+  );
+}
+
+export default App;

@@ -1,0 +1,37 @@
+/* about.css */
+
+
+.about-page {
+   
+    background-color: #f9f9f9; 
+    padding: 2rem 0;         
+  }
+  
+  .mission-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 900px;
+    margin: 0 auto; 
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .mission-text {
+    flex: 1;
+    padding-right: 20px;
+  }
+  
+  .mission-text h2 {
+    color: #4CAF50;
+  }
+  
+  .mission-image img {
+    max-width: 200px;
+    border-radius: 10px;
+  }
+  

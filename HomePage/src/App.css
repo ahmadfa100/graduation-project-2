@@ -1,8 +1,11 @@
 body {
-    font-family: 'Poppins', sans-serif !important;
-    color: #333 !important;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif !important;
+  color: #333 !important;
   background-color: #f5f5f5;
 }
+
 #price {
     color: white;
     background: red;
@@ -17,3 +20,12 @@ body {
   color: black;
   }
   
+  .App {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;  
+  }
+  
+  .content {
+    flex: 1;          
+  }

@@ -1,3 +1,4 @@
+// Header.jsx
 import React from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
@@ -15,11 +16,13 @@ const Header = () => {
         <Link to="/areas">Areas</Link>
         <Link to="/education">Education</Link>
         <Link to="/about">About</Link>
-        
       </nav>
 
       <div className="signup-container">
-        <button className="signup-button">Sign Up</button>
+        {/* Wrap the button with Link */}
+        <Link to="/signup">
+          <button className="signup-button">Sign Up</button>
+        </Link>
       </div>
     </header>
   );

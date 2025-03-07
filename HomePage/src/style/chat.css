@@ -5,13 +5,13 @@
     font-family: Arial, sans-serif;
 }
 
-/* body {
+.page {
     background-color: #f2f2f2;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-} */
+}
 
 .chat-container {
     width: 100%;
@@ -23,6 +23,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+
 }
 
 /* Chat Header */

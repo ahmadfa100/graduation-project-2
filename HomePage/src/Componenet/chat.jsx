@@ -1,6 +1,7 @@
 import React from "react";
 import "../style/chat.css";
 import { FaCamera, FaPaperPlane, FaUpload } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function ChatInput() {
     return (
@@ -42,9 +43,12 @@ function Receive({ content, date, image }) {
 
 function Chat(props) {
     return (
-        <div className="chat-container">
+        <div className="page">
+            <div className="chat-container">
             <div className="chat-header">
-                <img src={props.offer_image} alt="LandImage" />
+               <Link to= "/offer">
+               <img src={(props.offer_image) ? props.offer_image :"https://fontawesome.com/icons/image?f=classic&s=solid"} alt="LandImage" />
+               </Link>
                 <h3>{props.chat_title}</h3>
             </div>
 
@@ -61,6 +65,7 @@ function Chat(props) {
             </div>
 
             <ChatInput />
+        </div>
         </div>
     );
 }

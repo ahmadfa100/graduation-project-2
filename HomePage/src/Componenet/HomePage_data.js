@@ -2,26 +2,26 @@
 export const offers = [
   {
     id: 1,
-    name: "حراثة للأرض",
+    name: " Land planted with Roman olives north of Tafilah ",
     area: "5 Dunums",
-    price: "$20/year",
-    location: "الطفيلة",
+    price: "$2000/year",
+    location: "Tafilah",
     image: "./Lands/Land_1.jpg"
   },
   {
     id: 2,
-    name: "زراعة زيتون",
+    name: "Land planted with almonds, west of Ajloun",
     area: "10 Dunums",
-    price: "$50/year",
-    location: "الكرك",
+    price: "$3500/year",
+    location: "Ajloun",
     image: "./Lands/Map.jpg"
   },
   {
     id: 3,
-    name: "سقي وراعية للشجر",
+    name: "Desert land suitable for growing watermelons in Mafraq",
     area: "8 Dunums",
     price: "$30/year",
-    location: "جرش",
+    location: "Mafraq",
     image: "./Lands/Zitonjpg.jpg"
   },
 ];

@@ -13,7 +13,7 @@ function SignUp() {
 
   return (
     <div className="signup-page">
-      <div className="signup-container">
+      <div className="signup-cont">
         <form className="signup-form">
           <h2>Create a new account</h2>
 

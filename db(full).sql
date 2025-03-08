@@ -85,3 +85,4 @@ DROP TABLE IF EXISTS users;
 
 */
 -- you can use BYTEA for image if ur team refuse cloud --
+-- for higher level of security and u wanna use hashing then password wwill be varchar(60) for 10 salt round also email could be hashing

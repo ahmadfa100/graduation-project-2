@@ -7,14 +7,13 @@
     box-sizing: border-box;
   }
   
-  .signup-container {
-    /* background: white;
+  .signup-cont {
+    background: white;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 600px;
-    box-sizing: border-box; */
-    padding-left: 180px;
+    box-sizing: border-box;
   
   }
   

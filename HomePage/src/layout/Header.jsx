@@ -10,7 +10,6 @@ const Header = () => {
         <img src="./logo.jpg" alt="Logo" className="logo" />
         <span className="brand-name">Green Bridge</span>
       </Link>
-
       <nav className="nav-links">
         <Link to="/">Home</Link>
         <Link to="/areas">Areas</Link>

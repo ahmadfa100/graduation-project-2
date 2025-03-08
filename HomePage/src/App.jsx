@@ -7,7 +7,7 @@ import Educational from "./Componenet/Educational";
 import ArticleDetail from "./Componenet/ArticleDetail";
 import About from "./Componenet/about";
 import SignUp from "./Componenet/SignUp";
-// import LogIn from "./Componenet/LogIn";
+import LogIn from "./Componenet/LogIn";
 import Chat from "./Componenet/chat";
 
 import Header from "./layout/Header";
@@ -20,7 +20,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/signup" element={<SignUp />} />
-        {/* <Route path="/login" element={<LogIn />} /> */}
+        <Route path="/login" element={<LogIn />} />
         <Route
           path="*"
           element={

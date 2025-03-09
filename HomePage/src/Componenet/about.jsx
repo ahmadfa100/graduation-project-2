@@ -18,7 +18,7 @@ function About() {
           </p>
         </div>
         <div className="mission-image">
-          <img src="C:\Users\user\OneDrive - just.edu.jo\Desktop\graduation-project-2\HomePage\public\content images\aboutPicture.jpg" alt="Tractor on farmland" />
+          {/* <img src="" alt="Tractor on farmland" /> */}
         </div>
       </div>
     </div>

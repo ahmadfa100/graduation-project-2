@@ -2,8 +2,8 @@ import React from "react";
 import "../style/AccountInf.css";
 function AccountInf(){
     return (
-<div className="profile-card">
-        <img src="./formalpicture.jpg" alt="Profile Picture"/>
+<div className="AccountInf">
+        {/* <img src="./for" alt="Profile Picture"/> */}
         <label>Full Name:</label>
         <input type="text" />
         

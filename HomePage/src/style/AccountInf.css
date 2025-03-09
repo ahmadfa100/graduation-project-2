@@ -6,7 +6,7 @@ body {
     height: 100vh;
     background-color: #f8f8f8;
 }
-.profile-card {
+.AccountInf {
     width: 1000px;
     background: white;
     padding: 20px;
@@ -14,7 +14,7 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
-.profile-card img {
+.AccountInf img {
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -22,7 +22,7 @@ body {
     border-style: solid;
     border-color: green;
 }
-.profile-card input {
+.AccountInf input {
     padding: 8px;
     margin-top: 5px;
     margin-bottom: 5px;
@@ -31,7 +31,7 @@ body {
     border-radius: 5px;
     background: #f1f1f1;
 }
-.profile-card label {
+.AccountInf label {
     font-weight: bold;
     text-align: left;
     display: block;

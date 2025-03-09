@@ -2,6 +2,8 @@ import { useState } from "react";
 import "../style/offerdetail.css";
 import LeafLine from "../layout/leafLine";
 import * as Button from "../layout/buttons";
+import { Link } from "react-router-dom";
+
 
 const cellStyle = {
   border: "1px solid #ccc",
@@ -52,7 +54,9 @@ function Details(props) {
       </div>
       <div className="button-container">
         <Button.Call></Button.Call>
-        <Button.Chat></Button.Chat>
+       <Link to="/chat">
+       <Button.Chat></Button.Chat>
+       </Link>
         <Button.Like></Button.Like>
       </div>
     </div>

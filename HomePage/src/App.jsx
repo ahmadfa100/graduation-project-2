@@ -34,7 +34,7 @@ function App() {
                   <Route path="/article/:id" element={<ArticleDetail />} />
                   <Route path="/AddOffer" element={<AddOffer />} />
                   <Route path="/about" element={<About />} />
-                  <Route path="/chat" element={<Chat />} />
+                  <Route path="/chat" element={<Chat offer_image="./Lands/Land_1.jpg" />} />
                 </Routes>
               </div>
               <Footer />

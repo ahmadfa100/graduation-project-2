@@ -1,19 +1,11 @@
 import React, { useState } from "react";
 import "../style/HomePage.css";
-
-import "../layout/Header.css";
-import "../layout/Footer.css";
-import Header from "../layout/Header";
 import Divider from "../layout/leaf";
-import Footer from "../layout/Footer";
-
 import { offers } from "./HomePage_data";
-
 import Season from "./Season";
 import OffersSection from "./OffersSection ";
-
-import { FaPhone, FaComments, FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -42,7 +34,14 @@ function HomePage() {
       <Season />
 
       {/* Action Cards */}
-      <div className="action-container">
+      <motion.div
+        className="p-6 bg-blue-500 text-white text-center rounded-lg shadow-lg"
+        initial={{ scale: 0.8, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        transition={{ duration: .7, ease: "easeOut" }}
+        viewport={{ once: true }} // Animates only once when visible
+      >
+          <div className="action-container">
         <div className="action-card">
           <img
             src="https://i.pinimg.com/736x/b9/7b/62/b97b62328e8f52113257b9ca1bd698e5.jpg"
@@ -72,6 +71,7 @@ function HomePage() {
           </div>
         </div>
       </div>
+      </motion.div>
 
       <Divider />
 

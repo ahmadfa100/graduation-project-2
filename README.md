@@ -6,4 +6,4 @@
 3. in terminal
    - cd to the folder location
    - npm i
-   - node index.js
+   - npm start

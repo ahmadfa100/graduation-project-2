@@ -18,7 +18,7 @@ function About() {
           </p>
         </div>
         <div className="mission-image">
-          <img src="./aboutPicture.jpg" alt="Tractor on farmland" />
+          {/* <img src="" alt="Tractor on farmland" /> */}
         </div>
       </div>
     </div>

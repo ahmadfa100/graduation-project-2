@@ -19,7 +19,6 @@ function HomePage() {
     );
   };
 
-  // Smooth scroll to the offers section
   const handleScrollToOffers = () => {
     const offersSection = document.getElementById("offers-section");
     if (offersSection) {
@@ -29,14 +28,7 @@ function HomePage() {
 
   return (
     <div className="home-page">
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search for lands..."
-          className="search-input"
-        />
-        <button className="search-button">Search</button>
-      </div>
+
 
       <Season />
 

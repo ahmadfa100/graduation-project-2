@@ -7,6 +7,14 @@
     height: 100vh;
     background-color: #f9f9f9;
 } */
+
+ /* .background {
+    background-image: url("../../public/content images/LogIn background.jpg");
+ 
+  } */
+ /* img{
+    border-radius: 50%;
+} */
 .login-location{
     font-family: Arial, sans-serif;
     display: flex;

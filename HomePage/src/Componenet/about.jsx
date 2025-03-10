@@ -1,7 +1,7 @@
 // about.jsx
 import React from "react";
 import "../style/about.css";
-
+// import aboutPicture from "../../public/content images/aboutPicture.jpg";
 function About() {
   return (
     <div className="about-page">
@@ -18,7 +18,7 @@ function About() {
           </p>
         </div>
         <div className="mission-image">
-          {/* <img src="" alt="Tractor on farmland" /> */}
+          {/* <img src={aboutPicture} alt="Tractor on farmland" /> */}
         </div>
       </div>
     </div>

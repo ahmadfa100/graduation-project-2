@@ -5,6 +5,7 @@
     overflow: hidden;
     margin-bottom: 2rem;
     background-color: #ccc; 
+    margin-block:50px;
   }
   
   .slide {
@@ -81,6 +82,7 @@
     background-position: bottom;
     background-color: rgba(255, 255, 255, 0.5); 
     background-blend-mode: lighten;
+    margin-top: -60px;
   }
   
   .action-card {

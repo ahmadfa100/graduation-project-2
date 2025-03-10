@@ -27,7 +27,7 @@ gap: 50px;
   justify-content: center;
   align-items: center;
   padding: 1.5rem 0;
-  background-color: #f2f2f2;
+  margin-top: -40px;
 }
 
 .search-input {
@@ -59,6 +59,8 @@ gap: 50px;
 /* ===== Offers Section ===== */
 .offers-section {
   padding: 2rem;
+  margin-top: -100px;
+  
 }
 
 .section-title {
@@ -260,14 +262,12 @@ gap: 50px;
   gap: 0.5rem;
 }
 
-/* Shared style for all action buttons */
 .offer-actions {
   margin-top: 1rem;
   display: flex;
   gap: 0.5rem;
 }
 
-/* Shared style for all action buttons */
 
 
 .more-button-container {
@@ -294,3 +294,49 @@ gap: 50px;
   color: white;        
 }
 
+/* ===== Filters Container ===== */
+.filters-container {
+  display: flex;
+  justify-content: center; /* Centers filters horizontally */
+  align-items: flex-end;   /* Align bottoms of labels/inputs */
+  gap: 1rem;               /* Spacing between filter groups */
+  margin-bottom: 1.5rem;   /* Spacing below the filters */
+  flex-wrap: wrap;         /* Allows wrapping on smaller screens */
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+}
+
+.filter-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.filter-select, 
+.filter-input {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.filter-button {
+  padding: 0.8rem 1.5rem;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+  background-color: #45a049;
+}

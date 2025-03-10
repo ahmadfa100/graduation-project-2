@@ -15,6 +15,7 @@ import Footer from "./layout/Footer";
 import AddOffer from "./Componenet/addOffer";
 import "./App.css";
 import AccountInf from "./Componenet/AccountInf";
+import DashBoard from "./Componenet/DashBoard";
 function App() {
   return (
     <Router>
@@ -36,6 +37,7 @@ function App() {
                   <Route path="/about" element={<About />} />
                   <Route path="/chat" element={<Chat offer_image="./Lands/Land_1.jpg" />} />
                   <Route path="/AccountInf" element={<AccountInf/>}/>
+                  <Route path="/DashBoard" element={<DashBoard/>}/>
                 </Routes>
               </div>
               <Footer />

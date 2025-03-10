@@ -2,10 +2,14 @@ import React from "react";
 import "../style/AccountInf.css";
 function AccountInf(){
     return (
+        
         <div className="AccountInf-location">
-            
+        
+
         <div className="AccountInf">
-       
+
+        <img src="content images/formalpicture.jpg"/>
+        
         <label>Full Name:</label>
         <input type="text" />
         
@@ -26,7 +30,7 @@ function AccountInf(){
         <label>Password:</label>
         <input type="password"/>
     </div>
-    </div>
-    );
+    
+    </div>);
 }
 export default AccountInf;

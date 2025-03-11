@@ -46,7 +46,7 @@ const Header = () => {
       {/* Navigation Links */}
       <nav className="nav-links">
         <Link to="/">Home</Link>
-        <Link to="/areas">Areas</Link>
+        <Link to="/DashBoard">Areas</Link>
         <Link to="/education">Education</Link>
         <Link to="/about">About</Link>
       </nav>

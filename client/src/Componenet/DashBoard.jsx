@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 function DashBoard(){
     return(
 <div class="listing-container">
-        <div class="header">My Listing View</div>
+        <div class="header_dash">My Listing View</div>
         <div class="breadcrumb">Listings {'>'} My Listing View</div>
         <div class="listing-card">
             <img src="/content images/my offer.jpg" alt="Farm Image"/>

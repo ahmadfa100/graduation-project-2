@@ -297,11 +297,11 @@ gap: 50px;
 /* ===== Filters Container ===== */
 .filters-container {
   display: flex;
-  justify-content: center; /* Centers filters horizontally */
-  align-items: flex-end;   /* Align bottoms of labels/inputs */
-  gap: 1rem;               /* Spacing between filter groups */
-  margin-bottom: 1.5rem;   /* Spacing below the filters */
-  flex-wrap: wrap;         /* Allows wrapping on smaller screens */
+  justify-content: center; 
+  align-items: flex-end;   
+  gap: 1rem;              
+  margin-bottom: 1.5rem;   
+  flex-wrap: wrap;         
 }
 
 .filter-group {

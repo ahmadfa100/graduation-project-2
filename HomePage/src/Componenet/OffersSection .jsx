@@ -2,8 +2,11 @@
 
 import React from 'react';
 import { FaPhone, FaComments, FaHeart, FaRegHeart } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 function OffersSection({ offers, favoriteOffers, toggleFavorite }) {
+  const navigate = useNavigate();
+
   return (
     <div className="offers-section">
       <h2 className="section-title">Available Offers</h2>
@@ -93,7 +96,10 @@ function OffersSection({ offers, favoriteOffers, toggleFavorite }) {
                 <button className="action-button">
                   <FaPhone />
                 </button>
-                <button className="action-button">
+                <button
+                  className="action-button"
+                  onClick={() => navigate("/chat")}
+                >
                   <FaComments />
                 </button>
                 <button

@@ -1,12 +1,12 @@
 CREATE TABLE users (
     ID SERIAL PRIMARY KEY,
     userName VARCHAR(50) NOT NULL,
-	password VARCHAR(255) NOT NULL,
+	password VARCHAR(256) NOT NULL,
     phoneNumber VARCHAR(15) UNIQUE NOT NULL,
     Email VARCHAR(150) UNIQUE NOT NULL,
     age INT,
     address VARCHAR(255),
-    pfp text
+    pfp BYTEA
 );
 CREATE TABLE Landowners (
     ID INT PRIMARY KEY REFERENCES users(ID) ON DELETE CASCADE    
@@ -18,13 +18,14 @@ CREATE TABLE Farmers (
 
 CREATE TABLE Offers (
     ID SERIAL PRIMARY KEY,
+    landTitle varchar(255),
     landSize DECIMAL(10, 2) NOT NULL,
     landLocation VARCHAR(255) NOT NULL,
     --locMap text,
     offerDescription TEXT,
     landLeasePrice DECIMAL(10, 2) NOT NULL,-- in jordan its impossible but may be in other countries--
-    landLeaseType VARCHAR(50) NOT NULL,
-    landPicture TEXT, 
+    leaseDuration int ,-- leaseDuration in mounths
+    landPicture int, --fk
     offerDate Date NOT NULL DEFAULT CURRENT_DATE, 
     OwnerID INT NOT NULL   REFERENCES Landowners(ID) ON DELETE CASCADE
    
@@ -33,7 +34,7 @@ CREATE TABLE Offers (
 CREATE TABLE  landPicture(
 ID SERIAL PRIMARY KEY,
 	landID int not null REFERENCES offers(id) on delete cascade,
-	url TEXT 
+	picture bytea
 );
 
 CREATE TABLE FavoriteOffers (
@@ -67,8 +68,8 @@ CREATE TABLE Chats (
 CREATE TABLE ChatContents (
     contentID SERIAL PRIMARY KEY,
     chatID INT REFERENCES Chats(ID) ON DELETE CASCADE,
-    contentText TEXT,  
-    contentURL TEXT   
+    contentText varchar(255) ,  
+    contentFile BYTEA   
     
 );
 /*

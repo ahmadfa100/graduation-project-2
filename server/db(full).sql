@@ -19,13 +19,12 @@ CREATE TABLE Farmers (
 CREATE TABLE Offers (
     ID SERIAL PRIMARY KEY,
     landTitle varchar(255),
-    landSize DECIMAL(10, 2) NOT NULL,
+    landSize NUMERIC(10, 2) NOT NULL,
     landLocation VARCHAR(255) NOT NULL,
     --locMap text,
     offerDescription TEXT,
-    landLeasePrice DECIMAL(10, 2) NOT NULL,-- in jordan its impossible but may be in other countries--
+    landLeasePrice NUMERIC(10, 2) NOT NULL,-- in jordan its impossible but may be in other countries--
     leaseDuration int ,-- leaseDuration in mounths
-    landPicture int, --fk
     offerDate Date NOT NULL DEFAULT CURRENT_DATE, 
     OwnerID INT NOT NULL   REFERENCES Landowners(ID) ON DELETE CASCADE
    
@@ -54,7 +53,8 @@ CREATE TABLE Notifications (
     ID SERIAL PRIMARY KEY,
    NText TEXT NOT NULL,
     NDate TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-    userID INT NOT NULL  REFERENCES users(ID) ON DELETE CASCADE
+    userID INT NOT NULL  REFERENCES users(ID) ON DELETE CASCADE,
+     type VARCHAR(50),
    
 );
 CREATE TABLE Chats (
@@ -69,7 +69,8 @@ CREATE TABLE ChatContents (
     contentID SERIAL PRIMARY KEY,
     chatID INT REFERENCES Chats(ID) ON DELETE CASCADE,
     contentText varchar(255) ,  
-    contentFile BYTEA   
+    contentFile BYTEA ,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  
     
 );
 /*

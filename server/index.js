@@ -43,13 +43,14 @@ app.post("/addOffer", upload.array("images"), async (req, res) => {
 
     
     const values = [offer_title, parseFloat(size), location, description, parseFloat(price), leaseDuration, parseInt(landOwnerID)];
-    const response = await db.query(
+    const AddOfferResponse = await db.query(
       "INSERT INTO offers (landTitle, landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, OwnerID) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
       values
     );
 
-    console.log("Offer added successfully:", response.rows[0]);
-    res.json({ message: "Offer added successfully", offerId: response.rows[0].id });
+
+    console.log("Offer added successfully:", AddOfferResponse.rows[0]);
+    res.json({ message: "Offer added successfully", offerId: AddOfferResponse.rows[0].id });
 
   } catch (error) {
     console.error("Error adding offer:", error);

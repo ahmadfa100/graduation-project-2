@@ -34,38 +34,40 @@ function Input(props) {
   );
 }
 
-function AddOffer(props) {
+function AddOffer() {
   const [images, setImages] = useState([]);
-  const [hoverdImage, setHoverdImage] = useState(null);
+  const [hoveredImage, setHoveredImage] = useState(null);
 
   function handleImageUpload(event) {
     const files = Array.from(event.target.files);
     const imagesUrl = files.map((file) => URL.createObjectURL(file));
-    setImages((previous) => [...previous, ...imagesUrl]);
+    setImages((prev) => [...prev, ...imagesUrl]);
   }
 
   function deleteImage(index) {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   }
 
- async function addOfferSubmit(event) {  
-    
+  async function addOfferSubmit(event) {  
     event.preventDefault();
-    const formdata= new FormData(event.target);
-    const data = Object.fromEntries(formdata);
-  
-    console.log(data.months);
-    const response = await axios.post("http://localhost:3500",data);
-    // Add your code to save the offer to the database here
-    console.log("Offer saved successfully!");
+    const formData = new FormData(event.target);
+    
+    try {
+      const response = await axios.post("http://localhost:3001/addOffer", formData);
+      console.log(response.data);
+      alert("Offer saved successfully!");
+    } catch (error) {
+      console.error("Error saving offer:", error);
+      alert("Error saving offer. Please try again.");
+    }
   }
-
 
   return (
     <div className="page">
       <div className="add_offer">
         <h3>Land Lease Information</h3>
         <form onSubmit={addOfferSubmit}>
+          <input type="hidden" name="landOwnerID" value="1" />
           <div className="group-input">
             <Input type="text" message="Enter offer title" name="offer_title" />
             <UnitInput type="text" unit="m²" message="Enter the number of dunums" name="size" />
@@ -77,36 +79,35 @@ function AddOffer(props) {
             
             <UnitInput type="text" unit="JOD" message="Enter price" name="price" />
             <Input type="text" message="Enter offer location (e.g., Amman Sweileh)" name="location" />
-            <textarea className="textInput" placeholder="Enter a detailed description of the land and the offer" rows="5" required></textarea>
+            <textarea className="textInput" name="description" placeholder="Enter a detailed description of the land and the offer" rows="5" required></textarea>
 
             <div className="center">
               <label className="file-upload">
                 Click here to upload images (you can select multiple images)
-                <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload}  />
+                <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload} />
               </label>
 
               {images.length > 0 && (
                 <div className="image-preview">
                   {images.map((image, index) => (
-                   <div
-                   className="button-image"
-                   key={index}
-                   onMouseEnter={() => setHoverdImage(index)}
-                   onMouseLeave={() => setHoverdImage(null)}
-                 >
-                   <img src={image} alt="preview" />
-                   {hoverdImage === index && (
-                     <button type="button" className="delete-button" onClick={() => deleteImage(index)}>
-                       <FaTrash />
-                     </button>
-                   )}
-                 </div>
-                 
+                    <div
+                      className="button-image"
+                      key={index}
+                      onMouseEnter={() => setHoveredImage(index)}
+                      onMouseLeave={() => setHoveredImage(null)}
+                    >
+                      <img src={image} alt="preview" />
+                      {hoveredImage === index && (
+                        <button type="button" className="delete-button" onClick={() => deleteImage(index)}>
+                          <FaTrash />
+                        </button>
+                      )}
+                    </div>
                   ))}
                 </div>
               )}
 
-              <button type="submit" className="submit" >
+              <button type="submit" className="submit">
                 Save and Publish
               </button>
             </div>
@@ -115,7 +116,6 @@ function AddOffer(props) {
       </div>
     </div>
   );
- 
 }
 
 export default AddOffer;

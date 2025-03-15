@@ -3,7 +3,7 @@ import cors from 'cors';
 import pg from 'pg';
 import env from 'dotenv';
 const app = express();
-const port =3000;
+const port =3500;
 env.config();
 app.use(cors());
 app.use(express.json());
@@ -31,13 +31,34 @@ db.connect().then(()=> console.log('Data base connection established')).catch(()
 // }
 // });
 
-// app.post("/addOffer", async(req, res)=>{
-//     const { title, size, years,months, price, location, description, images,landOwnerID } = req.body;
-//     const leaseDuration=(years*12)+months;
-//     const values = [title,size, location, description, price, leaseDuration, image, landOwnerID]; 
-//     await db.query(" INSERT INTO Offers (  landTitle,landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, landPicture, OwnerID) VALUES ($1, $2, $3, $4, $5, $6, $7,$8)", values); 
-//     res.json("Offer added successfully");
-// });
+app.post("/addOffer", async (req, res) => {
+    try {
+        console.log("Received data:", req.body);
+
+        const { offer_title, size, years, months, price, location, description, landOwnerID } = req.body;
+
+        // Convert to numbers
+        const leaseDuration = (parseInt(years) * 12) + parseInt(months);
+
+        // Validate required fields
+        if (!offer_title || !size || !location || !description || !price || isNaN(leaseDuration) || !landOwnerID) {
+            return res.status(400).json({ error: "Missing required fields" });
+        }
+
+        const values = [offer_title, size, location, description, price, leaseDuration, landOwnerID];
+        const response = await db.query(
+            "INSERT INTO Offers (landTitle, landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, OwnerID) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
+            values
+        );
+
+        console.log("Offer added successfully:", response.rows[0]);
+        res.json({ message: "Offer added successfully", offerId: response.rows[0].id });
+
+    } catch (error) {
+        console.error("Error adding offer:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
 
 
 app.listen(port,()=>{

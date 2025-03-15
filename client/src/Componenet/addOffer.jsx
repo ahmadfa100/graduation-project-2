@@ -1,6 +1,7 @@
 import "../style/addOffer.css";
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import axios from "axios";
 
 function UnitInput(props) {
   return (
@@ -47,11 +48,24 @@ function AddOffer(props) {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
   }
 
+ async function addOfferSubmit(event) {  
+    
+    event.preventDefault();
+    const formdata= new FormData(event.target);
+    const data = Object.fromEntries(formdata);
+  
+    console.log(data.months);
+    const response = await axios.post("http://localhost:3500",data);
+    // Add your code to save the offer to the database here
+    console.log("Offer saved successfully!");
+  }
+
+
   return (
     <div className="page">
       <div className="add_offer">
         <h3>Land Lease Information</h3>
-        <form>
+        <form onSubmit={addOfferSubmit}>
           <div className="group-input">
             <Input type="text" message="Enter offer title" name="offer_title" />
             <UnitInput type="text" unit="m²" message="Enter the number of dunums" name="size" />
@@ -68,7 +82,7 @@ function AddOffer(props) {
             <div className="center">
               <label className="file-upload">
                 Click here to upload images (you can select multiple images)
-                <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload} />
+                <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload}  />
               </label>
 
               {images.length > 0 && (
@@ -92,7 +106,7 @@ function AddOffer(props) {
                 </div>
               )}
 
-              <button type="submit" className="submit">
+              <button type="submit" className="submit" >
                 Save and Publish
               </button>
             </div>
@@ -101,6 +115,7 @@ function AddOffer(props) {
       </div>
     </div>
   );
+ 
 }
 
 export default AddOffer;

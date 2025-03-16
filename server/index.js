@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 const db = new pg.Client({
   user: process.env.DBuser,
   host: process.env.DBhost,
-  database: process.env.database, // Removed extra space
+  database: process.env.database, 
   password: process.env.DBpassword,
   port:  process.env.DBport,
 });

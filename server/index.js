@@ -13,11 +13,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "GreenBridge ", // Removed extra space
-  password: "1234",
-  port: 5432,
+  user: process.env.DBuser,
+  host: process.env.DBhost,
+  database: process.env.database, // Removed extra space
+  password: process.env.DBpassword,
+  port:  process.env.DBport,
 });
 
 db.connect()

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 function LogIn() {
   return (    
     
-
+    <div className="background">
     <div className="login-location">
     <div className="login-container">
       <h2>Welcome back</h2>
@@ -31,7 +31,7 @@ function LogIn() {
         Don't have an account? <Link to="/signup">Create Account</Link>
       </div>
     </div></div>
-    
+    </div>
   );
 }
 export default LogIn;

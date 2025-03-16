@@ -16,9 +16,7 @@ function LogIn() {
         <input type="password" placeholder="Password" />
       </div>
       <div className="remember-forgot">
-        <label>
-          <input type="checkbox" /> Remember me
-        </label>
+        
         <a href="#">Forgot Password?</a>
       </div>
       <button className="login-btn">Log In</button>

@@ -9,7 +9,7 @@
 } */
 
  .background {
-    background-image: url("../../public/content\ images/LogIn background.jpg");
+    background-image: url("../../public/content images/LogIn\ background.jpg");
 
   }
  /* img{
@@ -45,6 +45,8 @@
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+
 
 .remember-forgot {
     display: flex;

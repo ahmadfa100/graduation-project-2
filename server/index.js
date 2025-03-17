@@ -13,16 +13,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const db = new pg.Client({
-  user: process.env.DBuser,
-  host: process.env.DBhost,
-  database: process.env.database, 
-  password: process.env.DBpassword,
-  port:  process.env.DBport,
+  user: "ahmad",
+  host: "dpg-cva25fd6l47c739glm10-a.frankfurt-postgres.render.com",
+  database: "green_bridge_82xx", 
+  password: "EBqFKSQgSM4yPiRwWmpcObj3ob7wU2tz", 
+  port: 5432,
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
-db.connect()
-  .then(() => console.log("Database connection established"))
-  .catch((err) => console.error("Database connection error:", err));
+db.connect((err) => {
+  if (err) {
+    console.error("Failed to connect to the database:", err);
+  } else {
+    console.log("Connected to PostgreSQL database!");
+  }
+});
 
 // Multer setup for file uploads (images)
 const storage = multer.memoryStorage();

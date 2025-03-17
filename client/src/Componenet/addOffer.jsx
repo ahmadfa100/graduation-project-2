@@ -2,6 +2,7 @@ import "../style/addOffer.css";
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import axios from "axios";
+import { useNotifications } from '@toolpad/core/useNotifications';
 
 function UnitInput(props) {
   return (
@@ -35,30 +36,54 @@ function Input(props) {
 }
 
 function AddOffer() {
+
+  const notifications = useNotifications();
   const [images, setImages] = useState([]);
   const [hoveredImage, setHoveredImage] = useState(null);
 
   function handleImageUpload(event) {
     const files = Array.from(event.target.files);
-    const imagesUrl = files.map((file) => URL.createObjectURL(file));
-    setImages((prev) => [...prev, ...imagesUrl]);
+    const images = files.map((file) => ({
+      image : file,
+      preview:URL.createObjectURL(file)
+    }));
+  
+    setImages((prev) => [...prev, ...images]);
   }
 
   function deleteImage(index) {
-    setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+
+    setImages((prevImages) => {
+      const newImages = [...prevImages];
+      URL.revokeObjectURL(newImages[index].preview); // Free memory
+      return newImages.filter((_, i) => i !== index);
+    });
   }
 
   async function addOfferSubmit(event) {  
     event.preventDefault();
     const formData = new FormData(event.target);
+    images.forEach(({ image }) => {
+      formData.append("images", image);
+    });
     
     try {
       const response = await axios.post("http://localhost:3001/addOffer", formData);
       console.log(response.data);
-      alert("Offer saved successfully!");
+      
+      notifications.show('Offer saved successfully!', {
+         severity: 'success',
+         autoHideDuration: 3000,
+       
+       
+      });
     } catch (error) {
       console.error("Error saving offer:", error);
-      alert("Error saving offer. Please try again.");
+      notifications.show('Error saving offer. Please try again.', {
+        severity: 'Error',
+        autoHideDuration: 3000,
+      
+     });
     }
   }
 
@@ -70,7 +95,7 @@ function AddOffer() {
           <input type="hidden" name="landOwnerID" value="1" />
           <div className="group-input">
             <Input type="text" message="Enter offer title" name="offer_title" />
-            <UnitInput type="text" unit="m²" message="Enter the number of dunums" name="size" />
+            <UnitInput type="number" unit="m²" message="Enter the number of dunums" name="size" />
             
             <div className="detailed-input">
               <Input type="number" message="Lease duration (years)" name="years" min="0" max="100" />
@@ -96,7 +121,7 @@ function AddOffer() {
                       onMouseEnter={() => setHoveredImage(index)}
                       onMouseLeave={() => setHoveredImage(null)}
                     >
-                      <img src={image} alt="preview" />
+                      <img src={image.preview} alt="preview" />
                       {hoveredImage === index && (
                         <button type="button" className="delete-button" onClick={() => deleteImage(index)}>
                           <FaTrash />

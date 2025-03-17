@@ -2,6 +2,7 @@
 //3/14
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { NotificationsProvider } from "@toolpad/core/useNotifications";
 import HomePage from "./Componenet/HomePage";
 import Offferdetail from "./Componenet/offerDetail";
 import Educational from "./Componenet/Educational";
@@ -34,7 +35,9 @@ function App() {
                   <Route path="/offer" element={<Offferdetail />} />
                   <Route path="/education" element={<Educational />} />
                   <Route path="/article/:id" element={<ArticleDetail />} />
-                  <Route path="/AddOffer" element={<AddOffer />} />
+                
+                  <Route path="/AddOffer" element={  <NotificationsProvider><AddOffer /></NotificationsProvider>} />
+              
                   <Route path="/about" element={<About />} />
                   <Route path="/chat" element={<Chat offer_image="./Lands/Land_1.jpg" />} />
                   <Route path="/AccountInf" element={<AccountInf/>}/>

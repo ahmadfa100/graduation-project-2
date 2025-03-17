@@ -14,7 +14,7 @@ function Input(props) {
 function LogIn() {
   return (    
     
-    <div className="background">
+
     <div className="login-location">
     <div className="login-container">
       <h2>Welcome back</h2>
@@ -26,7 +26,9 @@ function LogIn() {
         <Input type="password" placeholder="Password" />
       </div>
       <div className="remember-forgot">
-        
+        <label>
+          <input type="checkbox" /> Remember me
+        </label>
         <a href="#">Forgot Password?</a>
       </div>
       <button className="login-btn">Log In</button>
@@ -39,7 +41,7 @@ function LogIn() {
         Don't have an account? <Link to="/signup">Create Account</Link>
       </div>
     </div></div>
-    </div>
+    
   );
 }
 export default LogIn;

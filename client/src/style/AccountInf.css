@@ -17,6 +17,17 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
+.Submit-btn{
+    width: 10%;
+    padding: 10px;
+    background: linear-gradient(to right, #a4c639, #8ebf45);
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
 .AccountInf img {
     width: 150px;
     height: 150px;

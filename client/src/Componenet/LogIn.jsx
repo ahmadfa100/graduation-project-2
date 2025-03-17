@@ -1,6 +1,16 @@
 import React from "react";
 import "../style/LogIn.css";
 import { Link } from "react-router-dom";
+function Input(props) {
+  return (
+    <input
+      type={props.type}
+      placeholder={props.placeholder}
+      required
+
+    />
+  );
+}
 function LogIn() {
   return (    
     
@@ -10,10 +20,10 @@ function LogIn() {
       <h2>Welcome back</h2>
       <p>Login to your account</p>
       <div class="input-group">
-        <input type="text" placeholder="Enter email or phone" />
+        <Input type="text" placeholder="Enter email or phone" />
       </div>
       <div className="input-group">
-        <input type="password" placeholder="Password" />
+        <Input type="password" placeholder="Password" />
       </div>
       <div className="remember-forgot">
         

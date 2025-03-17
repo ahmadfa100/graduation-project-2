@@ -1,6 +1,19 @@
 import React from "react";
 import { Link } from "react-router-dom"; 
 import "../style/SignUp.css";
+const styles = {
+  marginTop: '25px'
+};
+function Input(props) {
+  return (
+    <input
+      type={props.type}
+      placeholder={props.placeholder}
+      required
+
+    />
+  );
+}
 
 function SignUp() {
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
@@ -19,12 +32,12 @@ function SignUp() {
 
           <div className="input-group">
             <label>First name</label>
-            <input type="text" placeholder="First name" />
+            <Input type="text" placeholder="First name" />
           </div>
 
           <div className="input-group">
-            <label>Surname</label>
-            <input type="text" placeholder="Surname" />
+            <label>LastName</label>
+            <Input type="text" placeholder="Last name" />
           </div>
 
           <div className="input-group">
@@ -60,7 +73,7 @@ function SignUp() {
             <label>Gender</label>
             <div className="gender-options">
               <label>
-                <input type="radio" name="gender" /> Female
+                <input type="radio" name="gender" />Female
               </label>
               <label>
                 <input type="radio" name="gender" /> Male
@@ -69,13 +82,18 @@ function SignUp() {
           </div>
 
           <div className="input-group">
-            <label>Mobile number or email address</label>
-            <input type="text" placeholder="Mobile number or email address" />
+            <label>Mobile number</label>
+            <Input type="number" placeholder="Mobile number" />
+            <label style={styles}>email address</label>
+            <Input type="email" placeholder="email address" />
+
           </div>
 
           <div className="input-group">
             <label>New password</label>
-            <input type="password" placeholder="New password" />
+            <Input type="password" placeholder="New password" />
+            <label style={styles}>Confirm password</label>
+            <Input type="password" placeholder="Confirm password"/>
           </div>
 
           <button type="submit" className="signup-btn">

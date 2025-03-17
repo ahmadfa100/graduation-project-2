@@ -1,10 +1,11 @@
+# Ignore all files inside `client` except the ones explicitly allowed
+client/*
+!client/src/
+!client/src/Componenet/addOffer.jsx
+
+# Ignore specific files
 server/index.js
-client/src/Componenet/addOffer.jsx
-server/index.js
-/client
-/client/src/Componenet
-client/src/Componenet/addOffer.jsx
-/client/src/Componenet
-/client/src
-/client
+
+# Ignore all JSX files (unless explicitly tracked)
 *.jsx
+!client/src/Componenet/addOffer.jsx

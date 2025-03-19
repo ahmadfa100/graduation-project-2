@@ -15,6 +15,8 @@ import Chat from "./Componenet/chat";
 import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 import AddOffer from "./Componenet/addOffer";
+
+import UpdateOffer from "./Componenet/updateOffer";
 import "./App.css";
 import AccountInf from "./Componenet/AccountInf";
 import DashBoard from "./Componenet/DashBoard";
@@ -37,7 +39,7 @@ function App() {
                   <Route path="/article/:id" element={<ArticleDetail />} />
                 
                   <Route path="/AddOffer" element={  <NotificationsProvider><AddOffer /></NotificationsProvider>} />
-              
+                  <Route path="/updateOffer" element={  <NotificationsProvider><UpdateOffer /></NotificationsProvider>} />
                   <Route path="/about" element={<About />} />
                   <Route path="/chat" element={<Chat offer_image="./Lands/Land_1.jpg" />} />
                   <Route path="/AccountInf" element={<AccountInf/>}/>

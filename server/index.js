@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
-import pg from "pg";
 import multer from "multer";
 import env from "dotenv";
+import pkg from "pg";
+const { Pool } = pkg;
 
 
 
@@ -16,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // local database
-// const db = new pg.Client({
+// const db = new Pool({
 //   user: process.env.DBuser,
 //   host: process.env.DBhost,
 //   database: process.env.database, // Removed extra space
@@ -24,7 +25,7 @@ app.use(express.urlencoded({ extended: true }));
 //   port:  process.env.DBport,
 // });
 
-const db = new pg.Client({
+const db = new Pool({
   user: "ahmad",
   host: "dpg-cva25fd6l47c739glm10-a.frankfurt-postgres.render.com",
   database: "green_bridge_82xx", 
@@ -46,6 +47,35 @@ db.connect((err) => {
 // Multer setup for file uploads (images)
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+app.get('/getOffer/:offerID', async (req, res) => {
+  try {
+    const offerID = req.params.offerID;
+    console.log("offerid: " + offerID);
+    const offerinfo = await db.query("SELECT * FROM offers WHERE id = $1", [offerID]);
+
+    if (offerinfo.rowCount === 0) {
+      return res.status(404).json({ error: "Offer not found" });
+    }
+
+    const offerimages = await db.query("SELECT picture FROM landPicture WHERE landID = $1", [offerID]);
+
+    // Convert images to base64 if they are stored as binary
+    const images = offerimages.rows.map((row) =>
+      `data:image/jpeg;base64,${row.picture.toString("base64")}`
+    );
+
+    const response = {
+      offer: offerinfo.rows[0],
+      images: images
+    };
+console.log(response);
+    res.json(response);
+  } catch (err) {
+    console.error("Error fetching offer:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 app.post("/addOffer", upload.array("images",10), async (req, res) => {
   try {
@@ -78,7 +108,69 @@ req.files.forEach(async (file) => {
     console.error("Error adding offer:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
+
 });
+
+app.put("/updateOffer/:offerID", upload.array("images", 10), async (req, res) => {
+  try {
+    console.log("Received data:\n images:", req.files, "data:", req.body);
+
+    const { offer_title, size, years, months, price, location, description, landOwnerID } = req.body;
+    const { offerID } = req.params;
+
+    if (!offerID || !offer_title || !size || !location || !description || !price || !years || !months || !landOwnerID) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    const leaseDuration = parseInt(years) * 12 + parseInt(months);
+
+    const values = [
+      offer_title,
+      parseFloat(size),
+      location,
+      description,
+      parseFloat(price),
+      leaseDuration,
+      parseInt(landOwnerID),
+      parseInt(offerID)
+    ];
+
+    const updateOfferResponse = await db.query(
+      "UPDATE offers SET landTitle = $1, landSize = $2, landLocation = $3, offerDescription = $4, landLeasePrice = $5, leaseDuration = $6, OwnerID = $7 WHERE id = $8 RETURNING id",
+      values
+    );
+
+    if (updateOfferResponse.rowCount === 0) {
+      return res.status(404).json({ error: "Offer not found" });
+    }
+
+    
+    await db.query("DELETE FROM landPicture WHERE landID = $1", [offerID]);
+
+    
+    for (const file of req.files) {
+      await db.query("INSERT INTO landPicture (landID, picture) VALUES ($1, $2)", [offerID, file.buffer]);
+    }
+
+    console.log("Offer updated successfully:", updateOfferResponse.rows[0]);
+    res.json({ message: "Offer updated successfully", offerId: updateOfferResponse.rows[0].id });
+
+  } catch (error) {
+    console.error("Error updating offer:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  } 
+});
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

@@ -43,7 +43,7 @@ function App() {
                   <Route path="/about" element={<About />} />
                   <Route path="/chat" element={<Chat offer_image="./Lands/Land_1.jpg" />} />
                   <Route path="/AccountInf" element={<AccountInf/>}/>
-                  <Route path="/DashBoard" element={<DashBoard/>}/>
+                  <Route path="/DashBoard" element={ <NotificationsProvider><DashBoard/></NotificationsProvider>}/>
                 </Routes>
               </div>
               <Footer />

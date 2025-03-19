@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
 import multer from "multer";
 import env from "dotenv";
@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// local database
+//local database
 // const db = new Pool({
 //   user: process.env.DBuser,
 //   host: process.env.DBhost,
@@ -51,7 +51,7 @@ const upload = multer({ storage: storage });
 app.get('/getOffer/:offerID', async (req, res) => {
   try {
     const offerID = req.params.offerID;
-    console.log("offerid: " + offerID);
+   // console.log("offerid: " + offerID);
     const offerinfo = await db.query("SELECT * FROM offers WHERE id = $1", [offerID]);
 
     if (offerinfo.rowCount === 0) {
@@ -69,7 +69,7 @@ app.get('/getOffer/:offerID', async (req, res) => {
       offer: offerinfo.rows[0],
       images: images
     };
-console.log(response);
+//console.log(response);
     res.json(response);
   } catch (err) {
     console.error("Error fetching offer:", err);
@@ -79,7 +79,7 @@ console.log(response);
 
 app.post("/addOffer", upload.array("images",10), async (req, res) => {
   try {
-    console.log("Received data:\n images:", req.files,"data:", req.body);
+    //console.log("Received data:\n images:", req.files,"data:", req.body);
 
     const { offer_title, size, years, months, price, location, description, landOwnerID } = req.body;
 
@@ -101,7 +101,7 @@ req.files.forEach(async (file) => {
 });
 
 
-    console.log("Offer added successfully:", AddOfferResponse.rows[0]);
+   // console.log("Offer added successfully:", AddOfferResponse.rows[0]);
     res.json({ message: "Offer added successfully", offerId: AddOfferResponse.rows[0].id });
 
   } catch (error) {
@@ -113,7 +113,7 @@ req.files.forEach(async (file) => {
 
 app.put("/updateOffer/:offerID", upload.array("images", 10), async (req, res) => {
   try {
-    console.log("Received data:\n images:", req.files, "data:", req.body);
+   // console.log("Received data:\n images:", req.files, "data:", req.body);
 
     const { offer_title, size, years, months, price, location, description, landOwnerID } = req.body;
     const { offerID } = req.params;
@@ -152,7 +152,7 @@ app.put("/updateOffer/:offerID", upload.array("images", 10), async (req, res) =>
       await db.query("INSERT INTO landPicture (landID, picture) VALUES ($1, $2)", [offerID, file.buffer]);
     }
 
-    console.log("Offer updated successfully:", updateOfferResponse.rows[0]);
+   // console.log("Offer updated successfully:", updateOfferResponse.rows[0]);
     res.json({ message: "Offer updated successfully", offerId: updateOfferResponse.rows[0].id });
 
   } catch (error) {
@@ -160,6 +160,29 @@ app.put("/updateOffer/:offerID", upload.array("images", 10), async (req, res) =>
     res.status(500).json({ error: "Internal Server Error" });
   } 
 });
+
+app.delete("/deleteOffer/:offerID", async (req, res) => {
+  try {
+    const { offerID } = req.params;
+    console.log("id = " + offerID);
+    const deleteImageResponse= await db.query("DELETE FROM landPicture WHERE landID= $1 ",[offerID]); 
+    if (deleteImageResponse.rowCount === 0) {
+      console.log("No images found for deletion.");
+    }else{
+      console.log("Deleted images count: " + deleteImageResponse.rowCount);
+    }   
+  const deleteOfferResponse= await db.query("DELETE FROM Offers WHERE ID= $1  RETURNING landTitle ",[offerID]);
+  if (deleteOfferResponse.rows.length === 0) {
+    console.log("No matching offer found for deletion.");
+    return res.status(404).json({ error: "Offer not found" });
+  }
+  
+  console.log(" the Offer deleted successfully:", deleteOfferResponse.rows[0]);//print nothig
+  res.json({ message: " the Offer deleted successfully", landTitle: deleteOfferResponse.rows[0].landTitle });
+}catch(error){
+  console.error("Error deleting offer:", error);
+  res.status(500).json({ error: "Internal Server Error" });
+}});
 
 
 

@@ -1,0 +1,515 @@
+[33mcommit 20cc9c62d59184398ef4f73b25ab81a057d347a1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Fri Mar 21 00:07:09 2025 +0300
+
+    add the past code , lol
+
+[33mcommit 552c8f472993ee73c635f7b3e3a59864848a4788[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Thu Mar 20 23:30:16 2025 +0300
+
+    add the new Zaid's code to SeasonAlert
+
+[33mcommit 7568504ae05feafa4563c5d071c2a68ebac6591a[m
+Merge: 22cbbf9 98a09d9
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Thu Mar 20 23:15:03 2025 +0300
+
+    re orinazing for the server folder and write the back-end of notification.
+
+[33mcommit 22cbbf9af1d1d4a1df6c911367b4f34bc0227af0[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Thu Mar 20 22:57:36 2025 +0300
+
+    re orinazing for the server folder and write the back-end of notification
+
+[33mcommit 98a09d958c43a93288ecf6c9c997ffe2d9992a8d[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Thu Mar 20 22:16:01 2025 +0300
+
+    api key
+
+[33mcommit 18d97ba44bc094468a0658d177e346b768412338[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Wed Mar 19 21:25:31 2025 +0300
+
+    delete offer done
+
+[33mcommit b47dfd2e63e381246d694b112bfefcde5359402c[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Wed Mar 19 19:44:15 2025 +0300
+
+    update offer done
+
+[33mcommit ecaa4f8fc1d4a6d53c461406aebc7bb65f146545[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 17 17:33:00 2025 +0300
+
+    add offer backend  done
+
+[33mcommit 27862462bd9fabeb9e3a35991b9de34653aff1d7[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 17 14:13:43 2025 +0300
+
+    delete hompage folder
+
+[33mcommit 833266a799c975f048bbfd8109eb2b575cf5f415[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 17 12:41:32 2025 +0300
+
+    fix axios error
+
+[33mcommit 6a866380e4a7892f9abe27c1e623ce13bebd58d4[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 17 12:30:57 2025 +0300
+
+    gitignore move
+
+[33mcommit 3ba5d1f1195e37573bf3a3c69bdf27abaa94f58a[m
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Mon Mar 17 11:22:35 2025 +0300
+
+    zaid
+
+[33mcommit 66c6f3e2f7c1bd49420a06162240954d2fcc7396[m
+Merge: 4b2584a 49b9971
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Mon Mar 17 11:04:08 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit 4b2584a59d833d410644aad881931fb51f8323c1[m
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Mon Mar 17 11:01:32 2025 +0300
+
+    Zaid
+
+[33mcommit 49b99712efe4ac0cadcff17bd9f37d9634bfe641[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 17 03:50:47 2025 +0300
+
+    render database
+
+[33mcommit e34f53ea00bf1be36f3b7d227655ba1777eb5ce2[m
+Merge: b00c116 6b33fa0
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 17 03:39:24 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit b00c1160eaec6b2fd223181fe085f52b62c579a2[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 17 03:30:44 2025 +0300
+
+    Updated .gitignore rules
+
+[33mcommit 6b33fa0e641e34630c59dc82fb355d9686199c6e[m
+Merge: 9e47cfa 6925784
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 17 03:03:57 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit 9e47cfa5d25a7b91bb92ea33ae4a091bc0afc1a3[m
+Merge: f13fa5a dc8fae1
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 17 03:00:41 2025 +0300
+
+    fix
+
+[33mcommit 6925784d568298bd3498b215e9a3aa2a8d834598[m[33m ([m[1;31morigin/well[m[33m, [m[1;32mwell[m[33m)[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 17 00:53:01 2025 +0300
+
+    change the port and install multer library
+
+[33mcommit 2c4dffe98d1e0966eab5d40c28543c060a12bd7b[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 17 00:43:07 2025 +0300
+
+    first fixing of the confilct between Ahmad and Zaid R
+
+[33mcommit f13fa5ad24a9ec6e2e7d8165f362f1f2c3de6496[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sun Mar 16 12:59:00 2025 +0300
+
+    add offer
+
+[33mcommit cf2e7b5ed797f6980fa362335ba4ad84e321a80c[m[33m ([m[1;31morigin/zr[m[33m)[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sun Mar 16 12:50:09 2025 +0300
+
+    env config
+
+[33mcommit dc8fae18a8d4b4e666b2bcf21539ccba7acb2d77[m
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Sun Mar 16 07:35:29 2025 +0300
+
+    zaid
+
+[33mcommit 6e07dac5b59d53340bfb33a641e619de69e0c6e2[m
+Merge: 1be15b6 1eb54cc
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Sun Mar 16 07:22:47 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit 1be15b62850f86d28561b36e0966f1ea26737bb2[m
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Sun Mar 16 07:20:05 2025 +0300
+
+    zaid
+
+[33mcommit ad220f172fc65694c38d3f34da17b7b845511d58[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sun Mar 16 00:15:43 2025 +0300
+
+    nothig
+
+[33mcommit 2c98dd23db25cfd5ed090dd1683d4ea7018d32da[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sat Mar 15 22:59:42 2025 +0300
+
+    addoffer
+
+[33mcommit 1eb54ccc0b9437a725911b9db2efaca2067608a5[m[33m ([m[1;31morigin/BackUp[m[33m, [m[1;32mbackup[m[33m)[m
+Merge: 3a5bf93 5fdc324
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Sat Mar 15 21:25:59 2025 +0300
+
+    setup the database on index.js server.
+
+[33mcommit 3a5bf93768075638fb65545f63fc167f9ca05215[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Sat Mar 15 21:17:06 2025 +0300
+
+    setup the database on index.js server
+
+[33mcommit 5fdc324400bfeee7444c26969f884b36b9bf1826[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sat Mar 15 17:43:30 2025 +0300
+
+    fix db
+
+[33mcommit e462ebf66ca5323737af50b2865673244e171482[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Fri Mar 14 14:07:01 2025 +0300
+
+    Update db
+
+[33mcommit 86cb401785864335f62163420d2acf225ff3d753[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Fri Mar 14 13:11:54 2025 +0300
+
+    update db
+    
+    add type to notification,fix image relationship, add time to chatcontent
+
+[33mcommit b4ce71e26ad033bdedb7cba381808e1cf6fd69cc[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Thu Mar 13 22:28:49 2025 +0300
+
+    update DB and init server
+
+[33mcommit d0485b8b4da1e222a53b53be5d6caccfac48ea39[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Tue Mar 11 11:26:05 2025 +0300
+
+    fix the overlap style :)
+
+[33mcommit 8596f91b303c23a20b3c4bee9888ac2c65a6aa40[m
+Merge: a5ea0b2 6b26f04
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Tue Mar 11 10:29:03 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit a5ea0b25af7f16c6c187bcc7dfeb3580550d94b7[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Tue Mar 11 10:28:51 2025 +0300
+
+    Ahmad
+    
+    i want to see the back-end
+
+[33mcommit 6b26f0480feae1cba28ce1a5775b81311898f5f6[m
+Merge: 56f221f 3da1616
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Tue Mar 11 00:10:07 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit 56f221f338abf6b34ffe58df8118e990a1ae1685[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Tue Mar 11 00:10:04 2025 +0300
+
+    track with date
+
+[33mcommit 3da16161749dbbf6d848630cb2ec71d463cd72f9[m
+Merge: 3332849 fa8f273
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Mon Mar 10 23:59:00 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit 3332849e426db7b4e9dad3da0143e3ad62c669af[m
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Mon Mar 10 23:33:48 2025 +0300
+
+    zaid
+
+[33mcommit fa8f273d85f6b6d98503a2f150b3c861f4004bc6[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 10 23:29:49 2025 +0300
+
+    fixes
+
+[33mcommit 11993987f4eeb1f2e4fd1ccc16f4d5983c8f35cf[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 10 23:26:16 2025 +0300
+
+    setup be
+
+[33mcommit 14894047d1466bac0b597343ff2c3626aa5af86d[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 10 21:31:55 2025 +0300
+
+    backend setup
+    
+    add backend folder and install libraries
+
+[33mcommit a01cff16494b31bf58ead5fe811723fc25925fe6[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 10 20:25:33 2025 +0300
+
+    add the filter buttons to the offers section
+
+[33mcommit a815f8ba4ce3e0aa35041e2ac22cd311c3f10f97[m
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Mon Mar 10 11:33:34 2025 +0300
+
+    Zaid
+
+[33mcommit c2d58ccbe02e72ef966f17e543cb62dd4a935e0b[m
+Merge: 9bdcf5a 118e212
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 10 02:55:57 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit 9bdcf5ae245bb65d54a53d8d85627cf943af922e[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 10 02:54:49 2025 +0300
+
+    add notification icon to the header and active the rent button
+
+[33mcommit 118e212b9b31b50a32b008638676388c80fbae78[m
+Merge: 8410239 78eea50
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 10 00:06:53 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit 8410239a7273c23d4231c3239d530c6fcadb9230[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 10 00:06:47 2025 +0300
+
+    upload and delete files with improving usability
+
+[33mcommit 78eea50a0a411c7c382bc5a7708cbf9175d16feb[m
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Mon Mar 10 00:06:09 2025 +0300
+
+    zaid
+
+[33mcommit c8117dd35edb43758db19c7eb8ef658149fa6e89[m
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Sun Mar 9 23:03:16 2025 +0300
+
+    zaid
+
+[33mcommit 6af172c93a640989b2f8e89c97bd1fb3777ca97f[m
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Sun Mar 9 23:01:48 2025 +0300
+
+    zaid
+
+[33mcommit 92aa736db7a7c85c7cb245fa8af8b4b7bbfd792f[m
+Merge: ca9e982 6c6586c
+Author: Zaidhassouneh <zaidhassouneh256@gmail.com>
+Date:   Sun Mar 9 19:21:47 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit cb2d018eb6756d0efdb343305a9fd585f4efd284[m
+Merge: d49c2c5 6c6586c
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Sun Mar 9 11:07:48 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit d49c2c5473caa49c8a79b96fcbfc955a7b976194[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Sun Mar 9 11:07:42 2025 +0300
+
+    fix
+
+[33mcommit 6c6586c18e063c713d1bd64105292ed3940ac86e[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sat Mar 8 23:22:59 2025 +0300
+
+    add env file
+    
+    env to keep our passwords secure
+
+[33mcommit af022368e7062a8e013173dbd2e87abeeb03239a[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sat Mar 8 18:34:09 2025 +0300
+
+    add note for DB
+    
+     for higher level of security and u wanna use hashing then password will be varchar(60) for 10 salt round also email could be hashing
+
+[33mcommit 2b819690c6f9c907a171adf6a0a903934f5aee0a[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Sat Mar 8 07:04:26 2025 +0300
+
+    make connectiont between SignUp page and login page , and fix some error
+
+[33mcommit c60c43ee60399ec0c0763d2e90de038a83aae5aa[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Sat Mar 8 04:32:15 2025 +0300
+
+    some improvements to SignUp style
+
+[33mcommit a84dc34c957ed489d6e1af94afef2e8903627419[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Fri Mar 7 20:42:46 2025 +0300
+
+    routing  chating
+
+[33mcommit 6f4138dc1499da9f869c9c71c9c0f47eee224f4d[m
+Merge: 397e74c a7926f3
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Fri Mar 7 16:19:01 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit a7926f3e55453decea4060c1c07866b16054a1f5[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Thu Mar 6 08:30:56 2025 +0300
+
+    add Zaid H files and some links with other pages
+
+[33mcommit ca9e98206a228fe8bf3947ded07d1b5d8e8b1c2a[m
+Author: Ahmad Faisal <ahmad100.fa100@gmail.com>
+Date:   Wed Mar 5 20:24:24 2025 +0300
+
+    Update README.md
+
+[33mcommit 397e74c63e230a0e5bfcfa90d174262e3aa6a569[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Tue Mar 4 23:31:41 2025 +0300
+
+    addOffer fix
+    
+    fix numbering  , improve readability
+
+[33mcommit aeaa597bb559dded52f7d7e06af721b7910a1255[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 3 23:11:47 2025 +0300
+
+    some fixes
+
+[33mcommit 72110262360c9b4f92343048e9786e06050537b6[m
+Merge: 84d7f5f 4e73dd7
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 3 23:03:21 2025 +0300
+
+    some fixes
+
+[33mcommit 84d7f5fc6dad0239b72a78a17333d68560efa320[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 3 22:57:06 2025 +0300
+
+    add required  prop
+
+[33mcommit 4e73dd7d398b29e108410e3a6a8fcc896ac00300[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 3 21:48:38 2025 +0300
+
+    add offer button in HomePage will navigate you to add Offer page
+
+[33mcommit c8399823b984a20ed534787aff656f6a5805cdea[m
+Merge: 5256ed4 49dc60d
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 3 20:16:53 2025 +0300
+
+    Merge branch 'main' of https://github.com/ahmadfa100/graduation-project-2
+
+[33mcommit 5256ed4a4bb752425a711808db692dc3149bf5ee[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 3 20:16:00 2025 +0300
+
+    first try to link the pages with some changes & updates
+
+[33mcommit 97efb0230b4ac8cae8bacbca90d5f03bd5914fe5[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 3 20:05:13 2025 +0300
+
+    some changes and first try to link all pages
+
+[33mcommit 49dc60d1fbbad992a8266ea518fff014d9cf55d4[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Mon Mar 3 19:49:30 2025 +0300
+
+    Zaid join
+
+[33mcommit f81fb36d74d7bab38b5dd1be751cccd8c3b1bc89[m[33m ([m[1;31morigin/Link1[m[33m)[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Mon Mar 3 16:09:54 2025 +0300
+
+    first trying to link the pages and organize the files
+
+[33mcommit 4dda51b8c90e9431ad2d47248782507d9ad72d21[m
+Merge: 9413c92 99fb4fc
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Sun Mar 2 03:44:14 2025 +0300
+
+    add Educational resouces page , and three paged followed, and finally some improvements .
+
+[33mcommit 9413c924e9d5c38d18448364f7f29d71c3632b59[m
+Author: Ahmad Faisal <ahmad100.fa100@example.com>
+Date:   Sun Mar 2 03:02:58 2025 +0300
+
+    add Educational resouces page , and three paged followed, and finally some improvements
+
+[33mcommit 99fb4fc6e41afbc606bdd395546988625b20ef45[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sat Mar 1 23:04:46 2025 +0300
+
+    chat page done
+
+[33mcommit fb0fa6fb1cc60ba622199b8ab00bd6054bc0ed97[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sat Mar 1 18:18:39 2025 +0300
+
+    db , weather Alert and season alert added and make zr pages responsive
+
+[33mcommit 084212a82055475bea4f8f9e318e18870d035357[m[33m ([m[1;31morigin/zr_frontend[m[33m)[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sat Mar 1 15:53:45 2025 +0300
+
+    add offer page done
+    
+    first edit
+
+[33mcommit ce647ce499bb1cf4aed1cc140a6cbcd616fd5553[m
+Author: ZaidAR49 <148114243+ZaidAR49@users.noreply.github.com>
+Date:   Sat Mar 1 01:07:39 2025 +0300
+
+    offer details added
+    
+    make leave as jsx file
+    create offer details and button with thier css and jsx files
+    add some classes to app. css

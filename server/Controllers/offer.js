@@ -14,7 +14,7 @@ export const getOffer = async (req, res) => {
       `data:image/jpeg;base64,${row.picture.toString("base64")}`
     );
 
-    res.json({ offer: offerinfo.rows[0], images });
+    res.json({ offer: offerinfo.rows[0], images: images });
   } catch (err) {
     console.error("Error fetching offer:", err);
     res.status(500).json({ error: "Internal Server Error" });

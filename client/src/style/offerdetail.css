@@ -1,7 +1,6 @@
 
 
 
-
 body, html {
   height: 100%;
   font-family: Arial, sans-serif;
@@ -10,6 +9,7 @@ body, html {
 
 .slider-container {
   padding: 20px;
+  
   border-radius: 15px;
   width: 80%;
  

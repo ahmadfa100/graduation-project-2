@@ -51,7 +51,7 @@ function UpdateOffer() {
   async function fetchOffer() {
     try {
       const response = await axios.get(`http://localhost:3001/getOffer/${offerID}`);
-      
+      console.log("here",response.data.images);
       if (response.data.error) {
         notifications.show(response.data.error, {
           severity: "error",

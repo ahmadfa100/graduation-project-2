@@ -29,7 +29,7 @@ function Details(props) {
             <td style={cellStyle}>
               <strong>Size</strong>
             </td>
-            <td style={cellStyle}>{props.size} Dunums</td>
+            <td style={cellStyle}>{props.size} m²</td>
           </tr>
           <tr>
             <td style={cellStyle}>

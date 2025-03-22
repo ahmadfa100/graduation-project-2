@@ -20,6 +20,7 @@ import UpdateOffer from "./Componenet/updateOffer";
 import "./App.css";
 import AccountInf from "./Componenet/AccountInf";
 import DashBoard from "./Componenet/DashBoard";
+import OfferDetails from "./Componenet/offerDetail";
 function App() {
   return (
     <Router>
@@ -44,6 +45,7 @@ function App() {
                   <Route path="/chat" element={<Chat offer_image="./Lands/Land_1.jpg" />} />
                   <Route path="/AccountInf" element={<AccountInf/>}/>
                   <Route path="/DashBoard" element={ <NotificationsProvider><DashBoard/></NotificationsProvider>}/>
+                  <Route path="/OfferDetails" element={<OfferDetails></OfferDetails>} />
                 </Routes>
               </div>
               <Footer />

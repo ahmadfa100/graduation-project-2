@@ -9,7 +9,7 @@ function DashBoard(){
     const notifications = useNotifications();
     async function deleteOffer(){
         try{
-            const offerID = 28; // stump
+            const offerID = 4; // stump
 const response = await axios.delete(`http://localhost:3001/deleteOffer/${offerID}`);
             console.log(response.data);
 

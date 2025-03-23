@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import env from "dotenv";
 import offersRoutes from "./Routes/offerRoutes.js";
+import router from "./Routes/filterRoutes.js";
 import notificationsRoutes from "./Routes/notificationsRoutes.js";
 
 env.config();
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/", offersRoutes);
+app.use("/", router);
 app.use("/api/notifications", notificationsRoutes);
 
 app.listen(port, () => {

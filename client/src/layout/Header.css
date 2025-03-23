@@ -4,7 +4,6 @@
   box-sizing: border-box;
 }
 
-/* Body & Font */
 body {
   font-family: "Arial", sans-serif;
   background-color: #a1a1a1;
@@ -31,14 +30,14 @@ body {
 .right-section {
   display: flex;
   align-items: center;
-  position: relative; 
+  position: relative;
 }
 
 .notification-icon {
   margin-right: 1rem;
   cursor: pointer;
   color: #333;
-  position: relative;
+  position: relative; 
   font-size: 1.2rem;
   transition: color 0.3s ease;
 }
@@ -48,12 +47,31 @@ body {
 }
 
 .notification-icon.active {
-  color: #111; 
+  color: #111;
 }
 
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff3b3b; 
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: bold;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Notification container (the dropdown) */
 .notification-popup {
   position: absolute;
-  top: 2.8rem; 
+  top: 2.8rem;
   right: 0;
   width: 250px;
   background-color: #fff;
@@ -61,39 +79,49 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   padding: 1rem;
-  z-index: 999; 
+  z-index: 999;
 }
 
 .notification-popup::before {
   content: "";
   position: absolute;
-  top: -10px; 
-  right: 115px; 
+  top: -10px;
+  right: 115px;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
-  border-bottom: 10px solid #fff; 
+  border-bottom: 10px solid #fff;
 }
 
 .notification-popup hr {
   margin: 0.5rem 0;
 }
 
+/* Notification item layout */
 .notification-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0.5rem 0;
+  margin-bottom: 0;
+  padding: 0.5rem 0;
 }
 
+.notification-item:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+.notification-item span {
+  margin-right: 0.5rem;
+}
+
+/* "Done" icon styling */
 .check-icon {
   cursor: pointer;
-  color: #4caf50; 
-  font-size: 1.2rem;
+  color: #4caf50;
   transition: color 0.3s ease;
 }
 
 .check-icon:hover {
-  color: #2e7d32; 
+  color: #2e7d32;
 }
 
 /* Logo & Branding */
@@ -116,6 +144,7 @@ body {
   color: #4caf50;
 }
 
+/* Navigation */
 .nav-links {
   display: flex;
   gap: 1.5rem;
@@ -132,13 +161,14 @@ body {
   color: #4caf50;
 }
 
+/* Sign Up Button */
 .signup-container {
   display: flex;
   align-items: center;
 }
 
 .signup-button {
-  background-color: #4caf50; 
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 10px 20px;

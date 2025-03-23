@@ -1,11 +1,59 @@
-// OffersSection.jsx
+import React, { useState, useEffect } from "react";
+import { FaPhone, FaComments, FaHeart, FaRegHeart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
-import React from 'react';
-import { FaPhone, FaComments, FaHeart, FaRegHeart } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-
-function OffersSection({ offers, favoriteOffers, toggleFavorite }) {
+function OffersSection({ favoriteOffers, toggleFavorite }) {
   const navigate = useNavigate();
+
+  // Local state for offers and pagination
+  const [offers, setOffers] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const limit = 3; // Number of offers to fetch per request
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [city, setCity] = useState("");
+  const [period, setPeriod] = useState("");
+  const [space, setSpace] = useState("");
+
+
+  const fetchOffers = async (append = false, newOffset = 0) => {
+    try {
+      const params = new URLSearchParams();
+      if (searchTerm) params.append("search", searchTerm);
+      if (city) params.append("city", city);
+      if (period) params.append("period", period);
+      if (space) params.append("space", space);
+      params.append("limit", limit);
+      params.append("offset", newOffset);
+
+      const response = await fetch(`http://localhost:3001/offers?${params.toString()}`);
+      const data = await response.json();
+
+      if (append) {
+        setOffers(prevOffers => [...prevOffers, ...data]);
+      } else {
+        setOffers(data);
+      }
+    } catch (error) {
+      console.error("Error fetching offers:", error);
+    }
+  };
+
+  useEffect(() => {
+    setOffset(0); 
+    fetchOffers(false, 0);
+  }, []); 
+
+  const handleSearchOrFilter = () => {
+    setOffset(0);
+    fetchOffers(false, 0);
+  };
+
+  const handleMore = () => {
+    const newOffset = offset + limit;
+    setOffset(newOffset);
+    fetchOffers(true, newOffset);
+  };
 
   return (
     <div className="offers-section">
@@ -17,16 +65,24 @@ function OffersSection({ offers, favoriteOffers, toggleFavorite }) {
           type="text"
           placeholder="Search for lands..."
           className="search-input"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <button className="search-button">Search</button>
+        <button className="search-button" onClick={handleSearchOrFilter}>
+          Search
+        </button>
       </div>
 
-      {/* === Filters Container === */}
+      {/* Filters Container */}
       <div className="filters-container">
-        {/* City Filter */}
         <div className="filter-group">
           <label htmlFor="cityFilter" className="filter-label">City</label>
-          <select id="cityFilter" className="filter-select">
+          <select
+            id="cityFilter"
+            className="filter-select"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          >
             <option value="">All Cities</option>
             <option value="Amman">Amman</option>
             <option value="Irbid">Irbid</option>
@@ -43,17 +99,20 @@ function OffersSection({ offers, favoriteOffers, toggleFavorite }) {
           </select>
         </div>
 
-        {/* Period of Rent Filter */}
         <div className="filter-group">
           <label htmlFor="periodFilter" className="filter-label">Period</label>
-          <select id="periodFilter" className="filter-select">
+          <select
+            id="periodFilter"
+            className="filter-select"
+            value={period}
+            onChange={(e) => setPeriod(e.target.value)}
+          >
             <option value="">All</option>
             <option value="monthly">Monthly</option>
             <option value="yearly">Yearly</option>
           </select>
         </div>
 
-        {/* Land Space Filter */}
         <div className="filter-group">
           <label htmlFor="spaceFilter" className="filter-label">Land Space</label>
           <input
@@ -61,17 +120,20 @@ function OffersSection({ offers, favoriteOffers, toggleFavorite }) {
             id="spaceFilter"
             placeholder="e.g. 5 Dunums"
             className="filter-input"
+            value={space}
+            onChange={(e) => setSpace(e.target.value)}
           />
         </div>
 
-        <button className="filter-button">Filter</button>
+        <button className="filter-button" onClick={handleSearchOrFilter}>
+          Filter
+        </button>
       </div>
-      {/* End of Filters Container */}
+      {/* End Filters Container */}
 
       <div className="offers-list">
         {offers.map((offer) => (
           <div key={offer.id} className="offer-item">
-            {/* Left side: Offer Image */}
             <div className="offer-image-container">
               <img
                 src={offer.image}
@@ -79,19 +141,14 @@ function OffersSection({ offers, favoriteOffers, toggleFavorite }) {
                 className="offer-image"
               />
             </div>
-
             <div className="offer-details">
               <div className="offer-header">
-                <h3 className="offer-title">{offer.name}</h3>
-                <span className="offer-price">{offer.price}</span>
+                <h3 className="offer-title">{offer.landtitle}</h3>
+                <span className="offer-price">{offer.landleaseprice}</span>
               </div>
-
-              {/* Subtitle */}
               <p className="offer-subtitle">
-                Land area: {offer.area}, location: {offer.location}
+                Land area: {offer.landsize}, location: {offer.landlocation}
               </p>
-
-              {/* Buttons row */}
               <div className="offer-actions">
                 <button className="action-button">
                   <FaPhone />
@@ -115,7 +172,7 @@ function OffersSection({ offers, favoriteOffers, toggleFavorite }) {
       </div>
 
       <div className="more-button-container">
-        <button className="more-button">More</button>
+        <button className="more-button" onClick={handleMore}>More</button>
       </div>
     </div>
   );

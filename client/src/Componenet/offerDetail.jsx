@@ -1,152 +1,77 @@
-import { useState,useEffect } from "react";
+import { useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import { Navigation, Pagination, Thumbs, Keyboard,} from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/thumbs";
 import "../style/offerdetail.css";
-import LeafLine from "../layout/leafLine";
-import * as Button from "../layout/buttons";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import ClipLoader from "react-spinners/ClipLoader";
 
-const cellStyle = {
-  border: "1px solid #ccc",
-  borderRadius: "5px",
-  margin: "5px",
-  boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2)",
-  padding: "10px",
-  cursor: "pointer",
-  width: "10%",
-  height: "20%",
-};
-function Details(props) {
+const EcommerceSlider = () => {
+  const [thumbsSwiper, setThumbsSwiper] = useState(null);
+
+  const productImages = [
+    "https://cdn.pixabay.com/photo/2022/05/11/09/13/data-7188894_1280.jpg",
+    "https://cdn.pixabay.com/photo/2023/03/22/12/40/ai-generated-7869380_1280.jpg",
+    "https://cdn.pixabay.com/photo/2018/11/14/08/32/binary-code-3814663_1280.jpg",
+    "https://cdn.pixabay.com/photo/2024/05/21/19/57/computer-8779039_1280.jpg",
+  ];
+
   return (
-    <div className="slider-container details">
-      <h1>Offer information </h1>
-      <div>
-        <h3>{props.landtitle  }</h3>
-      
-      </div>
-      <h4 id="price">{props.landleaseprice} JOD</h4>
-      <table>
-        <tbody>
-          <tr style={{ backgroundColor: "#f5f5f5" }}>
-            <td style={cellStyle}>
-              <strong>Size</strong>
-            </td>
-            <td style={cellStyle}>{props.landsize} m²</td>
-          </tr>
-          <tr>
-            <td style={cellStyle}>
-              <strong>Rent Duration</strong>
-            </td>
-            <td style={cellStyle}>
-              {Math.floor(props.leaseduration/12)===1? "one year":`${Math.floor(props.leaseduration/12)} years`} 
-              and {(props.leaseduration%12===1?"one month":`${props.leaseduration%12===1} months`)}</td>
-          </tr>
-          <tr style={{ backgroundColor: "#f5f5f5" }}>
-            <td style={cellStyle}>
-              <strong>Address</strong>
-            </td>
-            <td style={cellStyle}>{props.landlocation }</td>
-          </tr>
-        </tbody>
-      </table>
-      <div className="custom-element">
-        <LeafLine></LeafLine>
-      </div>
-      <p>{props.offerdescription }</p>
-      <div className="custom-element">
-        <LeafLine></LeafLine>
-      </div>
-      <div className="button-container">
-        <Button.Call></Button.Call>
-       <Link to="/chat">
-       <Button.Chat></Button.Chat>
-       </Link>
-        <Button.Like></Button.Like>
-      </div>
-    </div>
-  );
-}
-///////////////////////////////////////////////
- const OfferDetails = (props) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [details, setDetails] = useState([]);
-  const [mainImage, setMainImage] = useState();
+    <div className="slider-container">
+      {/* Main Slider */}
+      <Swiper
+      centeredSlides={true} // Center the active slide
+      spaceBetween={5} // Reduce space between slides
+      slidesPerView={"auto"} // Allow slides to adjust automatically
+        loop={true}
+        keyboard={{ enabled: true }}  // ✅ Enable keyboard navigation
+        navigation
+        pagination={{ clickable: true }}
+        modules={[Navigation, Pagination, Thumbs, Keyboard]}
+        thumbs={{ swiper: thumbsSwiper }}
+        className="main-slider"
+        onInit={(swiper) => {
+        
+          swiper.el.querySelector(".swiper-button-next").style.color = "green";
+          swiper.el.querySelector(".swiper-button-prev").style.color = "green";
+          swiper.el.querySelectorAll(".swiper-pagination-bullet").forEach((bullet) => {
+            bullet.style.backgroundColor = "green";
+          });
+          
+        }}
+      >
+        {productImages.map((img, index) => (
+          <SwiperSlide key={index}>
+            <img src={img} alt={`Product ${index + 1}`} className="main-image" />
+          </SwiperSlide>
+        ))}
+      </Swiper>
 
-  const [thumbnails,setThumbnails] = useState([]);
-  
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const changeImage = (index) => {
-    setMainImage(thumbnails[index]);
-    setActiveIndex(index);
-  };
-
-  useEffect(() => {
-   fetchoffer();
-  }, []);
-  async function fetchoffer() {
-    const offerID = 5;
-    try {
-      const response = await axios.get(`http://localhost:3001/getOffer/${offerID}`);
-      
-      console.log("Full server response:", response.data);
-      console.log("here",response.data.images);
-      if (response.data && response.data.images) {
-        setDetails(response.data.offer);
-        setMainImage(response.data.images[0]);
-        setThumbnails(response.data.images);
-        setIsLoading(false);
-
-
-      } else {
-        console.error("No images found in response:", response.data);
+      {/* Thumbnail Slider */}
+      <Swiper
+   
+        onSwiper={setThumbsSwiper}
+        spaceBetween={5}
+        slidesPerView={3}
+        watchSlidesProgress
+        modules={[Thumbs]}
+        className="thumb-slider"
+      style={
+        {
+         
+        }
       }
-    } catch (error) {
-      console.error("Error fetching offer details:", error);
-    }
-  }
- // console.log("here =>",details);
-
-  return (
-    <div className="page">
-   {
-    isLoading? (
-      <ClipLoader color="green" size={50}    />
-    ) : (
-<div>
-<div className="slider-container">
-      <div className="main-slide">
-        <img id="mainImage" src={mainImage} alt="Main Slide" />
-      </div>
-      <div className="thumbnail-container">
-        {thumbnails.map((thumb, index) => (
-          <img
-            key={index}
-            src={thumb}
-            alt={`Thumb ${index + 1}`}
-            onClick={() => changeImage(index)}
-            className={activeIndex === index ? "active" : ""}
-          />
+      >
+        {productImages.map((img, index) => (
+          <SwiperSlide key={index}>
+            <img src={img} alt={`Thumbnail ${index + 1}`} className="thumb-image" />
+          </SwiperSlide>
         ))}
-      </div>
-
-      <div className="pagination-dots">
-        {thumbnails.map((_, index) => (
-          <span
-            key={index}
-            onClick={() => changeImage(index)}
-            className={activeIndex === index ? "active" : ""}
-          ></span>
-        ))}
-      </div>
-    </div>
-
-    <div className="slider-container">{Details(details)}</div>
-</div>
-    )
-   }
+      </Swiper>
     </div>
   );
 };
 
-export default OfferDetails;
+export default EcommerceSlider;

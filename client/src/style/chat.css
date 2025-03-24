@@ -1,18 +1,12 @@
-body {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-   
-   
-}
+
 
 .chat-page {
-    background-color: #f2f2f2;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url(https://www.transparenttextures.com/patterns/ag-square.png) !important;
+    
+    margin: 50px;
     
 }
 

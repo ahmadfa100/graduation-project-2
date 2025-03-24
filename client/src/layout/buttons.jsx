@@ -19,7 +19,7 @@ function Chat() {
 }
 
 function Like() {
-  let [like,likeState]= useState(false);
+  let [like,likeState]= useState(true);
 
   function change(){
     likeState(like=!like);

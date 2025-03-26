@@ -133,6 +133,12 @@ function ChatInput({ message, setMessage, sendMessage }) {
         placeholder="Type a message..."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            sendMessage();
+          }
+        }}
       />
       <button onClick={sendMessage}>
         <FaPaperPlane />

@@ -6,6 +6,7 @@ import io from "socket.io-client";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 
+
 const socket = io("http://localhost:3001", { autoConnect: false });
 
 function Chat() {
@@ -20,6 +21,12 @@ function Chat() {
   const room = `owner${ownerID}user${userID}`;
 
   useEffect(() => {
+
+    fetchOffer();
+  const sender=1;
+  const receiver = 2;
+  socket.emit("Initialize", { sender: sender, receiver: receiver});
+
     socket.connect();
     socket.emit("join", room);
 
@@ -41,9 +48,7 @@ function Chat() {
     };
   }, [room]);
 
-  useEffect(() => {
-    fetchOffer();
-  }, []);
+ 
 
   async function fetchOffer() {
     const offerID = 5;

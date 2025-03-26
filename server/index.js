@@ -1,9 +1,9 @@
-import express from "express";
+import express, { response } from "express";
 import cors from "cors";
 import env from "dotenv";
 import { Server } from "socket.io";
 import { createServer } from "http";
-
+import db from "./db.js";
 env.config();
 const app = express();
 const port = process.env.PORT || 3001;
@@ -28,7 +28,15 @@ io.on("connection", (socket) => {
     console.log(`User joined room: ${room}`);
   });
 
-  socket.on("sendMessage", ({ message, room }) => {
+  socket.on("sendMessage",async ({ message, room }) => {
+
+
+
+
+
+
+
+
     console.log(`Message sent in room ${room}:`, message);
     socket.to(room).emit("RecivedMessage", { message }); // gpt: Include sender ID
   });
@@ -38,7 +46,16 @@ io.on("connection", (socket) => {
   });
 });
 
-
+app.get("/getchat/:receiverID?/:senderID?/:chatID?", async (req, res) => {
+  const { receiverID, senderID, chatID } = req.params;
+  const response = await db.query("SELECT ID FROM chat WHERE receiverID=($1) AND senderID=($2)",receiverID,senderID);
+  if (response.rows.length === 0) {
+   res.status(404).send("Not Found");
+  }
+  else {
+    res.send(response.rows[0]);
+  }
+});
 
 //////////////////////////////////////////////////////////
 

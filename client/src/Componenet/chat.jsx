@@ -13,6 +13,7 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const [offer, setOffer] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const [preview, setPreview] = useState(null);
 
   const ownerID = 1;
   const userID = 1;
@@ -63,6 +64,7 @@ function Chat() {
   }
 
   const sendMessage = () => {
+
 document.querySelectorAll("input").forEach( element=> element.value = '');
 
     if(message==null) {return;}
@@ -75,6 +77,7 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
       { content: message, sender: "sent" },
     ]);
     setMessage(null);
+    setPreview(null);
   };
 
   return (
@@ -104,6 +107,8 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
             message={message}
             setMessage={setMessage}
             sendMessage={sendMessage}
+            preview={preview}
+            setPreview={setPreview}
           />
         </div>
       )}
@@ -111,7 +116,7 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
   );
 }
 
-function ChatInput({ message, setMessage, sendMessage }) {
+function ChatInput({ message, setMessage,preview,setPreview, sendMessage }) {
   return (
     <div className="chat-input">
       <button className="icon-btn">
@@ -125,14 +130,25 @@ function ChatInput({ message, setMessage, sendMessage }) {
         id="file-upload"
         className="file-input"
         name="chatImage"
-        onChange={(e) => setMessage(e.target.files[0])}
+        onChange={(e) => {
+          setMessage(e.target.files[0]);
+          setPreview(URL.createObjectURL(e.target.files[0]));
+        }}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             e.preventDefault();
             sendMessage();
+          
           }
         }}
       />
+      <div>
+        {preview && (
+          <div className="message-preview">
+            <img src={preview} alt="Preview" />
+          </div>
+        )}
+      </div>
       <input
         type="text"
         placeholder="Type a message..."
@@ -142,6 +158,7 @@ function ChatInput({ message, setMessage, sendMessage }) {
           if (e.key === "Enter") {
             e.preventDefault();
             sendMessage();
+            
           }
         }}
       />
@@ -153,6 +170,7 @@ function ChatInput({ message, setMessage, sendMessage }) {
 }
 
 function Send({ content }) {
+  
 const blob = new Blob([content], { type: "image/png" });
 const imageUrl = URL.createObjectURL(blob);
   if (typeof content === "string") {

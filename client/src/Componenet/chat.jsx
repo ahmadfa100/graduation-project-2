@@ -6,27 +6,40 @@ import io from "socket.io-client";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 
-const socket = io("http://localhost:3001"); // Ensure socket is initialized once
+const socket = io("http://localhost:3001", { autoConnect: false });
 
 function Chat() {
-  const [message, setMessage] = useState(""); // Input message
-  const [messages, setMessages] = useState([]); // Stores all messages
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
   const [offer, setOffer] = useState(null);
   const [isLoading, setLoading] = useState(true);
 
-  // Define room ID dynamically
   const ownerID = 1;
   const userID = 1;
   const room = `owner${ownerID}user${userID}`;
 
   useEffect(() => {
+    socket.connect();
     socket.emit("join", room);
+
+    socket.on("RecivedMessage", (newMessage) => {
+      console.log("Received message:", newMessage);
+
+      // gpt: Ignore messages that were sent by this user
+      
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          { content: newMessage.message, sender: "received" },
+        ]);
+      
+    });
+
     return () => {
-      socket.emit("leave", room); // Leave the room when component unmounts
+      socket.off("RecivedMessage");
+      socket.disconnect();
     };
   }, [room]);
 
-  // Fetch offer data
   useEffect(() => {
     fetchOffer();
   }, []);
@@ -49,31 +62,17 @@ function Chat() {
     }
   }
 
-  // Listen for incoming messages
-  useEffect(() => {
-    socket.on("RecivedMessage", ({ message }) => {
-      console.log("Received message:", message);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { content: message, sender: "received" },
-      ]);
-    });
-
-    return () => socket.off("RecivedMessage"); // Cleanup listener
-  }, []);
-
-  // Handle sending message
   const sendMessage = () => {
-    if (message.trim() === "") return; // Prevent empty messages
+    if (message.trim() === "") return;
 
-    socket.emit("sendMessage", { message, room }); // Send message with room ID
+    const messageData = { message, room }; // gpt: Include sender ID
+    socket.emit("sendMessage", messageData);
 
-    // Update UI immediately with the sent message
     setMessages((prevMessages) => [
       ...prevMessages,
       { content: message, sender: "sent" },
     ]);
-    setMessage(""); // Clear input
+    setMessage("");
   };
 
   return (
@@ -92,17 +91,9 @@ function Chat() {
           <div className="chat-box">
             {messages.map((msg, index) =>
               msg.sender === "sent" ? (
-                <Send
-                  key={index}
-                  content={msg.content}
-                  date={new Date().toLocaleTimeString()}
-                />
+                <Send key={index} content={msg.content} />
               ) : (
-                <Receive
-                  key={index}
-                  content={msg.content}
-                  date={new Date().toLocaleTimeString()}
-                />
+                <Receive key={index} content={msg.content} />
               )
             )}
           </div>
@@ -118,7 +109,6 @@ function Chat() {
   );
 }
 
-// Chat input component
 function ChatInput({ message, setMessage, sendMessage }) {
   return (
     <div className="chat-input">
@@ -153,22 +143,18 @@ function ChatInput({ message, setMessage, sendMessage }) {
   );
 }
 
-// Sent message component
-function Send({ content, date }) {
+function Send({ content }) {
   return (
     <div className="send">
       <div className="message">{content}</div>
-      <div className="timestamp">{date}</div>
     </div>
   );
 }
 
-// Received message component
-function Receive({ content, date }) {
+function Receive({ content }) {
   return (
     <div className="received">
       <div className="message">{content}</div>
-      <div className="timestamp">{date}</div>
     </div>
   );
 }

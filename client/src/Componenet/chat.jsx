@@ -153,17 +153,18 @@ function ChatInput({ message, setMessage, sendMessage }) {
 }
 
 function Send({ content }) {
-
+const blob = new Blob([content], { type: "image/png" });
+const imageUrl = URL.createObjectURL(blob);
   if (typeof content === "string") {
     return (
       <div className="send">
         <div className="message">{content}</div>
       </div>
     );
-  } else if (content instanceof File) {
+  } else if (content instanceof ArrayBuffer || content instanceof Uint8Array|| content instanceof File) {
     return (
       <div className="send">
-        <img src={URL.createObjectURL(content)} alt="chatImage" />
+        <img src={imageUrl} alt="chatImage" />
       </div>
     );
   } else {
@@ -176,20 +177,21 @@ function Send({ content }) {
 }
 
 function Receive({ content }) {
+   const blob = new Blob([content], { type: "image/png" });
+   const imageUrl = URL.createObjectURL(blob);
   if(typeof(content) === "string"){
   return (
     <div className="received">
       <div className="message">{content}</div>
     </div>
   );}
-  else if (content instanceof File) {
+  else if (content instanceof ArrayBuffer || content instanceof Uint8Array) {
     return (
       <div className="received">
-        <img src={URL.createObjectURL(content)} alt="chatImage" />
+        <img src={imageUrl} alt="chatImage" />
       </div>
     );
-  }
-  else{
+  } else {
     return (
       <div className="received ">
         <div className="message error-message"> unknown type message❌</div>

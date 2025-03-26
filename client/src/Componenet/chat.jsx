@@ -153,19 +153,49 @@ function ChatInput({ message, setMessage, sendMessage }) {
 }
 
 function Send({ content }) {
-  return (
-    <div className="send">
-      <div className="message">{content}</div>
-    </div>
-  );
+
+  if (typeof content === "string") {
+    return (
+      <div className="send">
+        <div className="message">{content}</div>
+      </div>
+    );
+  } else if (content instanceof File) {
+    return (
+      <div className="send">
+        <img src={URL.createObjectURL(content)} alt="chatImage" />
+      </div>
+    );
+  } else {
+    return (
+      <div className="send">
+        <div className="message error-message"> unknown type message❌</div>
+      </div>
+    );
+  }
 }
 
 function Receive({ content }) {
+  if(typeof(content) === "string"){
   return (
     <div className="received">
       <div className="message">{content}</div>
     </div>
-  );
+  );}
+  else if (content instanceof File) {
+    return (
+      <div className="received">
+        <img src={URL.createObjectURL(content)} alt="chatImage" />
+      </div>
+    );
+  }
+  else{
+    return (
+      <div className="received ">
+        <div className="message error-message"> unknown type message❌</div>
+      </div>
+    );
+  }
 }
 
 export default Chat;

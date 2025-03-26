@@ -9,7 +9,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 const socket = io("http://localhost:3001", { autoConnect: false });
 
 function Chat() {
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(null);
   const [messages, setMessages] = useState([]);
   const [offer, setOffer] = useState(null);
   const [isLoading, setLoading] = useState(true);
@@ -63,7 +63,9 @@ function Chat() {
   }
 
   const sendMessage = () => {
-    if (message.trim() === "") return;
+document.querySelectorAll("input").forEach( element=> element.value = '');
+
+    if(message==null) {return;}
 
     const messageData = { message, room }; // gpt: Include sender ID
     socket.emit("sendMessage", messageData);
@@ -72,7 +74,7 @@ function Chat() {
       ...prevMessages,
       { content: message, sender: "sent" },
     ]);
-    setMessage("");
+    setMessage(null);
   };
 
   return (
@@ -123,6 +125,13 @@ function ChatInput({ message, setMessage, sendMessage }) {
         id="file-upload"
         className="file-input"
         name="chatImage"
+        onChange={(e) => setMessage(e.target.files[0])}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            sendMessage();
+          }
+        }}
       />
       <input
         type="text"

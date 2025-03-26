@@ -42,8 +42,8 @@ io.on("connection", (socket) => {
   socket.on("sendMessage", (data) =>{
     console.log("Sent message :", data.message);
 
-    socket.broadcast.emit("RecivedMessage", data.message);
-    //socket.to(data.room).emit("RecivedMessage",data);
+   // socket.broadcast.emit("RecivedMessage", data.message);
+    socket.to(data.room).emit("RecivedMessage",data);
   });
   socket.on("disconnect", () => {
     console.log("Client disconnected :", socket.id);

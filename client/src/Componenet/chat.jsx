@@ -9,19 +9,26 @@ import ClipLoader from "react-spinners/ClipLoader";
 const socket = io("http://localhost:3001"); // Ensure socket is initialized once
 
 function Chat() {
-  const [message, setMessage] = useState(null); // Input message
+  const [message, setMessage] = useState(""); // Input message
   const [messages, setMessages] = useState([]); // Stores all messages
   const [offer, setOffer] = useState(null);
   const [isLoading, setLoading] = useState(true);
-//stump
-const ownerID=1;
-const userID=1;
-const room=`owner${ownerID}user${userID}`;
-  socket.emit("join",room)
+
+  // Define room ID dynamically
+  const ownerID = 1;
+  const userID = 1;
+  const room = `owner${ownerID}user${userID}`;
+
+  useEffect(() => {
+    socket.emit("join", room);
+    return () => {
+      socket.emit("leave", room); // Leave the room when component unmounts
+    };
+  }, [room]);
+
   // Fetch offer data
   useEffect(() => {
     fetchOffer();
-      
   }, []);
 
   async function fetchOffer() {
@@ -44,12 +51,11 @@ const room=`owner${ownerID}user${userID}`;
 
   // Listen for incoming messages
   useEffect(() => {
-    socket.emit("join", room);
-    socket.on("RecivedMessage", (newMessage) => {
-      console.log("Received message:", newMessage);
+    socket.on("RecivedMessage", ({ message }) => {
+      console.log("Received message:", message);
       setMessages((prevMessages) => [
         ...prevMessages,
-        { content: newMessage, sender: "received" },
+        { content: message, sender: "received" },
       ]);
     });
 
@@ -60,7 +66,7 @@ const room=`owner${ownerID}user${userID}`;
   const sendMessage = () => {
     if (message.trim() === "") return; // Prevent empty messages
 
-    socket.emit("sendMessage", { message });
+    socket.emit("sendMessage", { message, room }); // Send message with room ID
 
     // Update UI immediately with the sent message
     setMessages((prevMessages) => [

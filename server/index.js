@@ -27,6 +27,23 @@ io.on("connection", (socket) => {
     socket.join(room);
     console.log(`User joined room: ${room}`);
   });
+  socket.on("Initialize", async({ sender, receiver, offer })=>{
+    try{
+ const chats = await getChats({ receiverID: receiver, senderID: sender, chatID: null, offerID:offer });
+ if(chats.length > 0){
+   //socket.emit("InitialMessages", chats.rows);
+   console.log("chat is already exist",chats[0].id);
+ }
+ else{
+  console.log("new chat");
+ }
+ }catch(error){
+  console.error("Error retrieving chats:", error);
+
+    }
+
+    
+  });
 
   socket.on("sendMessage",async ({ message, room }) => {
 
@@ -47,38 +64,23 @@ io.on("connection", (socket) => {
 });
 
 app.get("/getchat", async (req, res) => {
-  const { receiverID, senderID, chatID,offerID } = req.query;
-let query = "SELECT * FROM chats WHERE 1=1";
-  let values = [];
-  if (receiverID) {
-    query += " AND receiverID = $1";
-    values.push(receiverID);
-  }
-  if (senderID) {
-    query += " AND senderID = $2";
-    values.push(senderID);
-  }
-  if (offerID) {
-    query += " AND offerID = $3";
-    values.push(offerID);
-  }
-  if (chatID) {
-    query += " AND chatID = $3";
-    values.push(chatID);
-  }
+  try {
+    const { receiverID, senderID, chatID, offerID } = req.query;
+    const chats = await getChats({ receiverID, senderID, chatID, offerID });
 
-  const chats = await db.query(query, values);
-  
-  if(chats.rows){
-    res.json(chats.rows);
+    if (chats.rows.length > 0) {
+      res.json(chats.rows);
+    } else {
+      res.status(404).send("Not Found");
+    }
+  } catch (error) {
+    console.error("Error retrieving chats:", error);
+    res.status(500).send("Internal Server Error");
   }
-  else{
-    res.status(404).send("Not Found");
-  }
-
-
-
 });
+
+
+
 app.post('/addchat',async(req,res) => {
   const { receiverID, senderID,offerID } = req.body;
   const response = await db.query(
@@ -87,6 +89,32 @@ app.post('/addchat',async(req,res) => {
   );
   res.send(response.rows[0]);
 });
+
+const getChats = async ({ receiverID, senderID, chatID, offerID }) => {
+  let query = "SELECT * FROM chats WHERE 1=1";
+  let values = [];
+  let index = 1; // To track parameter position
+
+  if (receiverID) {
+    query += ` AND receiverID = $${index++}`;
+    values.push(receiverID);
+  }
+  if (senderID) {
+    query += ` AND senderID = $${index++}`;
+    values.push(senderID);
+  }
+  if (offerID) {
+    query += ` AND offerID = $${index++}`;
+    values.push(offerID);
+  }
+  if (chatID) {
+    query += ` AND chatID = $${index++}`;
+    values.push(chatID);
+  }
+
+  return (await db.query(query, values)).rows;
+};
+
 
 //////////////////////////////////////////////////////////
 

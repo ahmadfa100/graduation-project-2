@@ -25,8 +25,8 @@ function Chat() {
     fetchOffer();
     
   const sender=1;
-  const receiver = 2;
-  const offer = 3;
+  const receiver = 3;
+  const offer = 5;
   socket.emit("Initialize", { sender: sender, receiver: receiver, offer: offer});
 
     socket.connect();

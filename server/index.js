@@ -46,15 +46,46 @@ io.on("connection", (socket) => {
   });
 });
 
-app.get("/getchat/:receiverID?/:senderID?/:chatID?", async (req, res) => {
-  const { receiverID, senderID, chatID } = req.params;
-  const response = await db.query("SELECT ID FROM chat WHERE receiverID=($1) AND senderID=($2)",receiverID,senderID);
-  if (response.rows.length === 0) {
-   res.status(404).send("Not Found");
+app.get("/getchat", async (req, res) => {
+  const { receiverID, senderID, chatID,offerID } = req.query;
+let query = "SELECT * FROM chats WHERE 1=1";
+  let values = [];
+  if (receiverID) {
+    query += " AND receiverID = $1";
+    values.push(receiverID);
   }
-  else {
-    res.send(response.rows[0]);
+  if (senderID) {
+    query += " AND senderID = $2";
+    values.push(senderID);
   }
+  if (offerID) {
+    query += " AND offerID = $3";
+    values.push(offerID);
+  }
+  if (chatID) {
+    query += " AND chatID = $3";
+    values.push(chatID);
+  }
+
+  const chats = await db.query(query, values);
+  
+  if(chats.rows){
+    res.json(chats.rows);
+  }
+  else{
+    res.status(404).send("Not Found");
+  }
+
+
+
+});
+app.post('/addchat',async(req,res) => {
+  const { receiverID, senderID,offerID } = req.body;
+  const response = await db.query(
+    "INSERT INTO chats (receiverID, senderID,offerID) VALUES ($1, $2,$3) RETURNING ID",
+    [receiverID, senderID, offerID]
+  );
+  res.send(response.rows[0]);
 });
 
 //////////////////////////////////////////////////////////

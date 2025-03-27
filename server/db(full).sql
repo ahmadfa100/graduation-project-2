@@ -75,6 +75,7 @@ CREATE TABLE Chats (
 CREATE TABLE ChatContents (
     contentID SERIAL PRIMARY KEY,
     chatID INT REFERENCES Chats(ID) ON DELETE CASCADE,
+    senderID INT NOT NULL REFERENCES users(ID) ON DELETE CASCADE,
     contentText varchar(255) ,  
     contentFile BYTEA ,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP  

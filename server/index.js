@@ -68,8 +68,8 @@ app.get("/getchat", async (req, res) => {
     const { receiverID, senderID, chatID, offerID } = req.query;
     const chats = await getChats({ receiverID, senderID, chatID, offerID });
 
-    if (chats.rows.length > 0) {
-      res.json(chats.rows);
+    if (chats.length > 0) {
+      res.json(chats);
     } else {
       res.status(404).send("Not Found");
     }

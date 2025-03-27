@@ -23,9 +23,11 @@ function Chat() {
   useEffect(() => {
 
     fetchOffer();
+    
   const sender=1;
   const receiver = 2;
-  socket.emit("Initialize", { sender: sender, receiver: receiver});
+  const offer = 3;
+  socket.emit("Initialize", { sender: sender, receiver: receiver, offer: offer});
 
     socket.connect();
     socket.emit("join", room);

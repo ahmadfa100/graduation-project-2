@@ -66,7 +66,7 @@ socket.on("InitialMessages", (id) => {
       console.log("messages:",oldMessages);
       if(oldMessages){
         oldMessages.forEach(element => {
-        if( element.senderid==userID){
+        if( element.senderid===userID){
           
           if(element.contenttext){
             setMessages((prevMessages) => [
@@ -75,13 +75,14 @@ socket.on("InitialMessages", (id) => {
             ]);
           }
           else if( element.contentfile){
+            console.log("image from db type: " + typeof element.contentfile,"the actual image is: " + element.contentfile); //line 1
             setMessages((prevMessages) => [
              ...prevMessages,
               { content: element.contentfile , sender: "sent" },
             ]);
           }
 
-        }else if(element.senderid==ownerID){
+        }else if(element.senderid===ownerID){
           if(element.contenttext){
             setMessages((prevMessages) => [
              ...prevMessages,
@@ -240,7 +241,7 @@ function ChatInput({ message, setMessage,preview,setPreview, sendMessage }) {
 }
 
 function Send({ content }) {
-  
+  console.log("image type: " , typeof content, "the actual content:\n", content);//line 2
 const blob = new Blob([content], { type: "image/png" });
 const imageUrl = URL.createObjectURL(blob);
   if (typeof content === "string") {

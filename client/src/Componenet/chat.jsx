@@ -17,7 +17,7 @@ function Chat() {
   const [preview, setPreview] = useState(null);
 
   const ownerID = 1;
-  const userID = 1;
+  const userID = 2;
   const room = `owner${ownerID}user${userID}`;
 
   useEffect(() => {
@@ -60,16 +60,54 @@ socket.on("InitialMessages", (id) => {
 
     try {
       console.log("Fetching chat messages...");
-      const response = await axios.get(
-        `http://localhost:3001/getchatcontent/`
-      ,{params: { chatID } });
-      console.log("Chat messages received:", response.data);
+      const response = await axios.get(`http://localhost:3001/getchatcontent/`,{params: { chatID } });
+     const oldMessages = response.data;
+     console.log(Array.isArray(oldMessages)); // Should print true
+      console.log("messages:",oldMessages);
+      if(oldMessages){
+        oldMessages.forEach(element => {
+        if( element.senderid==userID){
+          
+          if(element.contenttext){
+            setMessages((prevMessages) => [
+             ...prevMessages,
+              { content: element.contenttext, sender: "sent" },
+            ]);
+          }
+          else if( element.contentfile){
+            setMessages((prevMessages) => [
+             ...prevMessages,
+              { content: element.contentfile , sender: "sent" },
+            ]);
+          }
+
+        }else if(element.senderid==ownerID){
+          if(element.contenttext){
+            setMessages((prevMessages) => [
+             ...prevMessages,
+              { content: element.contenttext, sender: "received" },
+            ]);
+          }
+          else if(element.contentfile){
+            setMessages((prevMessages) => [
+             ...prevMessages,
+              { content: element.contentfile, sender: "received" },
+            ]);
+          }
+        }      
+});
+setLoading(false);
+     
+      }
+      else{
+        console.log("No chat messages available.");
+      }
       if (response.data.error) {
         console.log("Error fetching chat messages:", response.data.error);
         return;
       }
-      //setMessages(response.data);
-      //setLoading(false);
+      
+      
       
     } catch (error) {
       console.error("Error fetching chat:", error);
@@ -89,7 +127,7 @@ socket.on("InitialMessages", (id) => {
         return;
       }
       setOffer(response.data);
-      setLoading(false);
+      
     } catch (error) {
       console.error("Error fetching offer:", error);
     }

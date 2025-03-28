@@ -29,14 +29,20 @@ io.on("connection", (socket) => {
   });
   socket.on("Initialize", async({ sender, receiver, offer })=>{
     try{
- const chats = await getChats({ receiverID: receiver, senderID: sender, chatID: null, offerID:offer });
- if(chats.length > 0){
-   //socket.emit("InitialMessages", chats.rows);
-   console.log("chat is already exist",chats[0].id);
+ let chat = await getChats({ receiverID: receiver, senderID: sender, chatID: null, offerID:offer });
+ if(chat.length > 0){
+   console.log("chat is already exist");
  }
  else{
   console.log("new chat");
+    chat = await db.query(
+      "INSERT INTO chats (senderID, receiverID, offerID) VALUES ($1, $2, $3) RETURNING id",
+      [sender, receiver, offer]
+    );
+
  }
+    console.log("chat id :", chat[0].id);
+ socket.emit("InitialMessages", chat[0].id);
  }catch(error){
   console.error("Error retrieving chats:", error);
 
@@ -45,9 +51,18 @@ io.on("connection", (socket) => {
     
   });
 
-  socket.on("sendMessage",async ({ message, room }) => {
-
-
+  socket.on("sendMessage",async ({ message, room,sender }) => {
+    
+if (typeof message === "string") {
+  console.log(`Text message received from ${sender}: ${message}`);
+} else if (typeof message === "object") {
+  console.log(
+    `Image message received from ${sender}, format: ${message.format}`
+  );
+  // You can store the Base64 data in a database or decode it for storage
+} else {
+  console.log("Unknown message format received.");
+}
 
 
 
@@ -77,6 +92,16 @@ app.get("/getchat", async (req, res) => {
     console.error("Error retrieving chats:", error);
     res.status(500).send("Internal Server Error");
   }
+});
+
+app.get('/getchatcontent', async (req, res)=> {
+  const { chatID } = req.query;
+  const chatContents = await db.query("SELECT contentFile ,contentText,senderID FROM ChatContents WHERE chatID = $1",[chatID] );
+    
+ console.log("chat contents: ",chatContents);
+
+    
+ 
 });
 
 

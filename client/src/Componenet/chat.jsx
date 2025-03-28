@@ -27,8 +27,13 @@ function Chat() {
   const sender=1;
   const receiver = 3;
   const offer = 5;
+ 
   socket.emit("Initialize", { sender: sender, receiver: receiver, offer: offer});
-
+socket.on("InitialMessages", (id) => {
+     console.log("chat  client id:", id);
+  fetchChat(id);
+});
+  
     socket.connect();
     socket.emit("join", room);
 
@@ -50,6 +55,23 @@ function Chat() {
     };
   }, [room]);
 
+  async function fetchChat(chatID){
+    // we need to fetch chatmessages not chat
+
+    // try {
+    //   const response = await axios.get( `http://localhost:3001/getChat`,{chatID: chatID}  );
+
+    //   console.log("Chat received:", response.data);
+    //   if (response.data.error) {
+    //     console.log("Error fetching chat:", response.data.error);
+    //     return;
+    //   }
+    //  // setMessages(response.data.messages);
+    //  // setLoading(false);
+    // } catch (error) {
+    //   console.error("Error fetching chat:", error);
+    // }
+  }
  
 
   async function fetchOffer() {
@@ -76,7 +98,7 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
 
     if(message==null) {return;}
 
-    const messageData = { message, room }; // gpt: Include sender ID
+    const messageData = { message, room, sender :userID }; // gpt: Include sender ID
     socket.emit("sendMessage", messageData);
 
     setMessages((prevMessages) => [

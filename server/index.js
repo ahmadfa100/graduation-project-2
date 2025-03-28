@@ -103,11 +103,24 @@ app.get("/getchat", async (req, res) => {
 });
 
 app.get('/getchatcontent', async (req, res)=> {
-  const { chatID } = req.query;
+ // console.log("Get chat content") 
+  try{
+    const { chatID } = req.query;
+    if(!chatID){
+      return res.status(400).send("Missing chatID");
+    }
   const chatContents = await db.query("SELECT contentFile ,contentText,senderID FROM ChatContents WHERE chatID = $1",[chatID] );
-    
- console.log("chat contents: ",chatContents);
-
+    if(chatContents.rowCount>0){
+ //console.log("chat contents: ",chatContents.rows);
+ res.json(chatContents.rows);
+    }
+    else{
+      res.status(404).send("Not Found");
+    }
+  }catch (error) {
+    console.error("Error retrieving chat contents:", error);
+    res.status(500).send("Internal Server Error");
+  }
     
  
 });

@@ -1,5 +1,3 @@
-// App.jsx
-//3/14
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
@@ -35,7 +33,7 @@ function App() {
               <div className="content">
                 <Routes>
                   <Route path="/" element={<HomePage />} />
-                  <Route path="/offer" element={<Offferdetail />} />
+                  <Route path="/OfferDetails/:offerID" element={<OfferDetails />} />
                   <Route path="/education" element={<Educational />} />
                   <Route path="/article/:id" element={<ArticleDetail />} />
                 

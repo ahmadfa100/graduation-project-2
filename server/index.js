@@ -22,7 +22,7 @@ const io = new Server(server, {
 
 io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);
-
+let chatID=0;
   socket.on("join", (room) => {
     socket.join(room);
     console.log(`User joined room: ${room}`);
@@ -41,6 +41,7 @@ io.on("connection", (socket) => {
     );
 
  }
+ chatID=chat[0].id;
     console.log("chat id :", chat[0].id);
  socket.emit("InitialMessages", chat[0].id);
  }catch(error){
@@ -52,10 +53,16 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage",async ({ message, room,sender }) => {
-    
+
+ if(chatID){
+     
 if (typeof message === "string") {
-  console.log(`Text message received from ${sender}: ${message}`);
+  console.log( `Text message received from ${sender}: ${message} :chat id : ${chatID}`);
+   const response = await db.query("INSERT INTO ChatContents (chatID, senderID, contentText)  VALUES ($1,$2,$3) Returning contentID ",[chatID,sender,message]);
+  console.log( "storing text message",response.rows[0].contentID);
 } else if (typeof message === "object") {
+  const response = await db.query("INSERT INTO ChatContents (chatID, senderID, contentFile)  VALUES ($1,$2,$3) Returning contentID ",[chatID,sender,message]);
+  console.log( "storing image message",response.rows[0].contentID);
   console.log(
     `Image message received from ${sender}, format: ${message.format}`
   );
@@ -64,6 +71,7 @@ if (typeof message === "string") {
   console.log("Unknown message format received.");
 }
 
+ }
 
 
 

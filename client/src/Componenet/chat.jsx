@@ -242,8 +242,7 @@ function ChatInput({ message, setMessage,preview,setPreview, sendMessage }) {
 
 function Send({ content }) {
   console.log("image type: " , typeof content, "the actual content:\n", content);//line 2
-const blob = new Blob([content], { type: "image/png" });
-const imageUrl = URL.createObjectURL(blob);
+
   if (typeof content === "string") {
     return (
       <div className="send">
@@ -251,6 +250,8 @@ const imageUrl = URL.createObjectURL(blob);
       </div>
     );
   } else if (content instanceof ArrayBuffer || content instanceof Uint8Array|| content instanceof File) {
+    const blob = new Blob([content], { type: "image/png" });
+const imageUrl = URL.createObjectURL(blob);
     return (
       <div className="send">
         <img src={imageUrl} alt="chatImage" />
@@ -266,8 +267,7 @@ const imageUrl = URL.createObjectURL(blob);
 }
 
 function Receive({ content }) {
-   const blob = new Blob([content], { type: "image/png" });
-   const imageUrl = URL.createObjectURL(blob);
+
   if(typeof(content) === "string"){
   return (
     <div className="received">
@@ -275,6 +275,8 @@ function Receive({ content }) {
     </div>
   );}
   else if (content instanceof ArrayBuffer || content instanceof Uint8Array) {
+    const blob = new Blob([content], { type: "image/png" });
+    const imageUrl = URL.createObjectURL(blob);
     return (
       <div className="received">
         <img src={imageUrl} alt="chatImage" />

@@ -58,19 +58,22 @@ socket.on("InitialMessages", (id) => {
   async function fetchChat(chatID){
     // we need to fetch chatmessages not chat
 
-    // try {
-    //   const response = await axios.get( `http://localhost:3001/getChat`,{chatID: chatID}  );
-
-    //   console.log("Chat received:", response.data);
-    //   if (response.data.error) {
-    //     console.log("Error fetching chat:", response.data.error);
-    //     return;
-    //   }
-    //  // setMessages(response.data.messages);
-    //  // setLoading(false);
-    // } catch (error) {
-    //   console.error("Error fetching chat:", error);
-    // }
+    try {
+      console.log("Fetching chat messages...");
+      const response = await axios.get(
+        `http://localhost:3001/getchatcontent/`
+      ,{params: { chatID } });
+      console.log("Chat messages received:", response.data);
+      if (response.data.error) {
+        console.log("Error fetching chat messages:", response.data.error);
+        return;
+      }
+      //setMessages(response.data);
+      //setLoading(false);
+      
+    } catch (error) {
+      console.error("Error fetching chat:", error);
+    }
   }
  
 

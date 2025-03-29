@@ -17,7 +17,7 @@ function Chat() {
   const [preview, setPreview] = useState(null);
 
   const ownerID = 1;
-  const userID = 2;
+  const userID = 3;
   const room = `owner${ownerID}user${userID}`;
 
   useEffect(() => {
@@ -40,8 +40,6 @@ socket.on("InitialMessages", (id) => {
     socket.on("RecivedMessage", (newMessage) => {
       console.log("Received message:", newMessage);
 
-      // gpt: Ignore messages that were sent by this user
-      
         setMessages((prevMessages) => [
           ...prevMessages,
           { content: newMessage.message, sender: "received",time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
@@ -56,14 +54,14 @@ socket.on("InitialMessages", (id) => {
   }, [room]);
 
   async function fetchChat(chatID){
-    // we need to fetch chatmessages not chat
+    
 
     try {
       console.log("Fetching chat messages...");
       const response = await axios.get(`http://localhost:3001/getchatcontent/`,{params: { chatID } });
      const oldMessages = response.data;
-     console.log(Array.isArray(oldMessages)); // Should print true
-      console.log("messages:",oldMessages);
+    //  console.log(Array.isArray(oldMessages)); // Should print true
+    //   console.log("messages:",oldMessages);
       if(oldMessages){
         oldMessages.forEach(element => {
         if( element.senderid===userID){
@@ -74,11 +72,11 @@ socket.on("InitialMessages", (id) => {
               { content: element.contenttext, sender: "sent"  ,time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
             ]);
           }
-          else if( element.contentfile){
-            console.log("image from db type: " + typeof element.contentfile,"the actual image is: " + element.contentfile); //line 1
+          else if(element.contentfile){
+            console.log("image from db type: " + element.contentfile,"the actual image is: " +element.contentfile.data); //line 1
             setMessages((prevMessages) => [
              ...prevMessages,
-              { content: element.contentfile , sender: "sent"  ,time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
+              { content:new Uint8Array(element.contentfile.data) , sender: "sent"  ,time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
             ]);
           }
 
@@ -92,7 +90,7 @@ socket.on("InitialMessages", (id) => {
           else if(element.contentfile){
             setMessages((prevMessages) => [
              ...prevMessages,
-              { content: element.contentfile, sender: "received"  , time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              { content:new Uint8Array(element.contentfile.data), sender: "received"  , time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             ]);
           }
         }      
@@ -241,7 +239,7 @@ function ChatInput({ message, setMessage,preview,setPreview, sendMessage }) {
 }
 
 function Send({ content,time }) {
-  console.log("image type: " , typeof content, "the actual content:\n", content);//line 2
+  //console.log("image type: " , typeof content, "the actual content:\n", content);//line 2
 
   if (typeof content === "string") {
     return (
@@ -250,7 +248,7 @@ function Send({ content,time }) {
         <div className="timestamp">{time}</div>
       </div>
     );
-  } else if (content instanceof ArrayBuffer || content instanceof Uint8Array|| content instanceof File) {
+  } else if (content instanceof ArrayBuffer || content instanceof Uint8Array|| content instanceof File||true) {
     const blob = new Blob([content], { type: "image/png" });
 const imageUrl = URL.createObjectURL(blob);
     return (

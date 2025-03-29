@@ -115,9 +115,11 @@ app.get('/getchatcontent', async (req, res)=> {
  res.json(chatContents.rows);
     }
     else{
-      res.status(404).send("Not Found");
+      console.log("no chat contents");
+      res.send("Not Found");
     }
   }catch (error) {
+    
     console.error("Error retrieving chat contents:", error);
     res.status(500).send("Internal Server Error");
   }

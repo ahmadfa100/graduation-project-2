@@ -92,6 +92,8 @@ DROP TABLE IF EXISTS Offers;
 DROP TABLE IF EXISTS Farmers;
 DROP TABLE IF EXISTS Landowners;
 DROP TABLE IF EXISTS users;
+TRUNCATE TABLE your_table_name RESTART IDENTITY CASCADE; reset table
+
 
 */
 -- you can use BYTEA for image if ur team refuse cloud --

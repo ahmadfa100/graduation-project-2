@@ -73,10 +73,6 @@ if (typeof message === "string") {
 
  }
 
-
-
-
-
     console.log(`Message sent in room ${room}:`, message);
     socket.to(room).emit("RecivedMessage", { message }); // gpt: Include sender ID
   });
@@ -143,14 +139,21 @@ const getChats = async ({ receiverID, senderID, chatID, offerID }) => {
   let values = [];
   let index = 1; // To track parameter position
 
-  if (receiverID) {
-    query += ` AND receiverID = $${index++}`;
-    values.push(receiverID);
+  if (receiverID && senderID) {
+    query += ` AND ((receiverID = $${index} AND senderID = $${index + 1}) OR (receiverID = $${index + 1} AND senderID = $${index}))`;
+    values.push(receiverID, senderID);
+    index += 2;
+  } else {
+    if (receiverID) {
+      query += ` AND receiverID = $${index++}`;
+      values.push(receiverID);
+    }
+    if (senderID) {
+      query += ` AND senderID = $${index++}`;
+      values.push(senderID);
+    }
   }
-  if (senderID) {
-    query += ` AND senderID = $${index++}`;
-    values.push(senderID);
-  }
+
   if (offerID) {
     query += ` AND offerID = $${index++}`;
     values.push(offerID);
@@ -162,6 +165,7 @@ const getChats = async ({ receiverID, senderID, chatID, offerID }) => {
 
   return (await db.query(query, values)).rows;
 };
+
 
 
 //////////////////////////////////////////////////////////

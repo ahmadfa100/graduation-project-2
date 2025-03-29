@@ -13,15 +13,16 @@ function Chat() {
   const [message, setMessage] = useState(null);
   const [messages, setMessages] = useState([]);
   const [offer, setOffer] = useState(null);
-  const [isLoading, setLoading] = useState(true);
   const [preview, setPreview] = useState(null);
-
+  const [isChatLoding, setChatLoading] = useState(true);
+  const [isOfferLoding, setOfferLoding] = useState(true);
   const ownerID = 1;
   const userID = 3;
   const room = `owner${ownerID}user${userID}`;
 
   useEffect(() => {
-
+setMessages([]);
+setMessage(null);
     fetchOffer();
     
   const sender=1;
@@ -59,10 +60,19 @@ socket.on("InitialMessages", (id) => {
     try {
       console.log("Fetching chat messages...");
       const response = await axios.get(`http://localhost:3001/getchatcontent/`,{params: { chatID } });
+      console.log("respones :",response.data==="Not Found");
+      if (response.data.error) {
+      //  console.log("Error fetching chat messages:", response.data.error);
+        return;
+      }
+      if (response.data === "Not Found") {
+        console.log("No chat messages available.");
+        setChatLoading(false);
+      }
+      else{
      const oldMessages = response.data;
     //  console.log(Array.isArray(oldMessages)); // Should print true
     //   console.log("messages:",oldMessages);
-      if(oldMessages){
         oldMessages.forEach(element => {
         if( element.senderid===userID){
           
@@ -73,7 +83,7 @@ socket.on("InitialMessages", (id) => {
             ]);
           }
           else if(element.contentfile){
-            console.log("image from db type: " + element.contentfile,"the actual image is: " +element.contentfile.data); //line 1
+           // console.log("image from db type: " + element.contentfile,"the actual image is: " +element.contentfile.data); //line 1
             setMessages((prevMessages) => [
              ...prevMessages,
               { content:new Uint8Array(element.contentfile.data) , sender: "sent"  ,time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
@@ -95,18 +105,9 @@ socket.on("InitialMessages", (id) => {
           }
         }      
 });
-setLoading(false);
+setChatLoading(false);
      
       }
-      else{
-        console.log("No chat messages available.");
-      }
-      if (response.data.error) {
-        console.log("Error fetching chat messages:", response.data.error);
-        return;
-      }
-      
-      
       
     } catch (error) {
       console.error("Error fetching chat:", error);
@@ -120,12 +121,16 @@ setLoading(false);
       const response = await axios.get(
         `http://localhost:3001/getOffer/${offerID}`
       );
-      console.log("Offer received:", response.data);
+
       if (response.data.error) {
         console.log("Error fetching offer:", response.data.error);
         return;
       }
-      setOffer(response.data);
+      if(response.data) {
+        setOffer(response.data);
+      setOfferLoding(false);
+      console.log("Offer received:", response.data);
+      }
       
     } catch (error) {
       console.error("Error fetching offer:", error);
@@ -151,13 +156,13 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
 
   return (
     <div className="chat-page">
-      {isLoading ? (
+      {(isChatLoding ||isOfferLoding)? (
         <ClipLoader color="green" size={50} />
       ) : (
         <div className="chat-container">
           <div className="chat-header">
             <Link to="/offer">
-              <img src={offer.images[0]} alt="LandImage" />
+              <img src={offer.images[0]?offer.images[0]:""} alt="LandImage" />
             </Link>
             <h3>{offer.offer.landtitle}</h3>
           </div>

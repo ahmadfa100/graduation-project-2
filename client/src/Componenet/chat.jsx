@@ -44,7 +44,7 @@ socket.on("InitialMessages", (id) => {
       
         setMessages((prevMessages) => [
           ...prevMessages,
-          { content: newMessage.message, sender: "received" },
+          { content: newMessage.message, sender: "received",time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
         ]);
       
     });
@@ -71,14 +71,14 @@ socket.on("InitialMessages", (id) => {
           if(element.contenttext){
             setMessages((prevMessages) => [
              ...prevMessages,
-              { content: element.contenttext, sender: "sent" },
+              { content: element.contenttext, sender: "sent"  ,time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
             ]);
           }
           else if( element.contentfile){
             console.log("image from db type: " + typeof element.contentfile,"the actual image is: " + element.contentfile); //line 1
             setMessages((prevMessages) => [
              ...prevMessages,
-              { content: element.contentfile , sender: "sent" },
+              { content: element.contentfile , sender: "sent"  ,time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
             ]);
           }
 
@@ -86,13 +86,13 @@ socket.on("InitialMessages", (id) => {
           if(element.contenttext){
             setMessages((prevMessages) => [
              ...prevMessages,
-              { content: element.contenttext, sender: "received" },
+              { content: element.contenttext, sender: "received", time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
             ]);
           }
           else if(element.contentfile){
             setMessages((prevMessages) => [
              ...prevMessages,
-              { content: element.contentfile, sender: "received" },
+              { content: element.contentfile, sender: "received"  , time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             ]);
           }
         }      
@@ -145,7 +145,7 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      { content: message, sender: "sent" },
+      { content: message, sender: "sent",time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
     ]);
     setMessage(null);
     setPreview(null);
@@ -167,9 +167,9 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
           <div className="chat-box">
             {messages.map((msg, index) =>
               msg.sender === "sent" ? (
-                <Send key={index} content={msg.content} />
+                <Send key={index} content={msg.content} time={msg.time} />
               ) : (
-                <Receive key={index} content={msg.content} />
+                <Receive key={index} content={msg.content} time={msg.time} />
               )
             )}
           </div>
@@ -240,13 +240,14 @@ function ChatInput({ message, setMessage,preview,setPreview, sendMessage }) {
   );
 }
 
-function Send({ content }) {
+function Send({ content,time }) {
   console.log("image type: " , typeof content, "the actual content:\n", content);//line 2
 
   if (typeof content === "string") {
     return (
       <div className="send">
         <div className="message">{content}</div>
+        <div className="timestamp">{time}</div>
       </div>
     );
   } else if (content instanceof ArrayBuffer || content instanceof Uint8Array|| content instanceof File) {
@@ -255,23 +256,26 @@ const imageUrl = URL.createObjectURL(blob);
     return (
       <div className="send">
         <img src={imageUrl} alt="chatImage" />
+        <div className="timestamp">{time}</div>
       </div>
     );
   } else {
     return (
       <div className="send">
         <div className="message error-message"> unknown type message❌</div>
+        <div className="timestamp">{time}</div>
       </div>
     );
   }
 }
 
-function Receive({ content }) {
+function Receive({ content,time }) {
 
   if(typeof(content) === "string"){
   return (
     <div className="received">
       <div className="message">{content}</div>
+      <div className="timestamp">{time}</div>
     </div>
   );}
   else if (content instanceof ArrayBuffer || content instanceof Uint8Array) {
@@ -280,12 +284,14 @@ function Receive({ content }) {
     return (
       <div className="received">
         <img src={imageUrl} alt="chatImage" />
+        <div className="timestamp">{time}</div>
       </div>
     );
   } else {
     return (
       <div className="received ">
         <div className="message error-message"> unknown type message❌</div>
+        <div className="timestamp">{time}</div>
       </div>
     );
   }

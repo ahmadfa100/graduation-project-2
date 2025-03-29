@@ -109,7 +109,7 @@ app.get('/getchatcontent', async (req, res)=> {
     if(!chatID){
       return res.status(400).send("Missing chatID");
     }
-  const chatContents = await db.query("SELECT contentFile ,contentText,senderID FROM ChatContents WHERE chatID = $1",[chatID] );
+  const chatContents = await db.query("SELECT contentFile ,contentText,senderID , sent_at FROM ChatContents WHERE chatID = $1",[chatID] );
     if(chatContents.rowCount>0){
  //console.log("chat contents: ",chatContents.rows);
  res.json(chatContents.rows);

@@ -1,8 +1,17 @@
 import express from "express";
 import cors from "cors";
 import env from "dotenv";
-import offersRoutes from "./Routes/offerRoutes.js";
-import notificationsRoutes from "./Routes/notificationsRoutes.js";
+import multer from "multer";
+
+// Import controllers
+import {
+  getOffer,
+  addOffer,
+  updateOffer,
+  deleteOffer,
+  getAllOffers,
+} from "./Controllers/offer.js";
+import { getNotifications } from "./Controllers/notification.js";
 
 env.config();
 const app = express();
@@ -12,8 +21,18 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", offersRoutes);
-app.use("/api/notifications", notificationsRoutes);
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+// Offers endpoints
+app.get("/getOffer/:offerID", getOffer);
+app.post("/addOffer", upload.array("images", 10), addOffer);
+app.put("/updateOffer/:offerID", upload.array("images", 10), updateOffer);
+app.delete("/deleteOffer/:offerID", deleteOffer);
+app.get("/offers", getAllOffers);
+
+// Notifications endpoint
+app.get("/api/notifications", getNotifications);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

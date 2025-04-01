@@ -5,7 +5,7 @@ import env from "dotenv";
 import multer from "multer";
 import { createServer } from "http";
 import { Server } from "socket.io";
-
+import bcrypt from 'bcrypt';
 // Import controllers
 import {
   getOffer,
@@ -21,7 +21,7 @@ import db from "./db.js"; // Used in socket code
 env.config();
 const app = express();
 const port = process.env.PORT || 3001;
-
+const saltRounds = 10;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -113,6 +113,129 @@ io.on("connection", (socket) => {
     console.log("Client disconnected:", socket.id);
   });
 });
+
+
+// Signup endpoint
+app.post('/api/signup', async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    address,
+    day,
+    month,
+    year,
+    gender,
+    mobileNumber,
+    email,
+    password,
+    confirmPassword
+  } = req.body;
+
+  // Basic validation
+  if (password !== confirmPassword) {
+    return res.status(400).json({ error: 'Passwords do not match' });
+  }
+
+  if (!['male', 'female'].includes(gender)) {
+    return res.status(400).json({ error: 'Invalid gender' });
+  }
+
+  // Calculate age from date of birth
+  const birthDate = new Date(year, month - 1, day);
+  const ageDiff = Date.now() - birthDate.getTime();
+  const ageDate = new Date(ageDiff);
+  const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+  try {
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Insert user into database
+    const query = `
+      INSERT INTO users (firstname, lastname, password, phonenumber, email, age, address, gender)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING id, email, firstname, lastname
+    `;
+
+    const values = [
+      firstName,
+      lastName,
+      hashedPassword,
+      mobileNumber,
+      email,
+      age,
+      address,
+      gender
+    ];
+
+    const result = await db.query(query, values);
+    
+    res.status(201).json({
+      message: 'User created successfully',
+      user: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Error during signup:', error);
+    
+    if (error.code === '23505') { // Unique violation
+      if (error.constraint === 'users_email_key') {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+      if (error.constraint === 'users_phonenumber_key') {
+        return res.status(400).json({ error: 'Phone number already exists' });
+      }
+    }
+    
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+// Login endpoint
+app.post('/api/login', async (req, res) => {
+  const { emailOrPhone, password } = req.body;
+
+  if (!emailOrPhone || !password) {
+    return res.status(400).json({ error: 'Email/phone and password are required' });
+  }
+
+  try {
+    // Check if user exists by email or phone number
+    const query = `
+      SELECT * FROM users 
+      WHERE email = $1 OR phonenumber = $1
+    `;
+    const result = await db.query(query, [emailOrPhone]);
+
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Invalid Account' });
+    }
+
+    const user = result.rows[0];
+
+    // Compare hashed password
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid password' });
+    }
+
+    // Remove password from user data before sending
+    const { password: _, ...userData } = user;
+
+    res.status(200).json({
+      message: 'Login successful',
+      user: userData
+    });
+
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Start server
+const PORT = process.env.PORT || 3001;
+
+
+export default app;
 
 // Start the server with Socket.io support.
 server.listen(port, () => {

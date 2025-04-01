@@ -1,3 +1,4 @@
+// OffersSection.jsx
 import React, { useState, useEffect } from "react";
 import { FaPhone, FaComments, FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +16,6 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
   const [period, setPeriod] = useState("");
   const [space, setSpace] = useState("");
 
-
   const fetchOffers = async (append = false, newOffset = 0) => {
     try {
       const params = new URLSearchParams();
@@ -26,11 +26,13 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
       params.append("limit", limit);
       params.append("offset", newOffset);
 
-      const response = await fetch(`http://localhost:3001/offers?${params.toString()}`);
+      const response = await fetch(
+        `http://localhost:3001/offers?${params.toString()}`
+      );
       const data = await response.json();
 
       if (append) {
-        setOffers(prevOffers => [...prevOffers, ...data]);
+        setOffers((prevOffers) => [...prevOffers, ...data]);
       } else {
         setOffers(data);
       }
@@ -40,9 +42,10 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
   };
 
   useEffect(() => {
-    setOffset(0); 
+    setOffset(0);
     fetchOffers(false, 0);
-  }, []); 
+    // eslint-disable-next-line
+  }, []);
 
   const handleSearchOrFilter = () => {
     setOffset(0);
@@ -76,7 +79,9 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
       {/* Filters Container */}
       <div className="filters-container">
         <div className="filter-group">
-          <label htmlFor="cityFilter" className="filter-label">City</label>
+          <label htmlFor="cityFilter" className="filter-label">
+            City
+          </label>
           <select
             id="cityFilter"
             className="filter-select"
@@ -100,7 +105,9 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
         </div>
 
         <div className="filter-group">
-          <label htmlFor="periodFilter" className="filter-label">Period</label>
+          <label htmlFor="periodFilter" className="filter-label">
+            Period
+          </label>
           <select
             id="periodFilter"
             className="filter-select"
@@ -114,7 +121,9 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
         </div>
 
         <div className="filter-group">
-          <label htmlFor="spaceFilter" className="filter-label">Land Space</label>
+          <label htmlFor="spaceFilter" className="filter-label">
+            Land Space
+          </label>
           <input
             type="text"
             id="spaceFilter"
@@ -133,13 +142,14 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
 
       <div className="offers-list">
         {offers.map((offer) => (
-          <div key={offer.id} className="offer-item">
+          <div
+            key={offer.id}
+            className="offer-item"
+            // Navigate to the details page for this specific offer
+            onClick={() => navigate(`/OfferDetails/${offer.id}`)}
+          >
             <div className="offer-image-container">
-              <img
-                src={offer.image}
-                alt={offer.name}
-                className="offer-image"
-              />
+              <img src={offer.image} alt={offer.name} className="offer-image" />
             </div>
             <div className="offer-details">
               <div className="offer-header">
@@ -155,13 +165,19 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
                 </button>
                 <button
                   className="action-button"
-                  onClick={() => navigate("/chat")}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Stop event from bubbling
+                    navigate("/chat");
+                  }}
                 >
                   <FaComments />
                 </button>
                 <button
                   className="action-button favorite-button"
-                  onClick={() => toggleFavorite(offer.id)}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Stop event from bubbling
+                    toggleFavorite(offer.id);
+                  }}
                 >
                   {favoriteOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
                 </button>
@@ -172,7 +188,9 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
       </div>
 
       <div className="more-button-container">
-        <button className="more-button" onClick={handleMore}>More</button>
+        <button className="more-button" onClick={handleMore}>
+          More
+        </button>
       </div>
     </div>
   );

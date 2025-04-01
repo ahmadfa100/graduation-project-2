@@ -1,54 +1,46 @@
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";  
+import axios from "axios";
 import "../style/offerdetail.css";
 import LeafLine from "../layout/leafLine";
 import * as Button from "../layout/buttons";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Thumbs, Keyboard } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/thumbs";
-import "../style/offerdetail.css";
 
-const EcommerceSlider = () => {
+function OfferDetails() {
+  const { offerID } = useParams();  
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [details, setDetails] = useState([]);
+  const [details, setDetails] = useState({});
   const [productImages, setProductImages] = useState([]);
 
   useEffect(() => {
-    fetchoffer();
+    fetchOffer();
   }, []);
-  async function fetchoffer() {
-    const offerID = 5;
-    try {
-      const response = await axios.get(
-        `http://localhost:3001/getOffer/${offerID}`
-      );
 
-      console.log("Full server response:", response.data);
-      console.log("here", response.data.images);
+  async function fetchOffer() {
+    try {
+      // Use the offerID from the route
+      const response = await axios.get(`http://localhost:3001/getOffer/${offerID}`);
       if (response.data && response.data.images) {
         setDetails(response.data.offer);
         setProductImages(response.data.images);
-
-        setIsLoading(false);
       } else {
         console.error("No images found in response:", response.data);
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching offer details:", error);
     }
   }
-  ///////////////////////////
+
+  // The rest of your rendering logic...
   return (
     <>
       {isLoading ? (
         <div className="loading">
-          {" "}
           <ClipLoader color="green" size={50} />
         </div>
       ) : (
@@ -56,35 +48,20 @@ const EcommerceSlider = () => {
           <div className="slider-container">
             {/* Main Slider */}
             <Swiper
-              centeredSlides={true} // Center the active slide
-              spaceBetween={5} // Reduce space between slides
-              slidesPerView={"auto"} // Allow slides to adjust automatically
-              loop={true}
-              keyboard={{ enabled: true }} // ✅ Enable keyboard navigation
+              centeredSlides
+              spaceBetween={5}
+              slidesPerView={"auto"}
+              loop
+              keyboard={{ enabled: true }}
               navigation
               pagination={{ clickable: true }}
               modules={[Navigation, Pagination, Thumbs, Keyboard]}
               thumbs={{ swiper: thumbsSwiper }}
               className="main-slider"
-              onInit={(swiper) => {
-                swiper.el.querySelector(".swiper-button-next").style.color =
-                  "green";
-                swiper.el.querySelector(".swiper-button-prev").style.color =
-                  "green";
-                swiper.el
-                  .querySelectorAll(".swiper-pagination-bullet")
-                  .forEach((bullet) => {
-                    bullet.style.backgroundColor = "green";
-                  });
-              }}
             >
               {productImages.map((img, index) => (
                 <SwiperSlide key={index}>
-                  <img
-                    src={img}
-                    alt={`Product ${index + 1}`}
-                    className="main-image"
-                  />
+                  <img src={img} alt={`Product ${index + 1}`} className="main-image" />
                 </SwiperSlide>
               ))}
             </Swiper>
@@ -100,75 +77,78 @@ const EcommerceSlider = () => {
             >
               {productImages.map((img, index) => (
                 <SwiperSlide key={index}>
-                  <img
-                    src={img}
-                    alt={`Thumbnail ${index + 1}`}
-                    className="thumb-image"
-                  />
+                  <img src={img} alt={`Thumbnail ${index + 1}`} className="thumb-image" />
                 </SwiperSlide>
               ))}
             </Swiper>
           </div>
-          <div>{Details(details)}</div>
+
+          {/* Render your details */}
+          <Details details={details} />
         </>
       )}
     </>
   );
-};
-function Details(props) {
+}
+
+function Details({ details }) {
+
+  const {
+    landtitle,
+    landleaseprice,
+    landsize,
+    leaseduration,
+    landlocation,
+    offerdescription,
+  } = details;
+
   return (
     <div className="details-container">
-      <h1>Offer information </h1>
+      <h1>Offer Information</h1>
       <div>
-        <h3>{props.landtitle}</h3>
+        <h3>{landtitle}</h3>
       </div>
-      <h4 id="price">{props.landleaseprice} JOD</h4>
+      <h4 id="price">{landleaseprice} JOD</h4>
       <table>
         <tbody>
           <tr>
-            <td>
-              <strong>Size</strong>
-            </td>
-            <td>{props.landsize} m²</td>
+            <td><strong>Size</strong></td>
+            <td>{landsize} m²</td>
           </tr>
           <tr>
+            <td><strong>Rent Duration</strong></td>
             <td>
-              <strong>Rent Duration</strong>
-            </td>
-            <td>
-              {Math.floor(props.leaseduration / 12) === 1
+              {Math.floor(leaseduration / 12) === 1
                 ? "one year"
-                : `${Math.floor(props.leaseduration / 12)} years`}
+                : `${Math.floor(leaseduration / 12)} years`}{" "}
               and{" "}
-              {props.leaseduration % 12 === 1
+              {leaseduration % 12 === 1
                 ? "one month"
-                : `${props.leaseduration % 12 === 1} months`}
+                : `${leaseduration % 12} months`}
             </td>
           </tr>
           <tr>
-            <td>
-              <strong>Address</strong>
-            </td>
-            <td>{props.landlocation}</td>
+            <td><strong>Address</strong></td>
+            <td>{landlocation}</td>
           </tr>
         </tbody>
       </table>
       <div className="custom-element">
-        <LeafLine></LeafLine>
+        <LeafLine />
       </div>
-      <p>{props.offerdescription}</p>
+      <p>{offerdescription}</p>
       <div className="custom-element">
-        <LeafLine></LeafLine>
+        <LeafLine />
       </div>
       <div className="button-container">
-        <Button.Call></Button.Call>
+        <Button.Call />
         <Link to="/chat">
-          <Button.Chat></Button.Chat>
+          <Button.Chat />
         </Link>
-        <Button.Like></Button.Like>
+        <Button.Like />
       </div>
     </div>
   );
 }
 
-export default EcommerceSlider;
+export default OfferDetails;

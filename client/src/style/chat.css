@@ -1,19 +1,21 @@
-body {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-   
-   
-}
+
 
 .chat-page {
-    background-color: #f2f2f2;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url(https://www.transparenttextures.com/patterns/ag-square.png) !important;
     
+    margin: 50px;
+    
+}
+.chat-page img{
+width: 200px;
+    height: 200px;
+    border-radius: 10px;
+    margin: 10px 0px;
+    object-fit: cover;
+    border: solid 2px rgb(69, 160, 73)
 }
 
 .chat-container {
@@ -27,6 +29,10 @@ body {
     display: flex;
     flex-direction: column;
 
+}
+.message-preview img{
+    width: 50px;
+    height: 50px;
 }
 
 /* Chat Header */
@@ -119,7 +125,8 @@ body {
 .image-message {
     max-width: 50%;
     border-radius: 10px;
-    margin-bottom: 10px;
+    margin: 10px;
+
 }
 
 /* Chat Input */
@@ -188,4 +195,8 @@ body {
 
 .upload-label:hover {
     color: #333;
+}
+.error-message{
+    color: rgb(170, 21, 21) !important;
+    
 }

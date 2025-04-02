@@ -7,12 +7,29 @@ import {
   MdDoneOutline,
 } from "react-icons/md";
 import "./Header.css";
+import {
+  Drawer,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Divider,
+} from "@mui/material";
+import {
+  AccountCircle,
+  Chat,
+  Dashboard,
+  Favorite,
+  ExitToApp,
+  
+} from "@mui/icons-material";
 
 const Header = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [isIconActive, setIsIconActive] = useState(false);
   const [notifications, setNotifications] = useState([]);
-
+  const [open, setOpen] = useState(false);
   const rightSectionRef = useRef(null);
 
   const handleNotificationClick = () => {
@@ -41,7 +58,9 @@ const Header = () => {
   useEffect(() => {
     async function getNotifications() {
       try {
-        const response = await axios.get("http://localhost:3001/api/notifications");
+        const response = await axios.get(
+          "http://localhost:3001/api/notifications"
+        );
         setNotifications(response.data.notifications || []);
       } catch (error) {
         console.error("Error fetching notifications:", error);
@@ -58,6 +77,70 @@ const Header = () => {
       return newNotifications;
     });
   };
+  const slidebarContent=[
+    {
+      title: "My Account",
+      onClick: () => {
+        setOpen(false);
+      },
+      icon: <AccountCircle />,
+    },
+    {
+      title: "Dashboard",
+      onClick: () => {
+        setOpen(false);
+      },
+      icon: <Dashboard />,
+    },
+    {
+      title: "Favorite offers",
+      onClick: () => {
+        setOpen(false);
+      },
+      icon: <Favorite />,
+    },
+    {
+      title: "My Chats",
+      onClick: () => {
+        setOpen(false);
+      },
+      icon: <Chat />,
+    },
+    
+    {
+      title: "Logout",
+      onClick: () => {
+        // Implement logout logic here
+        setOpen(false);
+      },
+      icon: <ExitToApp />,
+    },
+  ];
+  
+const slideBarItem = (index,title,onClick,icon) => {
+  return (
+<>    <ListItem
+    key={index}
+    button
+    onClick={onClick}
+    sx={{
+      borderRadius: "8px",
+      my: 2,
+      "&:hover": { bgcolor: "#f5f5f5" },
+    }}
+  >
+    <ListItemIcon sx={{ color: "#57b676", fontSize: "2rem" }}>
+      {icon}
+    </ListItemIcon>
+    <ListItemText primary={title} /> 
+    
+  </ListItem>
+  <Divider />
+  </>
+  
+ 
+  );
+}
 
   return (
     <header className="header">
@@ -86,9 +169,7 @@ const Header = () => {
             <MdNotificationsNone size={24} />
           )}
           {notifications.length > 0 && (
-            <span className="notification-badge">
-              {notifications.length}
-            </span>
+            <span className="notification-badge">{notifications.length}</span>
           )}
         </div>
 
@@ -112,9 +193,30 @@ const Header = () => {
 
         {/* Sign Up Button */}
         <div className="signup-container">
-          <Link to="/signup">
+          <div>
+            <Button onClick={() => setOpen(true)}>Open Drawer</Button>
+            <Drawer anchor="right" open={open} onClose={() => setOpen(false)} PaperProps={{ 
+          sx: { 
+            
+            borderRadius: "5px 5px 5px 5px",  
+            height: "88vh",        
+            marginTop: "12vh",      
+           // opacity: ".85" ??
+           cursor: "pointer",
+          } 
+          
+        }}
+        >
+              <ListItem onClick={() => setOpen(false)}>
+                <List>
+                  {slidebarContent.map((item,index) => slideBarItem(index,item.title,item.onClick,item.icon))}
+                </List>
+              </ListItem>
+            </Drawer>
+          </div>
+          {/* <Link to="/signup">
             <button className="signup-button">Sign Up</button>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </header>

@@ -60,6 +60,7 @@ socket.on("InitialMessages", (id) => {
     try {
       console.log("Fetching chat messages...");
       const response = await axios.get(`http://localhost:3001/getchatcontent/`,{params: { chatID } });
+    
       console.log("respones :",response.data==="Not Found");
       if (response.data.error) {
       //  console.log("Error fetching chat messages:", response.data.error);
@@ -110,6 +111,7 @@ setChatLoading(false);
       }
       
     } catch (error) {
+      setChatLoading(false);
       console.error("Error fetching chat:", error);
     }
   }

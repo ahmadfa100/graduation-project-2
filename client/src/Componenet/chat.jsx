@@ -13,6 +13,7 @@ function Chat() {
   const [message, setMessage] = useState(null);
   const [messages, setMessages] = useState([]);
   const [offer, setOffer] = useState(null);
+  const [offerOwner, setOfferOwner] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isChatLoding, setChatLoading] = useState(true);
   const [isOfferLoding, setOfferLoding] = useState(true);
@@ -24,6 +25,7 @@ function Chat() {
 setMessages([]);
 setMessage(null);
     fetchOffer();
+    
     
   const sender=1;
   const receiver = 3;
@@ -123,7 +125,7 @@ setChatLoading(false);
       const response = await axios.get(
         `http://localhost:3001/getOffer/${offerID}`
       );
-
+//console.log("herrrrrr",);
       if (response.data.error) {
         console.log("Error fetching offer:", response.data.error);
         return;
@@ -133,9 +135,34 @@ setChatLoading(false);
       setOfferLoding(false);
       console.log("Offer received:", response.data);
       }
+       // owner
+       
+    fetchOfferOwner(response.data.offer.ownerid);
       
     } catch (error) {
       console.error("Error fetching offer:", error);
+    }
+   
+  }
+  async function fetchOfferOwner(ownerID) {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/getUser/`,{
+          params: { userID: ownerID },
+        }
+      );
+    
+      if (response.data.error) {
+        console.log("Error fetching owner:", response.data.error);
+        return;
+      }
+      if(response.data) {
+        setOfferOwner(response.data);
+       // console.log("owner k",offerOwner.firstname);
+      }
+      
+    } catch (error) {
+      console.error("Error fetching owner:", error);
     }
   }
 
@@ -163,10 +190,13 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
       ) : (
         <div className="chat-container">
           <div className="chat-header">
-            <Link to="/offer">
+           <div className="chat-offer-header">
+           <Link to="/offer">
               <img src={offer.images[0]?offer.images[0]:""} alt="LandImage" />
             </Link>
-            <h3>{offer.offer.landtitle}</h3>
+            <h3>{offer.offer.landtitle||""}</h3>
+           </div>
+         <div className="chat-owner">   <h4>{offerOwner.firstname||""} {offerOwner.lastname||""}</h4></div>
           </div>
 
           <div className="chat-box">
@@ -255,7 +285,7 @@ function Send({ content,time }) {
         <div className="timestamp">{time}</div>
       </div>
     );
-  } else if (content instanceof ArrayBuffer || content instanceof Uint8Array|| content instanceof File||true) {
+  } else if (content instanceof ArrayBuffer || content instanceof Uint8Array|| content instanceof File) {
     const blob = new Blob([content], { type: "image/png" });
 const imageUrl = URL.createObjectURL(blob);
     return (

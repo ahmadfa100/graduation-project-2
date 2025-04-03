@@ -241,3 +241,29 @@ export default app;
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+app.get('/getuser', async (req, res) => {
+  try {
+    const userID = req.query.userID;
+    
+    if (!userID) {
+      return res.status(400).json({ error: 'userID is required' });
+    }
+
+    
+    if (isNaN(userID)) {
+      return res.status(400).json({ error: 'Invalid userID' });
+    }
+
+    const response = await db.query(`SELECT * FROM users WHERE ID = $1`, [userID]);
+
+    if (response.rowCount === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json(response.rows[0]);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});

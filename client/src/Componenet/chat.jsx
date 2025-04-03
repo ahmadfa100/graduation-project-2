@@ -23,6 +23,7 @@ function Chat() {
 
   useEffect(() => {
  const sender=1;
+ const receiver=2;
   const offer = 5;
 setMessages([]);
 setMessage(null);
@@ -31,7 +32,7 @@ setMessage(null);
     
  
  
-  socket.emit("Initialize", { sender: sender, receiver: offer.ownerid, offer: offer});
+  socket.emit("Initialize", { sender: sender, receiver: receiver, offer: offer});//The receiver takes owner ID not work with all scenarios owner id will be taken from offer only if user click on the chat button 
 socket.on("InitialMessages", (id) => {
      console.log("chat  client id:", id);
   fetchChat(id);

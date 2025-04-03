@@ -22,16 +22,16 @@ function Chat() {
   const room = `owner${ownerID}user${userID}`;
 
   useEffect(() => {
+ const sender=1;
+  const offer = 5;
 setMessages([]);
 setMessage(null);
-    fetchOffer();
+    fetchOffer(offer);
     
     
-  const sender=1;
-  const receiver = 3;
-  const offer = 5;
  
-  socket.emit("Initialize", { sender: sender, receiver: receiver, offer: offer});
+ 
+  socket.emit("Initialize", { sender: sender, receiver: offer.ownerid, offer: offer});
 socket.on("InitialMessages", (id) => {
      console.log("chat  client id:", id);
   fetchChat(id);
@@ -119,8 +119,8 @@ setChatLoading(false);
   }
  
 
-  async function fetchOffer() {
-    const offerID = 5;
+  async function fetchOffer(offerID) {
+   
     try {
       const response = await axios.get(
         `http://localhost:3001/getOffer/${offerID}`
@@ -196,7 +196,7 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
             </Link>
             <h3>{offer.offer.landtitle||""}</h3>
            </div>
-         <div className="chat-owner">   <h4>{offerOwner.firstname||""} {offerOwner.lastname||""}</h4></div>
+         <div className="chat-owner">   <h4>{offerOwner.firstname||" "} {offerOwner.lastname||" "}</h4></div>
           </div>
 
           <div className="chat-box">

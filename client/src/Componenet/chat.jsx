@@ -6,7 +6,6 @@ import io from "socket.io-client";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 
-
 const socket = io("http://localhost:3001", { autoConnect: false });
 
 function Chat() {
@@ -17,38 +16,44 @@ function Chat() {
   const [preview, setPreview] = useState(null);
   const [isChatLoding, setChatLoading] = useState(true);
   const [isOfferLoding, setOfferLoding] = useState(true);
-  const ownerID = 1;
+  //Temporary
+  const ReceiverID = 1;
   const userID = 3;
-  const room = `owner${ownerID}user${userID}`;
-
+  const offerID = 5;
+  const room = `other${ReceiverID}current${userID}offer${offerID}`;
+//
   useEffect(() => {
- const sender=1;
- const receiver=2;
-  const offer = 5;
-setMessages([]);
-setMessage(null);
-    fetchOffer(offer);
-    
-    
- 
- 
-  socket.emit("Initialize", { sender: sender, receiver: receiver, offer: offer});//The receiver takes owner ID not work with all scenarios owner id will be taken from offer only if user click on the chat button 
-socket.on("InitialMessages", (id) => {
-     console.log("chat  client id:", id);
-  fetchChat(id);
-});
-  
+    setMessages([]);
+    setMessage(null);
+    fetchOffer(offerID);
+
+    socket.emit("Initialize", {
+      sender: userID,
+      receiver: ReceiverID,
+      offer: offerID,
+    }); //The receiver takes owner ID not work with all scenarios owner id will be taken from offer only if user click on the chat button
+    socket.on("InitialMessages", (id) => {
+      console.log("chat  client id:", id);
+      fetchChat(id);
+    });
+
     socket.connect();
     socket.emit("join", room);
 
     socket.on("RecivedMessage", (newMessage) => {
       console.log("Received message:", newMessage);
 
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { content: newMessage.message, sender: "received",time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
-        ]);
-      
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          content: newMessage.message,
+          sender: "received",
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ]);
     });
 
     return () => {
@@ -57,128 +62,153 @@ socket.on("InitialMessages", (id) => {
     };
   }, [room]);
 
-  async function fetchChat(chatID){
-    
-
+  async function fetchChat(chatID) {
     try {
       console.log("Fetching chat messages...");
-      const response = await axios.get(`http://localhost:3001/getchatcontent/`,{params: { chatID } });
-    
-      console.log("respones :",response.data==="Not Found");
+      const response = await axios.get(
+        `http://localhost:3001/getchatcontent/`,
+        { params: { chatID } }
+      );
+
+      console.log("respones :", response.data === "Not Found");
       if (response.data.error) {
-      //  console.log("Error fetching chat messages:", response.data.error);
+        //  console.log("Error fetching chat messages:", response.data.error);
         return;
       }
       if (response.data === "Not Found") {
         console.log("No chat messages available.");
         setChatLoading(false);
+      } else {
+        const oldMessages = response.data;
+        //  console.log(Array.isArray(oldMessages)); // Should print true
+        //   console.log("messages:",oldMessages);
+        oldMessages.forEach((element) => {
+          if (element.senderid === userID) {
+            if (element.contenttext) {
+              setMessages((prevMessages) => [
+                ...prevMessages,
+                {
+                  content: element.contenttext,
+                  sender: "sent",
+                  time: new Date(element.sent_at).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                },
+              ]);
+            } else if (element.contentfile) {
+              // console.log("image from db type: " + element.contentfile,"the actual image is: " +element.contentfile.data); //line 1
+              setMessages((prevMessages) => [
+                ...prevMessages,
+                {
+                  content: new Uint8Array(element.contentfile.data),
+                  sender: "sent",
+                  time: new Date(element.sent_at).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                },
+              ]);
+            }
+          } else if (element.senderid === ReceiverID) {
+            if (element.contenttext) {
+              setMessages((prevMessages) => [
+                ...prevMessages,
+                {
+                  content: element.contenttext,
+                  sender: "received",
+                  time: new Date(element.sent_at).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                },
+              ]);
+            } else if (element.contentfile) {
+              setMessages((prevMessages) => [
+                ...prevMessages,
+                {
+                  content: new Uint8Array(element.contentfile.data),
+                  sender: "received",
+                  time: new Date(element.sent_at).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }),
+                },
+              ]);
+            }
+          }
+        });
+        setChatLoading(false);
       }
-      else{
-     const oldMessages = response.data;
-    //  console.log(Array.isArray(oldMessages)); // Should print true
-    //   console.log("messages:",oldMessages);
-        oldMessages.forEach(element => {
-        if( element.senderid===userID){
-          
-          if(element.contenttext){
-            setMessages((prevMessages) => [
-             ...prevMessages,
-              { content: element.contenttext, sender: "sent"  ,time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
-            ]);
-          }
-          else if(element.contentfile){
-           // console.log("image from db type: " + element.contentfile,"the actual image is: " +element.contentfile.data); //line 1
-            setMessages((prevMessages) => [
-             ...prevMessages,
-              { content:new Uint8Array(element.contentfile.data) , sender: "sent"  ,time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
-            ]);
-          }
-
-        }else if(element.senderid===ownerID){
-          if(element.contenttext){
-            setMessages((prevMessages) => [
-             ...prevMessages,
-              { content: element.contenttext, sender: "received", time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })},
-            ]);
-          }
-          else if(element.contentfile){
-            setMessages((prevMessages) => [
-             ...prevMessages,
-              { content:new Uint8Array(element.contentfile.data), sender: "received"  , time: new Date(element.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            ]);
-          }
-        }      
-});
-setChatLoading(false);
-     
-      }
-      
     } catch (error) {
       setChatLoading(false);
       console.error("Error fetching chat:", error);
     }
   }
- 
 
   async function fetchOffer(offerID) {
-   
     try {
       const response = await axios.get(
         `http://localhost:3001/getOffer/${offerID}`
       );
-//console.log("herrrrrr",);
+      //console.log("herrrrrr",);
       if (response.data.error) {
         console.log("Error fetching offer:", response.data.error);
         return;
       }
-      if(response.data) {
+      if (response.data) {
         setOffer(response.data);
-      setOfferLoding(false);
-      console.log("Offer received:", response.data);
+        setOfferLoding(false);
+        console.log("Offer received:", response.data);
       }
-       // owner
-       
-    fetchOfferOwner(response.data.offer.ownerid);
-      
+      // owner
+
+      fetchOfferOwner(response.data.offer.ownerid);
     } catch (error) {
       console.error("Error fetching offer:", error);
     }
-   
   }
-  async function fetchOfferOwner(ownerID) {
+  async function fetchOfferOwner(ReceiverID) {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/getUser/`,{
-          params: { userID: ownerID },
-        }
-      );
-    
+      const response = await axios.get(`http://localhost:3001/getUser/`, {
+        params: { userID: ReceiverID },
+      });
+
       if (response.data.error) {
         console.log("Error fetching owner:", response.data.error);
         return;
       }
-      if(response.data) {
+      if (response.data) {
         setOfferOwner(response.data);
-       // console.log("owner k",offerOwner.firstname);
+        // console.log("owner k",offerOwner.firstname);
       }
-      
     } catch (error) {
       console.error("Error fetching owner:", error);
     }
   }
 
   const sendMessage = () => {
+    document
+      .querySelectorAll("input")
+      .forEach((element) => (element.value = ""));
 
-document.querySelectorAll("input").forEach( element=> element.value = '');
+    if (message == null) {
+      return;
+    }
 
-    if(message==null) {return;}
-
-    const messageData = { message, room, sender :userID }; // gpt: Include sender ID
+    const messageData = { message, room, sender: userID }; // gpt: Include sender ID
     socket.emit("sendMessage", messageData);
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      { content: message, sender: "sent",time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) },
+      {
+        content: message,
+        sender: "sent",
+        time: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      },
     ]);
     setMessage(null);
     setPreview(null);
@@ -186,18 +216,26 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
 
   return (
     <div className="chat-page">
-      {(isChatLoding ||isOfferLoding)? (
+      {isChatLoding || isOfferLoding ? (
         <ClipLoader color="green" size={50} />
       ) : (
         <div className="chat-container">
           <div className="chat-header">
-           <div className="chat-offer-header">
-           <Link to="/offer">
-              <img src={offer.images[0]?offer.images[0]:""} alt="LandImage" />
-            </Link>
-            <h3>{offer.offer.landtitle||""}</h3>
-           </div>
-         <div className="chat-owner">   <h4>{offerOwner.firstname||" "} {offerOwner.lastname||" "}</h4></div>
+            <div className="chat-offer-header">
+              <Link to="/offer">
+                <img
+                  src={offer.images[0] ? offer.images[0] : ""}
+                  alt="LandImage"
+                />
+              </Link>
+              <h3>{offer.offer.landtitle || ""}</h3>
+            </div>
+            <div className="chat-owner">
+              {" "}
+              <h4>
+                {offerOwner.firstname || " "} {offerOwner.lastname || " "}
+              </h4>
+            </div>
           </div>
 
           <div className="chat-box">
@@ -223,7 +261,7 @@ document.querySelectorAll("input").forEach( element=> element.value = '');
   );
 }
 
-function ChatInput({ message, setMessage,preview,setPreview, sendMessage }) {
+function ChatInput({ message, setMessage, preview, setPreview, sendMessage }) {
   return (
     <div className="chat-input">
       <button className="icon-btn">
@@ -245,7 +283,6 @@ function ChatInput({ message, setMessage,preview,setPreview, sendMessage }) {
           if (e.key === "Enter") {
             e.preventDefault();
             sendMessage();
-          
           }
         }}
       />
@@ -265,7 +302,6 @@ function ChatInput({ message, setMessage,preview,setPreview, sendMessage }) {
           if (e.key === "Enter") {
             e.preventDefault();
             sendMessage();
-            
           }
         }}
       />
@@ -276,7 +312,7 @@ function ChatInput({ message, setMessage,preview,setPreview, sendMessage }) {
   );
 }
 
-function Send({ content,time }) {
+function Send({ content, time }) {
   //console.log("image type: " , typeof content, "the actual content:\n", content);//line 2
 
   if (typeof content === "string") {
@@ -286,9 +322,13 @@ function Send({ content,time }) {
         <div className="timestamp">{time}</div>
       </div>
     );
-  } else if (content instanceof ArrayBuffer || content instanceof Uint8Array|| content instanceof File) {
+  } else if (
+    content instanceof ArrayBuffer ||
+    content instanceof Uint8Array ||
+    content instanceof File
+  ) {
     const blob = new Blob([content], { type: "image/png" });
-const imageUrl = URL.createObjectURL(blob);
+    const imageUrl = URL.createObjectURL(blob);
     return (
       <div className="send">
         <img src={imageUrl} alt="chatImage" />
@@ -305,16 +345,15 @@ const imageUrl = URL.createObjectURL(blob);
   }
 }
 
-function Receive({ content,time }) {
-
-  if(typeof(content) === "string"){
-  return (
-    <div className="received">
-      <div className="message">{content}</div>
-      <div className="timestamp">{time}</div>
-    </div>
-  );}
-  else if (content instanceof ArrayBuffer || content instanceof Uint8Array) {
+function Receive({ content, time }) {
+  if (typeof content === "string") {
+    return (
+      <div className="received">
+        <div className="message">{content}</div>
+        <div className="timestamp">{time}</div>
+      </div>
+    );
+  } else if (content instanceof ArrayBuffer || content instanceof Uint8Array) {
     const blob = new Blob([content], { type: "image/png" });
     const imageUrl = URL.createObjectURL(blob);
     return (

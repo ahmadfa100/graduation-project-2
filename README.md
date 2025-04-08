@@ -5,5 +5,10 @@
 2. open it by vs code
 3. in terminal
    - cd to the folder location
+   - cd server
+   - npm i
+   - node index.js (or use nodemon)
+   - cd client
    - npm i
    - npm start
+   

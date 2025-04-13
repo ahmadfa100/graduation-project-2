@@ -17,8 +17,8 @@ function Chat() {
   const [isChatLoding, setChatLoading] = useState(true);
   const [isOfferLoding, setOfferLoding] = useState(true);
   //Temporary
-  const ReceiverID = 1;
-  const userID = 3;
+  const ReceiverID = 37;
+  const userID = 34;
   const offerID = 5;
   const room = `other${ReceiverID}current${userID}offer${offerID}`;
 //

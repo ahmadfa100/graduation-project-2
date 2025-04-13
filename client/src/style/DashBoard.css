@@ -1,95 +1,113 @@
-/* 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-        } */
-        .listing-container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
-            margin-top: 10px;
-        }
-        .header_dash {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .breadcrumb {
-            font-size: 14px;
-            color: gray;
-            margin-bottom: 20px;
-        }
-       
-        .listing-card {
-            display: flex;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            align-items: center;
-            margin-bottom:10px ;
-        }
-        .listing-card img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            padding: 5px; 
-            border-radius:10% ;
-        }
-        .listing-info {
-            padding: 10px;
-            flex-grow: 1;
-        }
-        .listing-info h2 {
-            margin: 0;
-            font-size: 16px;
-        }
-        .listing-info p {
-            margin: 5px 0;
-            color: #666;
-            font-size: 14px;
-        }
-        .price {
-            font-size: 18px;
-            font-weight: bold;
-            color:red;
-        }
-        .actions {
-            display: flex;
-            margin-top: 10px;
-        }
-        .actions button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-right: 5px;
-        }
-        .actions button:hover {
-            background-color: #0056b3;
-        }
-        .chat-btn {
-            display: block;
-            margin-top: 15px;
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .OfferTime {
-            display: flex;
-            justify-content:flex-end;
-            font-size: 14px;
-            font-weight: bold;
-            color: black;
-        }
- 
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+  }
+  
+  .dashboard {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  /* Style the whole rectangle */
+  .dashboard-section {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  /* Header styling: full width at the top */
+  .dashboard-section h2 {
+    margin: 0;
+    font-size: 16px;
+    background-color: #e8f5e9; /* Light green background */
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+  }
+  
+  /* Inner content styling: centered and small */
+  .inner-content {
+    padding: 15px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
+  /* Views number styling */
+  .views-number {
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  /* Add Offer button styling */
+  .add-offer-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .add-offer-button:hover {
+    background-color: #45a049;
+  }
+  
+  /* My Offers Section */
+  .my-offers {
+    margin-top: 20px;
+  }
+  
+  .header {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    text-align: center;
+  }
+  
+  .header:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .offers-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .offer {
+    background-color: white;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+  }
+  
+  .offer h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .offer p {
+    margin: 5px 0;
+  }
+  

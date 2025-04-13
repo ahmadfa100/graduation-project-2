@@ -33,8 +33,9 @@ export const addOffer = async (req, res) => {
     
     // Calculate lease duration in months.
     const leaseDuration = parseInt(years) * 12 + parseInt(months);
+   
     const values = [offer_title, parseFloat(size), location, description, parseFloat(price), leaseDuration, parseInt(landOwnerID)];
-    
+    const addLandOwner= await db.query("INSERT INTO Landowners (ID) VALUES ($1) RETURNING ID",[parseInt(landOwnerID)]);
     const addOfferResponse = await db.query(
       "INSERT INTO offers (landTitle, landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, OwnerID) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
       values

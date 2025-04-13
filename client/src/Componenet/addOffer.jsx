@@ -92,7 +92,7 @@ function AddOffer() {
       <div className="add_offer">
         <h3>Land Lease Information</h3>
         <form onSubmit={addOfferSubmit}>
-          <input type="hidden" name="landOwnerID" value="1" />
+          <input type="hidden" name="landOwnerID" value="34" />
           <div className="group-input">
             <Input type="text" message="Enter offer title" name="offer_title" />
             <UnitInput type="number" unit="m²" message="Enter the number of dunums" name="size" />

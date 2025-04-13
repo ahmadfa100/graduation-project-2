@@ -5,14 +5,15 @@ env.config();
 
 const db = new Pool({
   user: "ahmad",
-  host: "dpg-cva25fd6l47c739glm10-a.frankfurt-postgres.render.com",
-  database: "green_bridge_82xx",
-  password: "EBqFKSQgSM4yPiRwWmpcObj3ob7wU2tz",
-  port: 5432,
+  host: "dpg-cvr63195pdvs73ecfu9g-a.frankfurt-postgres.render.com",
+  database: "green_bridge_pryw",
+  password: "l34MLDs3bW2TbqPdS1KCMH8FNGLqeNvV", 
+  port: 5432, 
   ssl: {
     rejectUnauthorized: false,
   },
 });
+
 
 db.connect((err) => {
   if (err) {

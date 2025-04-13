@@ -1,76 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { FaEye, FaPlus } from "react-icons/fa";
 import "../style/DashBoard.css";
-import { FaTrash, FaEdit } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import { useNotifications } from "@toolpad/core/useNotifications";
-function DashBoard(){
-    console.log("inter");
-    const notifications = useNotifications();
-    async function deleteOffer(){
-        try{
-            const offerID = 4; // stump
-const response = await axios.delete(`http://localhost:3001/deleteOffer/${offerID}`);
-            console.log(response.data);
 
+function LandownerDashboard() {
+  const [offers, setOffers] = useState([]);
 
-    console.log(response.data.landTitle );
-    notifications.show(response.data.message, {
-              severity: "success",
-              autoHideDuration: 3000,
-});
-        }catch(err){
-            console.error("Error deleting offer:", err);
-            notifications.show("Error deleting offer. Please try again.", {
-              severity: "error",
-              autoHideDuration: 3000,
+  useEffect(() => {
+    fetch("http://localhost:3001/dashboard/offers", {
+      credentials: "include", // ensures cookies are sent
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Not authorized or error fetching offers");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setOffers(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching dashboard offers:", error);
+      });
+  }, []);
 
-        });
-        
-    }}
-
-    return(
-<div className="listing-container">
-        <div className="header_dash">My Listing View</div>
-        <div className="breadcrumb">Listings {'>'} My Listing View</div>
-        <div className="listing-card">
-            <img src="/content images/my offer.jpg" alt="Farm Image"/>
-            <div className="listing-info">
-                
-                <div className="OfferTime">2025-03-10 04:47</div>
-                <h2>Farm Land</h2>
-                <p>Farm, Yearly, Northwest</p>
-                <p>Lands for Rent in Amman</p>
-                <div className="price">JOD 3,000</div>
-                <div className="actions">
-                    <button>💬 0</button>
-                   <Link to="/AddOffer"><button><FaEdit/></button></Link> 
-                    <button onClick={deleteOffer} ><FaTrash/></button>
-                </div>
+  return (
+    <div className="dashboard">
+      <div className="top-row">
+        <div className="dashboard-section">
+          <h2>Number of Views</h2>
+          <div className="inner-content">
+            <div className="views-number">
+              <FaEye /> 1234
             </div>
+          </div>
         </div>
-        <div className="listing-card">
-            <img src="/content images/my offer.jpg" alt="Farm Image"/>
-            <div className="listing-info">
-                
-                <div className="OfferTime">2025-03-10 04:47</div>
-                <h2>Farm Land</h2>
-                <p>Farm, Yearly, Northwest</p>
-                <p>Lands for Rent in Amman</p>
-                <div className="price">JOD 3,000</div>
-                <div className="actions">
-                    
-                    <button>💬 0</button>
-                    <Link to="/AddOffer"><button><FaEdit/></button></Link> 
-                    <button><FaTrash/></button>
-                </div>
-            </div>
+        <div className="dashboard-section">
+          <h2>Add Offer</h2>
+          <div className="inner-content">
+            <button className="add-offer-button" aria-label="Add Offer">
+              <FaPlus />
+            </button>
+          </div>
         </div>
-      
+      </div>
+      <Accordion>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          My Offers
+        </AccordionSummary>
+        <AccordionDetails style={{ display: "block" }}>
+          {offers.length > 0 ? (
+            offers.map((offer) => (
+              <div key={offer.id} className="offer">
+                <h3>{offer.landTitle}</h3>
+                <p>Status: {offer.status || "Available"}</p>
+                <p>Views: {offer.views || 0}</p>
+              </div>
+            ))
+          ) : (
+            <p>No offers found.</p>
+          )}
+        </AccordionDetails>
+      </Accordion>
     </div>
+  );
+}
 
-
-
-    );
-};
-export default DashBoard;
+export default LandownerDashboard;

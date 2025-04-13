@@ -7,7 +7,9 @@ CREATE TABLE users (
     Email VARCHAR(150) UNIQUE NOT NULL,
     age INT,
     address VARCHAR(255),
-    pfp BYTEA
+    pfp BYTEA,
+ gender VARCHAR(6) CHECK (gender IN ('male', 'female'))
+
 );
 CREATE TABLE Landowners (
     ID INT PRIMARY KEY REFERENCES users(ID) ON DELETE CASCADE    

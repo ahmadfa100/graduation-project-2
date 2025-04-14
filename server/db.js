@@ -7,13 +7,8 @@ const db = new Pool({
   user: "ahmad",
   host: "dpg-cvr63195pdvs73ecfu9g-a.frankfurt-postgres.render.com",
   database: "green_bridge_pryw",
-<<<<<<< HEAD
-  password: "l34MLDs3bW2TbqPdS1KCMH8FNGLqeNvV", 
-  port: 5432, 
-=======
   password: "l34MLDs3bW2TbqPdS1KCMH8FNGLqeNvV",
   port: 5432,
->>>>>>> 773b35b1ef79e48b3367a4739fe429e5ce8d3f99
   ssl: {
     rejectUnauthorized: false,
   },
@@ -25,7 +20,6 @@ const db = new Pool({
 //    password: process.env.DBpassword,
 //    port:  process.env.DBport,
 // });
-
 
 db.connect((err) => {
   if (err) {

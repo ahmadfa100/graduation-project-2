@@ -16,10 +16,11 @@ function Chat() {
   const [preview, setPreview] = useState(null);
   const [isChatLoding, setChatLoading] = useState(true);
   const [isOfferLoding, setOfferLoding] = useState(true);
+  const [isUserLoading,setUserLoading]= useState(true);
   //Temporary
-  const ReceiverID = 37;
-  const userID = 34;
-  const offerID = 5;
+  const ReceiverID = 1;
+  const userID = 2;
+  const offerID = 3;
   const room = `other${ReceiverID}current${userID}offer${offerID}`;
 //
   useEffect(() => {
@@ -173,13 +174,14 @@ function Chat() {
       const response = await axios.get(`http://localhost:3001/getUser/`, {
         params: { userID: ReceiverID },
       });
-
+console.log("here now :",response.data)
       if (response.data.error) {
         console.log("Error fetching owner:", response.data.error);
         return;
       }
       if (response.data) {
         setOfferOwner(response.data);
+        setUserLoading(false);
         // console.log("owner k",offerOwner.firstname);
       }
     } catch (error) {
@@ -216,7 +218,7 @@ function Chat() {
 
   return (
     <div className="chat-page">
-      {isChatLoding || isOfferLoding ? (
+      {isChatLoding || isOfferLoding ||isUserLoading ||isUserLoading ? (
         <ClipLoader color="green" size={50} />
       ) : (
         <div className="chat-container">

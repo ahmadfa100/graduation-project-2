@@ -90,14 +90,16 @@ io.on("connection", (socket) => {
       let chat = await getChats({ receiverID: receiver, senderID: sender, chatID: null, offerID: offer });
       if (chat.length > 0) {
         console.log("Chat already exists");
+        chatID = chat[0].id;
       } else {
         console.log("Creating new chat");
         chat = await db.query(
           "INSERT INTO chats (senderID, receiverID, offerID) VALUES ($1, $2, $3) RETURNING id",
           [sender, receiver, offer]
         );
+        chatID = chat[0].id;
       }
-      chatID = chat[0].id;
+      
       console.log("Chat ID:", chat[0].id);
       socket.emit("InitialMessages", chat[0].id);
     } catch (error) {

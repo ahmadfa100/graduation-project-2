@@ -6,6 +6,7 @@ import multer from "multer";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import bcrypt from 'bcrypt';
+import session from "express-session";
 // Import controllers
 import {
   getOffer,
@@ -26,11 +27,30 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(session({
+  secret: 'your-secret-key', // use a strong secret!
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // set to true if using HTTPS
+}));
+
+//session test 
+app.get("/", (req, res) => {
+  req.session.user = { id: 1 };
+  console.log("User session has been set!");
+});
+app.get("/check", (req, res) => {
+  res.send(req.session.user);
+});
+
+
 // Set up multer for file uploads (for offers routes)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Offers endpoints
+
+
 app.get("/getOffer/:offerID", getOffer);
 app.post("/addOffer", upload.array("images", 10), addOffer);
 app.put("/updateOffer/:offerID", upload.array("images", 10), updateOffer);
@@ -172,7 +192,8 @@ app.post('/api/signup', async (req, res) => {
     
     res.status(201).json({
       message: 'User created successfully',
-      user: result.rows[0]
+      user: result.rows[0] 
+      
     });
   } catch (error) {
     console.error('Error during signup:', error);
@@ -188,6 +209,7 @@ app.post('/api/signup', async (req, res) => {
     
     res.status(500).json({ error: 'Internal server error' });
   }
+ 
 });
 // Login endpoint
 app.post('/api/login', async (req, res) => {

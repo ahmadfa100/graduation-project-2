@@ -1,3 +1,4 @@
+import { Session } from "inspector/promises";
 import db from "../db.js";
 
 // GET /getOffer/:offerID
@@ -25,6 +26,7 @@ export const getOffer = async (req, res) => {
 
 // POST /addOffer
 export const addOffer = async (req, res) => {
+  console.log("here sess",req.session.user)
   try {
     const { offer_title, size, years, months, price, location, description, landOwnerID } = req.body;
     if (!offer_title || !size || !location || !description || !price || !years || !months || !landOwnerID) {
@@ -35,7 +37,7 @@ export const addOffer = async (req, res) => {
     const leaseDuration = parseInt(years) * 12 + parseInt(months);
    
     const values = [offer_title, parseFloat(size), location, description, parseFloat(price), leaseDuration, parseInt(landOwnerID)];
-    const addLandOwner= await db.query("INSERT INTO Landowners (ID) VALUES ($1) RETURNING ID",[parseInt(landOwnerID)]);
+    const addLandOwner= await db.query("INSERT INTO Landowners (ID) VALUES ($1) ON CONFLICT (ID) DO NOTHING RETURNING ID",[parseInt(landOwnerID)]);
     const addOfferResponse = await db.query(
       "INSERT INTO offers (landTitle, landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, OwnerID) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
       values

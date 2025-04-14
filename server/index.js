@@ -7,6 +7,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import bcrypt from 'bcrypt';
 import session from "express-session";
+
 // Import controllers
 import {
   getOffer,
@@ -33,7 +34,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: { secure: false } // set to true if using HTTPS
 }));
-
+// app.use(bodyParser.json({ limit: '5mb' }));
 //session test 
 app.get("/", (req, res) => {
   req.session.user = { id: 1 };

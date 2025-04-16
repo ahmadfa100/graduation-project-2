@@ -71,12 +71,6 @@ app.get("/getchat", getChat);
 app.get("/getchatcontent", getChatContent);
 app.post("/addchat", addChat);
 
-// HTTP root (session test)
-// app.get("/", (req, res) => {
-//   req.session.user = { id: 10 };
-//   console.log("User session has been set!");
-//   res.sendStatus(200);
-// });
 app.get("/sessionInfo", (req, res) => {
   res.json(req.session);
 });

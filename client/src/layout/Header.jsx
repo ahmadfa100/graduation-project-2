@@ -37,9 +37,10 @@ const Header = () => {
   // 1) On mount: check if there's an active session
   useEffect(() => {
     axios
-      .get("http://localhost:3001/check", { withCredentials: true })
+      .get("http://localhost:3001/sessionInfo", { withCredentials: true })
       .then((res) => {
-        if (res.data) setUser(res.data);
+        
+        if (res.data) setUser(res.data.user);
       })
       .catch(() => setUser(null));
   }, []);

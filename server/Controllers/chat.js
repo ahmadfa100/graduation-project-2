@@ -54,6 +54,7 @@ export async function getChat(req, res) {
 // GET /getchatcontent - Retrieve content for a specific chat.
 export async function getChatContent(req, res) {
   try {
+    //console.log("refer",req.get("Referer"));
     const { chatID } = req.query;
     if (!chatID) {
       return res.status(400).send("Missing chatID");

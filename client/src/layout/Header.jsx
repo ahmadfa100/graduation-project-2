@@ -1,12 +1,12 @@
+// Header.jsx
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   MdNotificationsNone,
   MdNotifications,
   MdDoneOutline,
 } from "react-icons/md";
-import "./Header.css";
 import {
   Drawer,
   Button,
@@ -22,22 +22,35 @@ import {
   Dashboard,
   Favorite,
   ExitToApp,
-  
 } from "@mui/icons-material";
+import "./Header.css";
 
 const Header = () => {
+  const [user, setUser] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [isIconActive, setIsIconActive] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [open, setOpen] = useState(false);
   const rightSectionRef = useRef(null);
+  const navigate = useNavigate();
 
+  // 1) On mount: check if there's an active session
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/check", { withCredentials: true })
+      .then((res) => {
+        if (res.data) setUser(res.data);
+      })
+      .catch(() => setUser(null));
+  }, []);
+
+  // 2) Notification icon toggle
   const handleNotificationClick = () => {
     setShowNotifications((prev) => !prev);
     setIsIconActive((prev) => !prev);
   };
 
-  // Close the dropdown if user clicks outside
+  // 3) Close notifications if clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -49,17 +62,17 @@ const Header = () => {
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
+    return () =>
       document.removeEventListener("mousedown", handleClickOutside);
-    };
   }, []);
 
-  // Fetch notifications from the backend
+  // 4) Fetch notifications
   useEffect(() => {
     async function getNotifications() {
       try {
         const response = await axios.get(
-          "http://localhost:3001/api/notifications"
+          "http://localhost:3001/api/notifications",
+          { withCredentials: true }
         );
         setNotifications(response.data.notifications || []);
       } catch (error) {
@@ -69,81 +82,43 @@ const Header = () => {
     getNotifications();
   }, []);
 
-  // Remove a notification from the list
+  // 5) Remove a notification
   const handleRemoveNotification = (index) => {
-    setNotifications((prevNotifications) => {
-      const newNotifications = [...prevNotifications];
-      newNotifications.splice(index, 1);
-      return newNotifications;
+    setNotifications((prev) => {
+      const copy = [...prev];
+      copy.splice(index, 1);
+      return copy;
     });
   };
-  const slidebarContent=[
-    {
-      title: "My Account",
-      onClick: () => {
-        setOpen(false);
-      },
-      icon: <AccountCircle />,
-    },
-    {
-      title: "Dashboard",
-      onClick: () => {
-        setOpen(false);
-      },
-      icon: <Dashboard />,
-    },
-    {
-      title: "Favorite offers",
-      onClick: () => {
-        setOpen(false);
-      },
-      icon: <Favorite />,
-    },
-    {
-      title: "My Chats",
-      onClick: () => {
-        setOpen(false);
-      },
-      icon: <Chat />,
-    },
-    
-    {
-      title: "Logout",
-      onClick: () => {
-        // Implement logout logic here
-        setOpen(false);
-      },
-      icon: <ExitToApp />,
-    },
+
+  // 6) Logout handler
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3001/api/logout",
+        {},
+        { withCredentials: true }
+      );
+      setUser(null);
+      setOpen(false);
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout failed", err);
+    }
+  };
+
+  // Sidebar items
+  const slidebarContent = [
+    { title: "My Account", icon: <AccountCircle />, onClick: () => setOpen(false) },
+    { title: "Dashboard", icon: <Dashboard />, onClick: () => setOpen(false) },
+    { title: "Favorite offers", icon: <Favorite />, onClick: () => setOpen(false) },
+    { title: "My Chats", icon: <Chat />, onClick: () => setOpen(false) },
+    { title: "Logout", icon: <ExitToApp />, onClick: handleLogout },
   ];
-  
-const slideBarItem = (index,title,onClick,icon) => {
-  return (
-<>    <ListItem
-    key={index}
-    button
-    onClick={onClick}
-    sx={{
-      borderRadius: "8px",
-      my: 2,
-      "&:hover": { bgcolor: "#f5f5f5" },
-    }}
-  >
-    <ListItemIcon sx={{ color: "#57b676", fontSize: "2rem" }}>
-      {icon}
-    </ListItemIcon>
-    <ListItemText primary={title} /> 
-    
-  </ListItem>
-  <Divider />
-  </>
-  
- 
-  );
-}
 
   return (
     <header className="header">
+      {/* Logo & Brand */}
       <Link to="/" className="logo-container">
         <img src="./logo.jpg" alt="Logo" className="logo" />
         <span className="brand-name">Green Bridge</span>
@@ -157,8 +132,9 @@ const slideBarItem = (index,title,onClick,icon) => {
         <Link to="/about">About</Link>
       </nav>
 
+      {/* Right Section: notifications + sign in / drawer */}
       <div className="right-section" ref={rightSectionRef}>
-        {/* Notification Icon + Badge */}
+        {/* Notification Icon */}
         <div
           className={`notification-icon ${isIconActive ? "active" : ""}`}
           onClick={handleNotificationClick}
@@ -169,54 +145,67 @@ const slideBarItem = (index,title,onClick,icon) => {
             <MdNotificationsNone size={24} />
           )}
           {notifications.length > 0 && (
-            <span className="notification-badge">{notifications.length}</span>
+            <span className="notification-badge">
+              {notifications.length}
+            </span>
           )}
         </div>
 
-        {/* Notification Dropdown (conditional render) */}
+        {/* Notification Dropdown */}
         {showNotifications && (
           <div className="notification-popup">
             <p>You have {notifications.length} new notifications.</p>
             <hr />
-            {notifications.map((notif, index) => (
-              <div key={index} className="notification-item">
+            {notifications.map((notif, idx) => (
+              <div key={idx} className="notification-item">
                 <span>{notif.message}</span>
                 <MdDoneOutline
                   size={24}
                   className="check-icon"
-                  onClick={() => handleRemoveNotification(index)}
+                  onClick={() => handleRemoveNotification(idx)}
                 />
               </div>
             ))}
           </div>
         )}
 
-        {/* Sign Up Button */}
+        {/* Sign In / Open Drawer */}
         <div className="signup-container">
-          <div>
-            <Button onClick={() => setOpen(true)}>Open Drawer</Button>
-            <Drawer anchor="right" open={open} onClose={() => setOpen(false)} PaperProps={{ 
-          sx: { 
-            
-            borderRadius: "5px 5px 5px 5px",  
-            height: "88vh",        
-            marginTop: "12vh",      
-           // opacity: ".85" ??
-           cursor: "pointer",
-          } 
-          
-        }}
-        >
-              <ListItem onClick={() => setOpen(false)}>
+          {user ? (
+            <>
+              {/* Logged in: show drawer button */}
+              <Button onClick={() => setOpen(true)}>Open Drawer</Button>
+              <Drawer
+                anchor="right"
+                open={open}
+                onClose={() => setOpen(false)}
+                PaperProps={{
+                  sx: { borderRadius: 1, height: "88vh", mt: "12vh" },
+                }}
+              >
                 <List>
-                  {slidebarContent.map((item,index) => slideBarItem(index,item.title,item.onClick,item.icon))}
+                  {slidebarContent.map((item, i) => (
+                    <React.Fragment key={i}>
+                      <ListItem button onClick={item.onClick}>
+                        <ListItemIcon
+                          sx={{ color: "#57b676", fontSize: "2rem" }}
+                        >
+                          {item.icon}
+                        </ListItemIcon>
+                        <ListItemText primary={item.title} />
+                      </ListItem>
+                      <Divider />
+                    </React.Fragment>
+                  ))}
                 </List>
-              </ListItem>
-            </Drawer>
-          </div>
-          {/* <Link to="/signup">
-            <button className="signup-button">Sign Up</button>
-          </Link> */}
+              </Drawer>
+            </>
+          ) : (
+            /* Logged out: show sign in button */
+            <Link to="/login">
+              <Button>Sign In</Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>

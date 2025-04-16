@@ -6,6 +6,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import bcrypt from 'bcrypt';
 import session from "express-session";
+import { getMyOffers } from "./Controllers/dashboard.js"
 
 // Import controllers
 import { loginUser } from "./Controllers/login.js";
@@ -199,6 +200,26 @@ app.get('/getuser', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+// at the bottom of your routes, before server.listen
+app.post('/api/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) return res.status(500).json({ error: 'Logout failed' });
+    res.clearCookie('connect.sid');      // or whatever your cookie name is
+    res.json({ message: 'Logged out' });
+  });
+});
+
+
+app.get("/getOffer/:offerID", getOffer);
+app.post("/addOffer", upload.array("images", 10), addOffer);
+app.put("/updateOffer/:offerID", upload.array("images", 10), updateOffer);
+app.delete("/deleteOffer/:offerID", deleteOffer);
+app.get("/offers", getAllOffers);
+
+ // Dashboard “my offers”
+ app.get("/dashboard/offers", getMyOffers);
+
 
 // Start server with Socket.io
 server.listen(port, () => {

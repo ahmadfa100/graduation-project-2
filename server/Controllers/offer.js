@@ -1,4 +1,3 @@
-import { Session } from "inspector/promises";
 import db from "../db.js";
 
 // GET /getOffer/:offerID
@@ -6,18 +5,17 @@ export const getOffer = async (req, res) => {
   try {
     const offerID = req.params.offerID;
     const offerinfo = await db.query("SELECT * FROM offers WHERE id = $1", [offerID]);
-
     if (offerinfo.rowCount === 0) {
       return res.status(404).json({ error: "Offer not found" });
     }
-
-    // Fetch all images for the offer and convert them to base64 strings.
-    const offerimages = await db.query("SELECT picture FROM landPicture WHERE landID = $1", [offerID]);
-    const images = offerimages.rows.map((row) =>
+    const offerimages = await db.query(
+      "SELECT picture FROM landPicture WHERE landID = $1",
+      [offerID]
+    );
+    const images = offerimages.rows.map(row =>
       `data:image/jpeg;base64,${row.picture.toString("base64")}`
     );
-
-    res.json({ offer: offerinfo.rows[0], images: images });
+    res.json({ offer: offerinfo.rows[0], images });
   } catch (err) {
     console.error("Error fetching offer:", err);
     res.status(500).json({ error: "Internal Server Error" });
@@ -26,29 +24,60 @@ export const getOffer = async (req, res) => {
 
 // POST /addOffer
 export const addOffer = async (req, res) => {
-  console.log("here sess",req.session.user)
   try {
-    const { offer_title, size, years, months, price, location, description, landOwnerID } = req.body;
-    if (!offer_title || !size || !location || !description || !price || !years || !months || !landOwnerID) {
+    // 1) Authentication check
+    if (!req.session.user?.id) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    const landOwnerID = req.session.user.id;
+
+    // 2) Extract & validate
+    const { offer_title, size, years, months, price, location, description } = req.body;
+    if (
+      !offer_title ||
+      !size ||
+      !years ||
+      !months ||
+      !price ||
+      !location ||
+      !description
+    ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-    
-    // Calculate lease duration in months.
+
+    // 3) Compute duration & insert landowner record
     const leaseDuration = parseInt(years) * 12 + parseInt(months);
-   
-    const values = [offer_title, parseFloat(size), location, description, parseFloat(price), leaseDuration, parseInt(landOwnerID)];
-    const addLandOwner= await db.query("INSERT INTO Landowners (ID) VALUES ($1) ON CONFLICT (ID) DO NOTHING RETURNING ID",[parseInt(landOwnerID)]);
-    const addOfferResponse = await db.query(
-      "INSERT INTO offers (landTitle, landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, OwnerID) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id",
-      values
+    await db.query(
+      "INSERT INTO Landowners (ID) VALUES ($1) ON CONFLICT (ID) DO NOTHING",
+      [landOwnerID]
     );
-    
+
+    // 4) Insert offer
+    const addOfferResponse = await db.query(
+      `INSERT INTO offers
+         (landTitle, landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, OwnerID)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       RETURNING id`,
+      [
+        offer_title,
+        parseFloat(size),
+        location,
+        description,
+        parseFloat(price),
+        leaseDuration,
+        landOwnerID,
+      ]
+    );
     const offerId = addOfferResponse.rows[0].id;
-    // Save uploaded images.
-    req.files.forEach(async (file) => {
-      await db.query("INSERT INTO landPicture (landID, picture) VALUES ($1, $2)", [offerId, file.buffer]);
-    });
-    
+
+    // 5) Save images
+    for (const file of req.files) {
+      await db.query(
+        "INSERT INTO landPicture (landID, picture) VALUES ($1, $2)",
+        [offerId, file.buffer]
+      );
+    }
+
     res.json({ message: "Offer added successfully", offerId });
   } catch (error) {
     console.error("Error adding offer:", error);
@@ -59,32 +88,58 @@ export const addOffer = async (req, res) => {
 // PUT /updateOffer/:offerID
 export const updateOffer = async (req, res) => {
   try {
-    const { offer_title, size, years, months, price, location, description, landOwnerID } = req.body;
+    if (!req.session.user?.id) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    const landOwnerID = req.session.user.id;
     const { offerID } = req.params;
+    const { offer_title, size, years, months, price, location, description } = req.body;
 
-    if (!offerID || !offer_title || !size || !location || !description || !price || !years || !months || !landOwnerID) {
+    if (
+      !offerID ||
+      !offer_title ||
+      !size ||
+      !years ||
+      !months ||
+      !price ||
+      !location ||
+      !description
+    ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-    
+
     const leaseDuration = parseInt(years) * 12 + parseInt(months);
-    const values = [offer_title, parseFloat(size), location, description, parseFloat(price), leaseDuration, parseInt(landOwnerID), parseInt(offerID)];
-    
-    const updateOfferResponse = await db.query(
-      "UPDATE offers SET landTitle = $1, landSize = $2, landLocation = $3, offerDescription = $4, landLeasePrice = $5, leaseDuration = $6, OwnerID = $7 WHERE id = $8 RETURNING id",
-      values
+    const updateRes = await db.query(
+      `UPDATE offers
+         SET landTitle=$1, landSize=$2, landLocation=$3, offerDescription=$4,
+             landLeasePrice=$5, leaseDuration=$6, OwnerID=$7
+       WHERE id=$8
+       RETURNING id`,
+      [
+        offer_title,
+        parseFloat(size),
+        location,
+        description,
+        parseFloat(price),
+        leaseDuration,
+        landOwnerID,
+        parseInt(offerID),
+      ]
     );
-    
-    if (updateOfferResponse.rowCount === 0) {
+    if (updateRes.rowCount === 0) {
       return res.status(404).json({ error: "Offer not found" });
     }
-    
-    // Remove old images and add new ones.
+
+    // Replace images
     await db.query("DELETE FROM landPicture WHERE landID = $1", [offerID]);
     for (const file of req.files) {
-      await db.query("INSERT INTO landPicture (landID, picture) VALUES ($1, $2)", [offerID, file.buffer]);
+      await db.query(
+        "INSERT INTO landPicture (landID, picture) VALUES ($1, $2)",
+        [offerID, file.buffer]
+      );
     }
-    
-    res.json({ message: "Offer updated successfully", offerId: updateOfferResponse.rows[0].id });
+
+    res.json({ message: "Offer updated successfully", offerId: updateRes.rows[0].id });
   } catch (error) {
     console.error("Error updating offer:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -95,16 +150,15 @@ export const updateOffer = async (req, res) => {
 export const deleteOffer = async (req, res) => {
   try {
     const { offerID } = req.params;
-    
-    // Delete images associated with the offer.
     await db.query("DELETE FROM landPicture WHERE landID = $1", [offerID]);
-    
-    const deleteOfferResponse = await db.query("DELETE FROM offers WHERE id = $1 RETURNING landTitle", [offerID]);
-    if (deleteOfferResponse.rows.length === 0) {
+    const deleteRes = await db.query(
+      "DELETE FROM offers WHERE id = $1 RETURNING landTitle",
+      [offerID]
+    );
+    if (deleteRes.rowCount === 0) {
       return res.status(404).json({ error: "Offer not found" });
     }
-    
-    res.json({ message: "Offer deleted successfully", landTitle: deleteOfferResponse.rows[0].landTitle });
+    res.json({ message: "Offer deleted successfully", landTitle: deleteRes.rows[0].landTitle });
   } catch (error) {
     console.error("Error deleting offer:", error);
     res.status(500).json({ error: "Internal Server Error" });

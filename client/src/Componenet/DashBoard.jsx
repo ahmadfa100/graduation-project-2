@@ -5,15 +5,17 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { FaPlus } from "react-icons/fa";
 import "../style/DashBoard.css";
+import { useNavigate } from "react-router-dom";
+
 
 function LandownerDashboard() {
   const [offers, setOffers] = useState([]);
   const [favoriteOffers, setFavoriteOffers] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
-    fetch("http://localhost:3001/dashboard/offers", {
-      credentials: "include",
-    })
+fetch("/dashboard/offers", {
+     credentials: "include",
+    })  
       .then((res) => {
         if (!res.ok) {
           throw new Error("Not authorized or error fetching offers");
@@ -48,9 +50,13 @@ function LandownerDashboard() {
       <div className="dashboard-section">
         <h2>Add Offer</h2>
         <div className="inner-content">
-          <button className="add-offer-button" aria-label="Add Offer">
-            <FaPlus />
-          </button>
+        <button
+  className="add-offer-button"
+  aria-label="Add Offer"
+  onClick={() => navigate("/AddOffer")}
+>
+  <FaPlus />
+</button>
         </div>
       </div>
 

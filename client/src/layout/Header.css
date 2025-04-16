@@ -3,6 +3,36 @@
   padding: 0;
   box-sizing: border-box;
 }
+a {
+  text-decoration: none;
+  color: inherit; /* Optional: keep the same text color */
+}
+.Drawer-element{
+margin-bottom: 1.5rem;
+}
+.User-Avatar-Header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Image sizing */
+.User-Avatar-Header img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Username text */
+.User-Avatar-Header h3 {
+  color: rgb(76, 175, 80);
+  text-transform: none;
+  position: relative;
+  top: 5px;
+  font-size: 16px;
+}
 
 body {
   font-family: "Arial", sans-serif;

@@ -24,6 +24,10 @@ import {
   ExitToApp,
 } from "@mui/icons-material";
 import "./Header.css";
+import { FaCaretDown } from "react-icons/fa";
+import { green } from "@mui/material/colors";
+
+
 
 const Header = () => {
   const [user, setUser] = useState(null);
@@ -110,9 +114,9 @@ const Header = () => {
 
   // Sidebar items
   const slidebarContent = [
-    { title: "My Account", icon: <AccountCircle />, onClick: () => setOpen(false) },
-    { title: "Dashboard", icon: <Dashboard />, onClick: () => setOpen(false) },
-    { title: "Favorite offers", icon: <Favorite />, onClick: () => setOpen(false) },
+    { title: "My Account", icon: <AccountCircle />, onClick: () => setOpen(false) ,link:"AccountInf" },
+    { title: "Dashboard", icon: <Dashboard />, onClick: () => setOpen(false),link:"DashBoard" },
+    { title: "Favorite offers", icon: <Favorite />, onClick: () => setOpen(false) ,link:"DashBoard" },
     { title: "My Chats", icon: <Chat />, onClick: () => setOpen(false) },
     { title: "Logout", icon: <ExitToApp />, onClick: handleLogout },
   ];
@@ -175,7 +179,14 @@ const Header = () => {
           {user ? (
             <>
               {/* Logged in: show drawer button */}
-              <Button onClick={() => setOpen(true)}>Open Drawer</Button>
+              <Button onClick={() => setOpen(true)}>
+                <div className="User-Avatar-Header">
+                 {user.pfp ?  <img src={URL.createObjectURL(user.pfp)} alt="pfp" /> :  <img src="./user.png" alt="pfp" />}
+                <h3>Hi {user.firstname} </h3>
+                <FaCaretDown  style={{ position: 'relative', top: '10px', color: 'green'}}/>
+
+                </div>
+                </Button>
               <Drawer
                 anchor="right"
                 open={open}
@@ -187,7 +198,9 @@ const Header = () => {
                 <List>
                   {slidebarContent.map((item, i) => (
                     <React.Fragment key={i}>
-                      <ListItem button onClick={item.onClick}>
+                 <div className="Drawer-element">
+                 <Link to={"/"+item.link}>
+                   <ListItem button onClick={item.onClick}>
                         <ListItemIcon
                           sx={{ color: "#57b676", fontSize: "2rem" }}
                         >
@@ -196,6 +209,8 @@ const Header = () => {
                         <ListItemText primary={item.title} />
                       </ListItem>
                       <Divider />
+                   </Link>
+                 </div>
                     </React.Fragment>
                   ))}
                 </List>

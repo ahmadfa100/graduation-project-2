@@ -17,19 +17,27 @@ function Chat() {
   const [isChatLoding, setChatLoading] = useState(true);
   const [isOfferLoding, setOfferLoding] = useState(true);
   const [isUserLoading,setUserLoading]= useState(true);
+  const [sessiondata, setSessiondata] = useState(null); 
+  const [sessionReady, setSessionReady] = useState(false);
   //Temporary
-  const ReceiverID = 1;
-  const userID = 2;
+  const ReceiverID = 2;
   const offerID = 3;
-  const room = `other${ReceiverID}current${userID}offer${offerID}`;
+  const room = `other${ReceiverID}currentoffer${offerID}`;
 //
+useEffect(()=>{
+fetchSession();
+},[]);
   useEffect(() => {
+    console.log("enter");
+    if (!sessionReady || sessiondata === null) return;
+    console.log("vaild");
     setMessages([]);
     setMessage(null);
     fetchOffer(offerID);
 
     socket.emit("Initialize", {
-      sender: userID,
+      sender: sessiondata.userID 
+,
       receiver: ReceiverID,
       offer: offerID,
     }); //The receiver takes owner ID not work with all scenarios owner id will be taken from offer only if user click on the chat button
@@ -61,8 +69,30 @@ function Chat() {
       socket.off("RecivedMessage");
       socket.disconnect();
     };
-  }, [room]);
+  }, [sessionReady, sessiondata, room]);
 
+  async function fetchSession() {
+    try {
+      const sessionResponse = await axios.get(`http://localhost:3001/sessionInfo`, {
+        withCredentials: true, 
+      });
+      const user = sessionResponse.data.user;
+
+      if (user ) {
+        
+      setSessiondata({
+        userID:sessionResponse.data.user.id
+      });  
+        setSessionReady(true);  
+        console.log("Session data:", user);
+      } else {
+        console.warn("No user found in session.");
+      }
+     
+    } catch (err) {
+      console.error("Failed to fetch session info:", err);
+    }
+  }
   async function fetchChat(chatID) {
     try {
       console.log("Fetching chat messages...");
@@ -84,7 +114,8 @@ function Chat() {
         //  console.log(Array.isArray(oldMessages)); // Should print true
         //   console.log("messages:",oldMessages);
         oldMessages.forEach((element) => {
-          if (element.senderid === userID) {
+          if (element.senderid === sessiondata.userID 
+) {
             if (element.contenttext) {
               setMessages((prevMessages) => [
                 ...prevMessages,
@@ -198,7 +229,8 @@ console.log("here now :",response.data)
       return;
     }
 
-    const messageData = { message, room, sender: userID }; // gpt: Include sender ID
+    const messageData = { message, room, sender: sessiondata.userID 
+ }; // gpt: Include sender ID
     socket.emit("sendMessage", messageData);
 
     setMessages((prevMessages) => [

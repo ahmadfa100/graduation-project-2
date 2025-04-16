@@ -1,80 +1,50 @@
-
-/* body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f9f9f9;
-} */
-
- /* .background {
-    background-image: url("../../public/content images/LogIn background.jpg");
- 
-  } */
- /* img{
-    border-radius: 50%;
-} */
-.login-location{
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f9f9f9;
-
-}
 .login-container {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 4rem auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: #fff;
+  }
+  .login-container h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
     text-align: center;
-    width: 350px;
-}
-.login-container h2 {
-    margin-bottom: 10px;
-}
-.input-group {
-    margin: 10px 0;
-}
-.login-container input[type="text"],
-.login-container input[type="password"] {
+  }
+  .login-container p {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #555;
+  }
+  .login-form label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  .login-form input {
     width: 100%;
-    padding: 10px;
+    padding: 0.5rem;
+    margin-top: 0.25rem;
     border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-.remember-forgot {
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-}
-.login-btn {
+    border-radius: 4px;
+  }
+  .login-form button {
     width: 100%;
-    padding: 10px;
-    background: linear-gradient(to right, #a4c639, #8ebf45);
+    padding: 0.75rem;
+    margin-top: 1rem;
     border: none;
-    color: white;
-    font-size: 16px;
+    border-radius: 4px;
+    font-size: 1rem;
     cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-.social-login {
-    margin: 15px 0;
-}
-.social-icons img {
-    width: 30px;
-    margin: 0 5px;
+  }
+  .alt-action {
+    text-align: center;
+    margin-top: 1rem;
+    color: #333;
+  }
+  .signup-link {
+    color: #007bff;
     cursor: pointer;
-}
-.register {
-    font-size: 14px;
-    margin-top: 10px;
-}
-.register a {
-    color: #8ebf45;
-    text-decoration: none;
-}
+    text-decoration: underline;
+  }

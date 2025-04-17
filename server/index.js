@@ -6,9 +6,9 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import bcrypt from 'bcrypt';
 import session from "express-session";
-import { getMyOffers } from "./Controllers/dashboard.js"
+import db from "./db.js"; // Used in socket code
 
-// Import controllers
+// Controllers
 import { loginUser } from "./Controllers/login.js";
 import {
   getOffer,
@@ -19,7 +19,7 @@ import {
 } from "./Controllers/offer.js";
 import { getNotifications } from "./Controllers/notification.js";
 import { getChat, getChatContent, addChat, getChats } from "./Controllers/chat.js";
-import db from "./db.js"; // Used in socket code
+import { getMyOffers } from "./Controllers/dashboard.js";
 
 // Load environment variables
 env.config();
@@ -33,7 +33,7 @@ app.use(cors({
   credentials: true
 }));
 
-// Middleware
+// Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -43,18 +43,107 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,    // set to true if using HTTPS in production
-    httpOnly: false,  // allow JS to read the cookie (dev only)
+    secure: false,    // set true in production with HTTPS
+    httpOnly: false,  // allow JS to read cookie (dev only)
     sameSite: 'lax'
   }
 }));
+
+// ——————————————
+// Session‐update endpoint
+// ——————————————
+app.post('/api/addObjectSession', (req, res) => {
+  const { key, value } = req.body;
+
+  if (!key || value === undefined) {
+    return res.status(400).json({ message: 'You must provide a key and value' });
+  }
+
+  req.session[key] = value;
+
+  res.json({
+    message: `Session key '${key}' set`,
+    session: req.session
+  });
+});
 
 // Multer setup for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Authentication route
+// Authentication routes
 app.post('/api/login', loginUser);
+app.post('/api/signup', async (req, res) => {
+  const {
+    firstName,
+    lastName,
+    address,
+    day,
+    month,
+    year,
+    gender,
+    mobileNumber,
+    email,
+    password,
+    confirmPassword
+  } = req.body;
+
+  if (password !== confirmPassword) {
+    return res.status(400).json({ error: 'Passwords do not match' });
+  }
+  if (!['male', 'female'].includes(gender)) {
+    return res.status(400).json({ error: 'Invalid gender' });
+  }
+
+  const birthDate = new Date(year, month - 1, day);
+  const ageDiff = Date.now() - birthDate.getTime();
+  const ageDate = new Date(ageDiff);
+  const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const query = `
+      INSERT INTO users (firstname, lastname, password, phonenumber, email, age, address, gender)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING id, email, firstname, lastname
+    `;
+    const values = [firstName, lastName, hashedPassword, mobileNumber, email, age, address, gender];
+    const result = await db.query(query, values);
+    res.status(201).json({ message: 'User created successfully', user: result.rows[0] });
+  } catch (error) {
+    console.error('Error during signup:', error);
+    if (error.code === '23505') {
+      if (error.constraint === 'users_email_key') {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+      if (error.constraint === 'users_phonenumber_key') {
+        return res.status(400).json({ error: 'Phone number already exists' });
+      }
+    }
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/getuser', async (req, res) => {
+  try {
+    const userID = Number(req.query.userID);
+    if (!userID) return res.status(400).json({ error: 'userID is required' });
+    const response = await db.query('SELECT * FROM users WHERE id = $1', [userID]);
+    if (response.rowCount === 0) return res.status(404).json({ error: 'User not found' });
+    res.json(response.rows[0]);
+  } catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.post('/api/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) return res.status(500).json({ error: 'Logout failed' });
+    res.clearCookie('connect.sid');
+    res.json({ message: 'Logged out' });
+  });
+});
 
 // Offers endpoints
 app.get("/getOffer/:offerID", getOffer);
@@ -63,17 +152,21 @@ app.put("/updateOffer/:offerID", upload.array("images", 10), updateOffer);
 app.delete("/deleteOffer/:offerID", deleteOffer);
 app.get("/offers", getAllOffers);
 
-// Notifications endpoint
+// Notifications
 app.get("/api/notifications", getNotifications);
 
-// Chat endpoints (HTTP)
+// Chat (HTTP)
 app.get("/getchat", getChat);
 app.get("/getchatcontent", getChatContent);
 app.post("/addchat", addChat);
 
+// Session info (for debugging)
 app.get("/sessionInfo", (req, res) => {
   res.json(req.session);
 });
+
+// Dashboard “my offers”
+app.get("/dashboard/offers", getMyOffers);
 
 // Start HTTP server and bind Socket.io
 const server = createServer(app);
@@ -85,6 +178,7 @@ const io = new Server(server, {
   }
 });
 
+// Socket.io setup
 io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);
   let chatID = 0;
@@ -133,89 +227,7 @@ io.on("connection", (socket) => {
   });
 });
 
-// Signup endpoint
-app.post('/api/signup', async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    address,
-    day,
-    month,
-    year,
-    gender,
-    mobileNumber,
-    email,
-    password,
-    confirmPassword
-  } = req.body;
-
-  if (password !== confirmPassword) {
-    return res.status(400).json({ error: 'Passwords do not match' });
-  }
-  if (!['male', 'female'].includes(gender)) {
-    return res.status(400).json({ error: 'Invalid gender' });
-  }
-
-  const birthDate = new Date(year, month - 1, day);
-  const ageDiff = Date.now() - birthDate.getTime();
-  const ageDate = new Date(ageDiff);
-  const age = Math.abs(ageDate.getUTCFullYear() - 1970);
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-    const query = `
-      INSERT INTO users (firstname, lastname, password, phonenumber, email, age, address, gender)
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-      RETURNING id, email, firstname, lastname
-    `;
-    const values = [firstName, lastName, hashedPassword, mobileNumber, email, age, address, gender];
-    const result = await db.query(query, values);
-    res.status(201).json({ message: 'User created successfully', user: result.rows[0] });
-  } catch (error) {
-    console.error('Error during signup:', error);
-    if (error.code === '23505') {
-      if (error.constraint === 'users_email_key') return res.status(400).json({ error: 'Email already exists' });
-      if (error.constraint === 'users_phonenumber_key') return res.status(400).json({ error: 'Phone number already exists' });
-    }
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// Get user by ID
-app.get('/getuser', async (req, res) => {
-  try {
-    const userID = Number(req.query.userID);
-    if (!userID) return res.status(400).json({ error: 'userID is required' });
-    const response = await db.query('SELECT * FROM users WHERE id = $1', [userID]);
-    if (response.rowCount === 0) return res.status(404).json({ error: 'User not found' });
-    res.json(response.rows[0]);
-  } catch (error) {
-    console.error('Database error:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-// at the bottom of your routes, before server.listen
-app.post('/api/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) return res.status(500).json({ error: 'Logout failed' });
-    res.clearCookie('connect.sid');      // or whatever your cookie name is
-    res.json({ message: 'Logged out' });
-  });
-});
-
-
-app.get("/getOffer/:offerID", getOffer);
-app.post("/addOffer", upload.array("images", 10), addOffer);
-app.put("/updateOffer/:offerID", upload.array("images", 10), updateOffer);
-app.delete("/deleteOffer/:offerID", deleteOffer);
-app.get("/offers", getAllOffers);
-
- // Dashboard “my offers”
- app.get("/dashboard/offers", getMyOffers);
-
-
-// Start server with Socket.io
+// Start server
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

@@ -83,21 +83,24 @@ export default function AddOffer() {
         <form onSubmit={addOfferSubmit}>
           {/* NO more hidden landOwnerID input! */}
           <div className="group-input">
-            <Input type="text" message="Enter offer title" name="offer_title" />
+          
+            <input type="text" message="Enter offer title" name="offer_title" minlength="5" maxlength="100" error="hi"/>
             <UnitInput type="number" unit="m²" message="Enter the number of dunums" name="size" />
 
             <div className="detailed-input">
-              <Input type="number" message="Lease duration (years)" name="years" min="0" max="100" />
+              <Input type="number" message="Lease duration (years)" name="years" min="0" max="10" />
               <Input type="number" message="Lease duration (months)" name="months" min="0" max="11" />
             </div>
 
-            <UnitInput type="text" unit="JOD" message="Enter price" name="price" />
-            <Input type="text" message="Enter offer location" name="location" />
+            <UnitInput type="number" unit="JOD" message="Enter price" name="price" min="1" max="100000000" />
+            <input type="text" message="Enter offer location" name="location"  minlength="2" maxlength="100" />
             <textarea
               className="textInput"
               name="description"
               placeholder="Enter a detailed description"
               rows="5"
+              minlength="20" 
+              maxlength="500"
               required
             />
 

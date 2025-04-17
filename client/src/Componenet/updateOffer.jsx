@@ -104,7 +104,7 @@ function UpdateOffer() {
      
         <input type="hidden" name="landOwnerID" value="1" />
         <div className="group-input">
-          <input className="textInput" type="text" placeholder="Enter offer title" name="offer_title" defaultValue={form.landtitle} required />
+          <input className="textInput" type="text" placeholder="Enter offer title" name="offer_title" defaultValue={form.landtitle} minLength="5" maxLength="100" required />
           <UnitInput type="number" unit="m²" message="Enter land size" name="size" defaultValue={form.landsize} />
 
           <div className="detailed-input">
@@ -113,9 +113,9 @@ function UpdateOffer() {
             <input className="textInput" type="number" placeholder="Lease duration (months)" name="months" min="0" max="12" defaultValue={form.leaseduration ? (form.leaseduration % 12) : ""}/>
           </div>
 
-          <UnitInput type="text" unit="JOD" message="Enter price" name="price" defaultValue={form.landleaseprice} />
-          <input className="textInput" type="text" placeholder="Enter offer location (e.g., Amman Sweileh)" name="location" defaultValue={form.landlocation} />
-          <textarea className="textInput" name="description" placeholder="Enter a detailed description" rows="5" required defaultValue={form.offerdescription}></textarea>
+          <UnitInput type="text" unit="JOD" message="Enter price" name="price" defaultValue={form.landleaseprice}  min="1" max="100000000"  />
+          <input className="textInput" type="text" placeholder="Enter offer location (e.g., Amman Sweileh)" name="location" defaultValue={form.landlocation}  minLength="2" maxLength="100" />
+          <textarea className="textInput" name="description" placeholder="Enter a detailed description" rows="5" required defaultValue={form.offerdescription} minLength="20" maxLength="500"></textarea>
 
           <div className="center">
             <label className="file-upload">

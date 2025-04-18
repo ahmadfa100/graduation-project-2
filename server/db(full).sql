@@ -41,11 +41,14 @@ ID SERIAL PRIMARY KEY,
 );
 
 CREATE TABLE FavoriteOffers (
-	--FavoriteOffers--
-    farmerID INT not null REFERENCES farmers(id) on delete cascade ,
-    offerID INT not null references offers(id) on delete cascade,
-    PRIMARY KEY (farmerID, offerID)
+    --FavoriteOffers--
+    farmerID INT NOT NULL,
+    offerID INT NOT NULL,
+    CONSTRAINT PK_FavoriteOffers PRIMARY KEY (farmerID, offerID),
+    CONSTRAINT FK_FavoriteOffers_Farmer FOREIGN KEY (farmerID) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT FK_FavoriteOffers_Offer FOREIGN KEY (offerID) REFERENCES offers(id) ON DELETE CASCADE
 );
+
 CREATE TABLE EducationalResource (
 	--EducationalResource--
 	-- in docs its linked with user but i see its unuseful?!--

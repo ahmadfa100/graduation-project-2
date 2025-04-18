@@ -19,6 +19,7 @@ const EcommerceSlider = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [details, setDetails] = useState([]);
   const [productImages, setProductImages] = useState([]);
+
   
   useEffect(() => {
     fetchoffer();
@@ -104,8 +105,31 @@ const EcommerceSlider = () => {
   );
 };
 function Details(props) {
+  const[isLiked,setIsLiked]=useState(true);
   const navigate = useNavigate();
   console.log("detail props: ",props);
+
+  async function handleLikedOffer() {
+    setIsLiked(!isLiked);
+    console.log(isLiked);
+  
+    if (isLiked) {
+      const response = await axios.post(
+        "http://localhost:3001/AddFavoriteOffers",
+        { offerID: props.id },
+        { withCredentials: true }
+      );
+    } else {
+      const response = await axios.delete(
+        "http://localhost:3001/DeleteFavoriteOffer",
+        {
+          data: { offerID: props.id }, // ✅ wrap offerID in `data`
+          withCredentials: true
+        }
+      );
+    }
+  }
+  
   return (
     <div className="details-container">
       <h1>Offer information </h1>
@@ -153,7 +177,9 @@ function Details(props) {
         <Button.Chat onClick={() => navigate(`/chat/${props.id}/${props.ownerid}`)} />
 
        
+        <div onClick={handleLikedOffer}>
         <Button.Like></Button.Like>
+        </div>
       </div>
     </div>
   );

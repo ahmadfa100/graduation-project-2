@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import "../style/chat.css";
 import { FaCamera, FaPaperPlane, FaUpload } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link,useParams } from "react-router-dom";
 import io from "socket.io-client";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -19,12 +19,16 @@ function Chat() {
   const [isUserLoading,setUserLoading]= useState(true);
   const [sessiondata, setSessiondata] = useState(null); 
   const [sessionReady, setSessionReady] = useState(false);
-  //Temporary
-  const ReceiverID = 2;
-  const offerID = 3;
+  const {offerID,ReceiverID}= useParams();
+  
   const room = `other${ReceiverID}currentoffer${offerID}`;
 //
+useEffect(() => {
+  console.log("Offer ID:", offerID);
+  console.log("Owner ID:", ReceiverID);
+}, [offerID, ReceiverID]);
 useEffect(()=>{
+  
 fetchSession();
 },[]);
   useEffect(() => {

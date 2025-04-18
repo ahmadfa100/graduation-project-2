@@ -142,6 +142,7 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
 
       <div className="offers-list">
         {offers.map((offer) => (
+        
           <div
             key={offer.id}
             className="offer-item"
@@ -167,7 +168,8 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
                   className="action-button"
                   onClick={(e) => {
                     e.stopPropagation(); // Stop event from bubbling
-                    navigate("/chat");
+                  //  console.log(" offer sectiom :",offer);
+                    navigate(`/chat/${offer.id}/${offer.ownerid}`);
                   }}
                 >
                   <FaComments />

@@ -146,7 +146,9 @@ function Details(props) {
         <LeafLine></LeafLine>
       </div>
       <div className="button-container">
-        <Button.Call></Button.Call>
+        <Button.Call onClick={()=>{(window.location.href = `tel:${props.PhoneNumber}`)}}>
+        
+        </Button.Call>
        
         <Button.Chat onClick={() => navigate(`/chat/${props.id}/${props.ownerid}`)} />
 

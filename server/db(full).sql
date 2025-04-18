@@ -24,6 +24,7 @@ CREATE TABLE Offers (
     landTitle varchar(255),
     landSize NUMERIC(10, 2) NOT NULL,
     landLocation VARCHAR(255) NOT NULL,
+    PhoneNumber VARCHAR(20),
     --locMap text,
     offerDescription TEXT,
     landLeasePrice NUMERIC(10, 2) NOT NULL,-- in jordan its impossible but may be in other countries--

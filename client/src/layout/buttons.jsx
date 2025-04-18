@@ -23,7 +23,7 @@ function Like(params) {
 
   function change(){
     likeState(like=!like);
-    params.onClick();
+    //params.onClick();
   }
 return(
     <button onClick={change} className="custom-button">

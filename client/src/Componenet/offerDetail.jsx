@@ -114,13 +114,13 @@ function Details(props) {
     console.log(isLiked);
   
     if (isLiked) {
-      const response = await axios.post(
+       await axios.post(
         "http://localhost:3001/AddFavoriteOffers",
         { offerID: props.id },
         { withCredentials: true }
       );
     } else {
-      const response = await axios.delete(
+       await axios.delete(
         "http://localhost:3001/DeleteFavoriteOffer",
         {
           data: { offerID: props.id }, // ✅ wrap offerID in `data`

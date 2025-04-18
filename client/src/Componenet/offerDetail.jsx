@@ -2,7 +2,7 @@ import { useState,useEffect } from "react";
 import "../style/offerdetail.css";
 import LeafLine from "../layout/leafLine";
 import * as Button from "../layout/buttons";
-import { Link ,useParams} from "react-router-dom";
+import { useNavigate ,useParams} from "react-router-dom";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -96,14 +96,16 @@ const EcommerceSlider = () => {
         ))}
       </Swiper>
     </div>
-    <div >{Details(details)}</div>
+    <div><Details {...details} /></div> 
+
    
   </>)}
  </>
   );
 };
 function Details(props) {
-  
+  const navigate = useNavigate();
+  console.log("detail props: ",props);
   return (
     <div className="details-container">
       <h1>Offer information </h1>
@@ -145,9 +147,10 @@ function Details(props) {
       </div>
       <div className="button-container">
         <Button.Call></Button.Call>
-       <Link to="/chat">
-       <Button.Chat></Button.Chat>
-       </Link>
+       
+        <Button.Chat onClick={() => navigate(`/chat/${props.id}/${props.ownerid}`)} />
+
+       
         <Button.Like></Button.Like>
       </div>
     </div>

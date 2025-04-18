@@ -59,8 +59,8 @@ function App() {
                     />
                     <Route path="/about" element={<About />} />
                     <Route
-                      path="/chat"
-                      element={<Chat offer_image="./Lands/Land_1.jpg" />}
+                      path="/chat/:offerID/:ReceiverID"
+                      element={<Chat/>}
                     />
                     <Route path="/AccountInf" element={<AccountInf />} />
                     <Route

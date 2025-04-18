@@ -84,7 +84,7 @@ export default function AddOffer() {
           {/* NO more hidden landOwnerID input! */}
           <div className="group-input">
           
-            <input type="text" message="Enter offer title" name="offer_title" minlength="5" maxlength="100" error="hi"/>
+            <input type="text" placeholder="Enter offer title" name="offer_title" minlength="5" maxlength="100" error="hi"/>
             <UnitInput type="number" unit="m²" message="Enter the number of dunums" name="size" />
 
             <div className="detailed-input">
@@ -93,7 +93,7 @@ export default function AddOffer() {
             </div>
 
             <UnitInput type="number" unit="JOD" message="Enter price" name="price" min="1" max="100000000" />
-            <input type="text" message="Enter offer location" name="location"  minlength="2" maxlength="100" />
+            <input type="text" placeholder="Enter location" name="location"  minlength="2" maxlength="100" />
             <textarea
               className="textInput"
               name="description"

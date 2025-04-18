@@ -161,9 +161,16 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
                 Land area: {offer.landsize}, location: {offer.landlocation}
               </p>
               <div className="offer-actions">
-                <button className="action-button">
-                  <FaPhone />
-                </button>
+              <button
+  className="action-button"
+  onClick={(e) => {
+    e.stopPropagation(); // Prevent parent click from firing
+    window.location.href = `tel:${offer.PhoneNumber}`;
+  }}
+>
+  <FaPhone />
+</button>
+
                 <button
                   className="action-button"
                   onClick={(e) => {

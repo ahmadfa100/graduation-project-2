@@ -25,15 +25,16 @@ export const getOffer = async (req, res) => {
 // POST /addOffer
 export const addOffer = async (req, res) => {
   try {
-    // 1) Authentication check
+ 
     if (!req.session.user?.id) {
       return res.status(401).json({ error: "Not authenticated" });
     }
     const landOwnerID = req.session.user.id;
-
-    // 2) Extract & validate
+    const phoneNumber = req.session.user.phonenumber;
     const { offer_title, size, years, months, price, location, description } = req.body;
+    //console.log(phoneNumber);
     if (
+      !phoneNumber||
       !offer_title ||
       !size ||
       !years ||
@@ -55,8 +56,8 @@ export const addOffer = async (req, res) => {
     // 4) Insert offer
     const addOfferResponse = await db.query(
       `INSERT INTO offers
-         (landTitle, landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, OwnerID)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+         (landTitle, landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, OwnerID,phoneNumber)
+       VALUES ($1, $2, $3, $4, $5, $6, $7,$8)
        RETURNING id`,
       [
         offer_title,
@@ -66,6 +67,7 @@ export const addOffer = async (req, res) => {
         parseFloat(price),
         leaseDuration,
         landOwnerID,
+        phoneNumber
       ]
     );
     const offerId = addOfferResponse.rows[0].id;

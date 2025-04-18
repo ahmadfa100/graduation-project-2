@@ -5,6 +5,7 @@ import { FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { useNotifications } from '@toolpad/core/useNotifications';
 
+
 function UnitInput(props) {
   return (
     <div className="unit-Input">
@@ -94,6 +95,8 @@ export default function AddOffer() {
 
             <UnitInput type="number" unit="JOD" message="Enter price" name="price" min="1" max="100000000" />
             <input type="text" placeholder="Enter location" name="location"  minlength="2" maxlength="100" />
+           
+        
             <textarea
               className="textInput"
               name="description"

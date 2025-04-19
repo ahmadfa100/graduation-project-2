@@ -328,9 +328,9 @@ gap: 50px;
 
 .filter-button {
   padding: 0.8rem 1.5rem;
-  background-color: #4CAF50;
-  color: #fff;
-  border: none;
+  background-color: #fff;
+  color: #4CAF50;
+  border: 1px solid #4CAF50;
   border-radius: 25px;
   font-size: 1rem;
   cursor: pointer;
@@ -338,5 +338,23 @@ gap: 50px;
 }
 
 .filter-button:hover {
-  background-color: #45a049;
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+
+.clear-button {
+  padding: 0.8rem 1.5rem;
+  background-color: #fff;
+  color: #4CAF50;
+  border: 1px solid #4CAF50;
+  border-radius: 25px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.clear-button:hover {
+  background-color: #4CAF50;
+  color: #fff;
 }

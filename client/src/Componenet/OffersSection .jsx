@@ -11,18 +11,29 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
   const [offset, setOffset] = useState(0);
   const limit = 3; // Number of offers to fetch per request
 
+  // Filter & search state
   const [searchTerm, setSearchTerm] = useState("");
   const [city, setCity] = useState("");
   const [period, setPeriod] = useState("");
   const [space, setSpace] = useState("");
 
+  // Clears only the filter fields (not searchTerm)
+  const handleClear = () => {
+    setCity("");
+    setPeriod("");
+    setSpace("");
+    setOffset(0);
+    fetchOffers(false, 0);
+  };
+
+  // Fetching logic
   const fetchOffers = async (append = false, newOffset = 0) => {
     try {
       const params = new URLSearchParams();
       if (searchTerm) params.append("search", searchTerm);
-      if (city) params.append("city", city);
-      if (period) params.append("period", period);
-      if (space) params.append("space", space);
+      if (city)        params.append("city", city);
+      if (period)      params.append("period", period);
+      if (space)       params.append("space", space);
       params.append("limit", limit);
       params.append("offset", newOffset);
 
@@ -32,7 +43,7 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
       const data = await response.json();
 
       if (append) {
-        setOffers((prevOffers) => [...prevOffers, ...data]);
+        setOffers((prev) => [...prev, ...data]);
       } else {
         setOffers(data);
       }
@@ -41,17 +52,20 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
     }
   };
 
+  // Initial load
   useEffect(() => {
     setOffset(0);
     fetchOffers(false, 0);
     // eslint-disable-next-line
   }, []);
 
+  // Shared “go” handler
   const handleSearchOrFilter = () => {
     setOffset(0);
     fetchOffers(false, 0);
   };
 
+  // Pagination “More” button
   const handleMore = () => {
     const newOffset = offset + limit;
     setOffset(newOffset);
@@ -70,6 +84,9 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
           className="search-input"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSearchOrFilter();
+          }}
         />
         <button className="search-button" onClick={handleSearchOrFilter}>
           Search
@@ -78,15 +95,20 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
 
       {/* Filters Container */}
       <div className="filters-container">
+        {/* City */}
         <div className="filter-group">
-          <label htmlFor="cityFilter" className="filter-label">
-            City
-          </label>
+          <label htmlFor="cityFilter" className="filter-label">City</label>
           <select
             id="cityFilter"
             className="filter-select"
             value={city}
             onChange={(e) => setCity(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearchOrFilter();
+              }
+            }}
           >
             <option value="">All Cities</option>
             <option value="Amman">Amman</option>
@@ -104,15 +126,20 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
           </select>
         </div>
 
+        {/* Period */}
         <div className="filter-group">
-          <label htmlFor="periodFilter" className="filter-label">
-            Period
-          </label>
+          <label htmlFor="periodFilter" className="filter-label">Period</label>
           <select
             id="periodFilter"
             className="filter-select"
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearchOrFilter();
+              }
+            }}
           >
             <option value="">All</option>
             <option value="monthly">Monthly</option>
@@ -120,10 +147,9 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
           </select>
         </div>
 
+        {/* Land Space */}
         <div className="filter-group">
-          <label htmlFor="spaceFilter" className="filter-label">
-            Land Space
-          </label>
+          <label htmlFor="spaceFilter" className="filter-label">Land Space</label>
           <input
             type="text"
             id="spaceFilter"
@@ -131,22 +157,30 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
             className="filter-input"
             value={space}
             onChange={(e) => setSpace(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleSearchOrFilter();
+              }
+            }}
           />
         </div>
 
+        {/* Filter & Clear buttons */}
         <button className="filter-button" onClick={handleSearchOrFilter}>
           Filter
         </button>
+        <button className="clear-button" onClick={handleClear}>
+          Clear
+        </button>
       </div>
-      {/* End Filters Container */}
 
+      {/* Offers List */}
       <div className="offers-list">
         {offers.map((offer) => (
-        
           <div
             key={offer.id}
             className="offer-item"
-            // Navigate to the details page for this specific offer
             onClick={() => navigate(`/OfferDetails/${offer.id}`)}
           >
             <div className="offer-image-container">
@@ -161,21 +195,19 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
                 Land area: {offer.landsize}, location: {offer.landlocation}
               </p>
               <div className="offer-actions">
-              <button
-  className="action-button"
-  onClick={(e) => {
-    e.stopPropagation(); // Prevent parent click from firing
-    window.location.href = `tel:${offer.PhoneNumber}`;
-  }}
->
-  <FaPhone />
-</button>
-
                 <button
                   className="action-button"
                   onClick={(e) => {
-                    e.stopPropagation(); // Stop event from bubbling
-                  //  console.log(" offer sectiom :",offer);
+                    e.stopPropagation();
+                    window.location.href = `tel:${offer.PhoneNumber}`;
+                  }}
+                >
+                  <FaPhone />
+                </button>
+                <button
+                  className="action-button"
+                  onClick={(e) => {
+                    e.stopPropagation();
                     navigate(`/chat/${offer.id}/${offer.ownerid}`);
                   }}
                 >
@@ -184,7 +216,7 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
                 <button
                   className="action-button favorite-button"
                   onClick={(e) => {
-                    e.stopPropagation(); // Stop event from bubbling
+                    e.stopPropagation();
                     toggleFavorite(offer.id);
                   }}
                 >
@@ -196,6 +228,7 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
         ))}
       </div>
 
+      {/* More Button */}
       <div className="more-button-container">
         <button className="more-button" onClick={handleMore}>
           More

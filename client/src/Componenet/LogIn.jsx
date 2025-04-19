@@ -51,8 +51,16 @@ const Login = () => {
             required
           />
         </label>
-        <button type="submit">Log In</button>
-      </form>
+        <button
+  type="submit"
+  style={{ 
+    backgroundColor: "#45a049", 
+    color: "white"    // ← use `color` here
+  }}
+>
+  Log In
+</button>
+     </form>
       <p className="alt-action">
         OR<br />
         Don’t have an account?{' '}

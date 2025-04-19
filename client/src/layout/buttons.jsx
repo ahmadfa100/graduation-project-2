@@ -18,17 +18,12 @@ function Chat(params) {
   );
 }
 
-function Like(params) {
-  let [like,likeState]= useState(true);
 
-  function change(){
-    likeState(like=!like);
-    //params.onClick();
-  }
-return(
-    <button onClick={change} className="custom-button">
-    {like? <FaRegHeart /> :  <FaHeart />}
-</button>
-);
+function Like({ isLiked, onClick }) {
+  return (
+    <button onClick={onClick} className="custom-button">
+      {isLiked ? <FaHeart /> : <FaRegHeart />}
+    </button>
+  );
 }
 export { Call, Chat, Like };

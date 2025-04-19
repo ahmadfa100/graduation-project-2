@@ -29,8 +29,8 @@ const EcommerceSlider = () => {
      try {
        const response = await axios.get(`http://localhost:3001/getOffer/${offerID}`);
        
-       console.log("Full server response:", response.data);
-       console.log("here",response.data.images);
+       //console.log("Full server response:", response.data);
+       //console.log("here",response.data.images);
        if (response.data && response.data.images) {
          setDetails(response.data.offer);
          setProductImages(response.data.images);
@@ -107,11 +107,40 @@ const EcommerceSlider = () => {
 function Details(props) {
   const[isLiked,setIsLiked]=useState(true);
   const navigate = useNavigate();
-  console.log("detail props: ",props);
+  //console.log("detail props: ",props);
+
+  useEffect(() => {
+    async function checkFavorite() {
+      try {
+        const result = await fetchFavoriteOffer(props.id);
+        const isFavorited = Array.isArray(result) && result.length > 0 && result[0]?.offerid === props.id;
+        setIsLiked(!isFavorited);
+        console.log("Favorite fetch result:", result);
+        console.log("Is liked set to:", isLiked);
+      } catch (error) {
+        console.error("Error in checkFavorite:", error);
+      }
+    }
+  
+    checkFavorite();
+  }, [props.id]);
+  
+  async function fetchFavoriteOffer(offerID) {
+    try {
+      const response = await axios.get("http://localhost:3001/FavoriteOffers", {
+        params: { offerID },
+        withCredentials: true,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching favorite offer:", error);
+      return [];
+    }
+  }
 
   async function handleLikedOffer() {
     setIsLiked(!isLiked);
-    console.log(isLiked);
+    console.log("handleLikedOffer ",isLiked);
   
     if (isLiked) {
        await axios.post(
@@ -177,8 +206,9 @@ function Details(props) {
         <Button.Chat onClick={() => navigate(`/chat/${props.id}/${props.ownerid}`)} />
 
        
-        <div onClick={handleLikedOffer}>
-        <Button.Like></Button.Like>
+        <div >
+        <Button.Like isLiked={!isLiked} onClick={handleLikedOffer} />
+
         </div>
       </div>
     </div>

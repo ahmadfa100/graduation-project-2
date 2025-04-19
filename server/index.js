@@ -7,6 +7,7 @@ import { Server } from "socket.io";
 import bcrypt from 'bcrypt';
 import session from "express-session";
 import db from "./db.js"; // Used in socket code
+import notificationsRouter from "./Controllers/notifications.js";
 
 // Controllers
 import { loginUser } from "./Controllers/login.js";
@@ -36,6 +37,7 @@ app.use(cors({
 // Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(notificationsRouter);
 
 // Session configuration
 app.use(session({

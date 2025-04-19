@@ -84,11 +84,11 @@ export default function LandownerDashboard() {
             <div className="offers-list">
               {favoriteList.map(offer => (
                 <OfferCard
-                  key={offer.id}
-                  offer={offer}
-                  isFavorite={true}
-                  onToggleFavorite={toggleFavorite}
-                />
+  key={offer.id}
+  offer={offer}
+  isFavorite={favoriteOffers.includes(offer.id)}
+  onToggleFavorite={toggleFavorite}
+/>
               ))}
             </div>
           )}

@@ -6,23 +6,40 @@ export const getMyOffers = async (req, res) => {
     return res.status(401).json({ error: "Not authenticated" });
   }
   const ownerID = req.session.user.id;
+
   try {
     const result = await db.query(
       `
-      SELECT o.*,
-             COALESCE(
-               ('data:image/jpeg;base64,' || encode(lp.picture, 'base64')),
-               ''
-             ) AS image
+      SELECT
+        o.id,
+        o.landtitle        AS "landTitle",
+        o.landsize         AS "landSize",
+        o.landlocation     AS "landLocation",
+        o.offerdescription AS "offerDescription",
+        o.landleaseprice   AS "landLeasePrice",
+        o.leaseduration    AS "leaseDuration",
+        o.ownerid          AS "ownerID",
+        o.phonenumber      AS "phoneNumber",
+        o.offerdate        AS "offerDate",
+        -- grab one picture (base64‑encoded) or empty string
+        COALESCE(
+          ('data:image/jpeg;base64,' || encode(lp.picture, 'base64')),
+          ''
+        ) AS "image"
       FROM offers o
       LEFT JOIN LATERAL (
-        SELECT picture FROM landPicture WHERE landID = o.id LIMIT 1
+        SELECT picture
+        FROM landpicture
+        WHERE landid = o.id
+        LIMIT 1
       ) lp ON true
-      WHERE o.OwnerID = $1
-      ORDER BY o.offerDate DESC
+      WHERE o.ownerid = $1
+      ORDER BY o.offerdate DESC
       `,
       [ownerID]
     );
+
+    // now each row has { id, landTitle, landSize, landLocation, …, image }
     res.json(result.rows);
   } catch (err) {
     console.error("Error fetching user offers:", err);

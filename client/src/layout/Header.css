@@ -5,7 +5,7 @@
 }
 a {
   text-decoration: none;
-  color: inherit; /* Optional: keep the same text color */
+  color: inherit; 
 }
 .Drawer-element{
 margin-bottom: 1.5rem;
@@ -17,7 +17,6 @@ margin-bottom: 1.5rem;
   gap: 10px;
 }
 
-/* Image sizing */
 .User-Avatar-Header img {
   height: 40px;
   width: 40px;
@@ -25,7 +24,6 @@ margin-bottom: 1.5rem;
   object-fit: cover;
 }
 
-/* Username text */
 .User-Avatar-Header h3 {
   color: rgb(76, 175, 80);
   text-transform: none;
@@ -98,7 +96,6 @@ body {
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
 }
 
-/* Notification container (the dropdown) */
 .notification-popup {
   position: absolute;
   top: 2.8rem;
@@ -116,7 +113,7 @@ body {
   content: "";
   position: absolute;
   top: -10px;
-  right: 115px;
+  right: 177px;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-bottom: 10px solid #fff;
@@ -126,7 +123,6 @@ body {
   margin: 0.5rem 0;
 }
 
-/* Notification item layout */
 .notification-item {
   display: flex;
   align-items: center;
@@ -143,7 +139,6 @@ body {
   margin-right: 0.5rem;
 }
 
-/* "Done" icon styling */
 .check-icon {
   cursor: pointer;
   color: #4caf50;

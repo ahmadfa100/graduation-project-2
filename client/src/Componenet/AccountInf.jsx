@@ -89,7 +89,7 @@ function AccountInf() {
 
     const renderField = (label, field, type = "text") => (
         <>
-            <h2>{label}:</h2>
+           <h2 className="field-label">Gender:</h2>
             <div className="input-with-button">
                 <input
                     type={type}

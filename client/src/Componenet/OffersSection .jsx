@@ -6,18 +6,18 @@ import axios from "axios";
 function OffersSection({ favoriteOffers, toggleFavorite }) {
   const navigate = useNavigate();
 
-  // Local state for offers and pagination
   const [offers, setOffers] = useState([]);
   const [offset, setOffset] = useState(0);
-  const limit = 3; // Number of offers to fetch per request
+  const limit = 3;
 
-  // Filter & search state
   const [searchTerm, setSearchTerm] = useState("");
   const [city, setCity] = useState("");
   const [period, setPeriod] = useState("");
   const [space, setSpace] = useState("");
-const [favoriteOffersList,setFavoriteOffersList] = useState([]);
-  // Clears only the filter fields (not searchTerm)
+
+  const [favoriteOffersList, setFavoriteOffersList] = useState([]);
+  const [likedOffers, setLikedOffers] = useState([]);
+
   const handleClear = () => {
     setCity("");
     setPeriod("");
@@ -25,28 +25,25 @@ const [favoriteOffersList,setFavoriteOffersList] = useState([]);
     setOffset(0);
     fetchOffers(false, 0);
   };
-  
+
   async function fetchFavoriteOfferList() {
     try {
       const response = await axios.get("http://localhost:3001/FavoriteOffers", {
-       
         withCredentials: true,
       });
-      
-     setFavoriteOffersList(response.data);
+      setFavoriteOffersList(response.data);
     } catch (error) {
       console.error("Error fetching favorite offer:", error);
-      return [];
     }
   }
-  // Fetching logic
+
   const fetchOffers = async (append = false, newOffset = 0) => {
     try {
       const params = new URLSearchParams();
       if (searchTerm) params.append("search", searchTerm);
-      if (city)        params.append("city", city);
-      if (period)      params.append("period", period);
-      if (space)       params.append("space", space);
+      if (city) params.append("city", city);
+      if (period) params.append("period", period);
+      if (space) params.append("space", space);
       params.append("limit", limit);
       params.append("offset", newOffset);
 
@@ -65,23 +62,23 @@ const [favoriteOffersList,setFavoriteOffersList] = useState([]);
     }
   };
 
-  // Initial load
-
   useEffect(() => {
     fetchFavoriteOfferList();
     setOffset(0);
     fetchOffers(false, 0);
-    console.log("fav offers: ",favoriteOffersList);
     // eslint-disable-next-line
   }, []);
 
-  // Shared “go” handler
+  useEffect(() => {
+    const ids = favoriteOffersList.map((fav) => fav.offerid); // Adjust if it's `fav.id` in your DB
+    setLikedOffers(ids);
+  }, [favoriteOffersList]);
+
   const handleSearchOrFilter = () => {
     setOffset(0);
     fetchOffers(false, 0);
   };
 
-  // Pagination “More” button
   const handleMore = () => {
     const newOffset = offset + limit;
     setOffset(newOffset);
@@ -109,9 +106,8 @@ const [favoriteOffersList,setFavoriteOffersList] = useState([]);
         </button>
       </div>
 
-      {/* Filters Container */}
+      {/* Filters */}
       <div className="filters-container">
-        {/* City */}
         <div className="filter-group">
           <label htmlFor="cityFilter" className="filter-label">City</label>
           <select
@@ -142,7 +138,6 @@ const [favoriteOffersList,setFavoriteOffersList] = useState([]);
           </select>
         </div>
 
-        {/* Period */}
         <div className="filter-group">
           <label htmlFor="periodFilter" className="filter-label">Period</label>
           <select
@@ -163,7 +158,6 @@ const [favoriteOffersList,setFavoriteOffersList] = useState([]);
           </select>
         </div>
 
-        {/* Land Space */}
         <div className="filter-group">
           <label htmlFor="spaceFilter" className="filter-label">Land Space</label>
           <input
@@ -182,7 +176,6 @@ const [favoriteOffersList,setFavoriteOffersList] = useState([]);
           />
         </div>
 
-        {/* Filter & Clear buttons */}
         <button className="filter-button" onClick={handleSearchOrFilter}>
           Filter
         </button>
@@ -194,7 +187,6 @@ const [favoriteOffersList,setFavoriteOffersList] = useState([]);
       {/* Offers List */}
       <div className="offers-list">
         {offers.map((offer) => (
-         
           <div
             key={offer.id}
             className="offer-item"
@@ -234,26 +226,39 @@ const [favoriteOffersList,setFavoriteOffersList] = useState([]);
                   className="action-button favorite-button"
                   onClick={async (e) => {
                     e.stopPropagation();
-                    const isLiked = !favoriteOffers.includes(offer.id);
-                    toggleFavorite(offer.id);
-                    if (isLiked) {
-                      await axios.post(
-                        "http://localhost:3001/AddFavoriteOffers",
-                        { offerID: offer.id },
-                        { withCredentials: true }
-                      );
-                    } else {
-                      await axios.delete(
-                        "http://localhost:3001/DeleteFavoriteOffer",
-                        {
-                          data: { offerID: offer.id },
-                          withCredentials: true,
-                        }
-                      );
+
+                    const isLiked = likedOffers.includes(offer.id);
+
+                    setLikedOffers((prev) =>
+                      isLiked
+                        ? prev.filter((id) => id !== offer.id)
+                        : [...prev, offer.id]
+                    );
+
+                    try {
+                      if (!isLiked) {
+                        await axios.post(
+                          "http://localhost:3001/AddFavoriteOffers",
+                          { offerID: offer.id },
+                          { withCredentials: true }
+                        );
+                      } else {
+                        await axios.delete(
+                          "http://localhost:3001/DeleteFavoriteOffer",
+                          {
+                            data: { offerID: offer.id },
+                            withCredentials: true,
+                          }
+                        );
+                      }
+                    } catch (err) {
+                      console.error("Favorite toggle error:", err);
                     }
+
+                    if (toggleFavorite) toggleFavorite(offer.id);
                   }}
                 >
-                  {favoriteOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
+                  {likedOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
                 </button>
               </div>
             </div>
@@ -270,6 +275,5 @@ const [favoriteOffersList,setFavoriteOffersList] = useState([]);
     </div>
   );
 }
-
 
 export default OffersSection;

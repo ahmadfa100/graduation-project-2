@@ -16,7 +16,7 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
   const [city, setCity] = useState("");
   const [period, setPeriod] = useState("");
   const [space, setSpace] = useState("");
-
+const [favoriteOffersList,setFavoriteOffersList] = useState([]);
   // Clears only the filter fields (not searchTerm)
   const handleClear = () => {
     setCity("");
@@ -25,7 +25,20 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
     setOffset(0);
     fetchOffers(false, 0);
   };
-
+  
+  async function fetchFavoriteOfferList() {
+    try {
+      const response = await axios.get("http://localhost:3001/FavoriteOffers", {
+       
+        withCredentials: true,
+      });
+      
+     setFavoriteOffersList(response.data);
+    } catch (error) {
+      console.error("Error fetching favorite offer:", error);
+      return [];
+    }
+  }
   // Fetching logic
   const fetchOffers = async (append = false, newOffset = 0) => {
     try {
@@ -53,9 +66,12 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
   };
 
   // Initial load
+
   useEffect(() => {
+    fetchFavoriteOfferList();
     setOffset(0);
     fetchOffers(false, 0);
+    console.log("fav offers: ",favoriteOffersList);
     // eslint-disable-next-line
   }, []);
 
@@ -178,6 +194,7 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
       {/* Offers List */}
       <div className="offers-list">
         {offers.map((offer) => (
+         
           <div
             key={offer.id}
             className="offer-item"
@@ -253,5 +270,6 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
     </div>
   );
 }
+
 
 export default OffersSection;

@@ -128,13 +128,17 @@ app.post('/api/signup', async (req, res) => {
 
 
 app.get("/FavoriteOffers", async (req, res) => {
+  
   const userID = req.session?.user?.id;
 const {offerID}=req.query;
   if (!userID) {
     return res.status(401).json({ error: "Not logged in" });
   }
   if(!offerID){
-    return res.status(401).json({ error: "missing offer id" });
+    const result = await db.query("SELECT * FROM FavoriteOffers WHERE farmerID=($1)",[userID]);
+   console.log("ttt");
+console.log("rows: ",result.rows);
+    return res.status(200).json(result.rows);
   }
 
   try {

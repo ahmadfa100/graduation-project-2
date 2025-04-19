@@ -127,6 +127,24 @@ app.post('/api/signup', async (req, res) => {
 });
 
 
+app.get("/FavoriteOffers", async (req, res) => {
+  const userID = req.session?.user?.id;
+const {offerID}=req.query;
+  if (!userID) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+  if(!offerID){
+    return res.status(401).json({ error: "missing offer id" });
+  }
+
+  try {
+    const result = await db.query("SELECT * FROM FavoriteOffers WHERE offerID=($1) AND farmerID=($2)",[offerID,userID]);
+   res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching favorite offers:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
 app.post("/AddFavoriteOffers", async (req, res) => {
   const userID = req.session.user.id;
   const { offerID } = req.body; // ✅ Correct source
@@ -158,6 +176,7 @@ app.delete("/DeleteFavoriteOffer", async (req, res) => {
   if (!userID || !offerID) {
     return res.status(400).json({ error: "Missing required fields" });
   }
+
 
   try {
     await db.query(

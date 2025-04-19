@@ -6,24 +6,43 @@ import { useNavigate } from "react-router-dom";
 export default function OfferCard({ offer, isFavorite, onToggleFavorite }) {
   const navigate = useNavigate();
 
+  // ensure these are numbers when formatting
+  const price = parseFloat(offer.landLeasePrice);
+  const area  = parseFloat(offer.landSize);
+
   return (
     <div
       className="offer-item"
       onClick={() => navigate(`/OfferDetails/${offer.id}`)}
     >
       <div className="offer-image-container">
-        <img src={offer.image} alt={offer.landTitle} className="offer-image" />
+        <img
+          src={offer.image}
+          alt={offer.landTitle}
+          className="offer-image"
+        />
       </div>
+
       <div className="offer-details">
         <div className="offer-header">
           <h3 className="offer-title">{offer.landTitle}</h3>
-          <span className="offer-price">{offer.landLeasePrice}</span>
+          <span className="offer-price">
+            {/* if price is a valid number, format to two decimals; otherwise render raw */}
+            {!isNaN(price) ? price.toFixed(2) : offer.landLeasePrice}
+          </span>
         </div>
+
         <p className="offer-subtitle">
-          Land area: {offer.landSize}, location: {offer.landLocation}
+          Land area:{" "}
+          {!isNaN(area) ? area.toFixed(2) : offer.landSize}
+          , location: {offer.landLocation}
         </p>
+
         <div className="offer-actions">
-          <button className="action-button">
+          <button
+            className="action-button"
+            onClick={e => e.stopPropagation()}
+          >
             <FaPhone />
           </button>
           <button

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { FaPhone, FaComments, FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
 function OffersSection({ favoriteOffers, toggleFavorite }) {
   const navigate = useNavigate();
 
@@ -183,9 +183,27 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
                 </button>
                 <button
                   className="action-button favorite-button"
-                  onClick={(e) => {
+                  onClick={async(e) => {
                     e.stopPropagation(); // Stop event from bubbling
                     toggleFavorite(offer.id);
+                  const isLiked=!favoriteOffers.includes(offer.id)  
+                  console.log(isLiked," ",offer.id);
+                   favoriteOffers.includes(offer.id) 
+                   if (isLiked) {
+                    await axios.post(
+                     "http://localhost:3001/AddFavoriteOffers",
+                     { offerID: offer.id },
+                     { withCredentials: true }
+                   );
+                 } else {
+                    await axios.delete(
+                     "http://localhost:3001/DeleteFavoriteOffer",
+                     {
+                       data: { offerID: offer.id }, // ✅ wrap offerID in `data`
+                       withCredentials: true
+                     }
+                   );
+                 }
                   }}
                 >
                   {favoriteOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
@@ -204,5 +222,6 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
     </div>
   );
 }
+
 
 export default OffersSection;

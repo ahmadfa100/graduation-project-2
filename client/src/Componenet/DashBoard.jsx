@@ -20,7 +20,7 @@ export default function LandownerDashboard() {
     fetch("http://localhost:3001/dashboard/offers", {
       credentials: "include",
     })
-      .then(res => {
+      .then((res) => {
         if (!res.ok) throw new Error("Not authorized");
         return res.json();
       })
@@ -28,12 +28,12 @@ export default function LandownerDashboard() {
       .catch(console.error);
   }, []);
 
-  const toggleFavorite = id =>
-    setFavoriteOffers(prev =>
-      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+  const toggleFavorite = (id) =>
+    setFavoriteOffers((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
     );
 
-  const favoriteList = offers.filter(o => favoriteOffers.includes(o.id));
+  const favoriteList = offers.filter((o) => favoriteOffers.includes(o.id));
 
   return (
     <div className="dashboard">
@@ -60,12 +60,12 @@ export default function LandownerDashboard() {
             <p>No offers found.</p>
           ) : (
             <div className="offers-list">
-              {offers.map(offer => (
+              {offers.map((offer) => (
                 <OfferCard
                   key={offer.id}
                   offer={offer}
-                  isFavorite={favoriteOffers.includes(offer.id)}
-                  onToggleFavorite={toggleFavorite}
+                  showEdit // ← tell it “dashboard mode”
+                  onEdit={(id) => navigate(`/updateOffer/${id}`)}
                 />
               ))}
             </div>
@@ -82,13 +82,14 @@ export default function LandownerDashboard() {
             <p>No favorite offers found.</p>
           ) : (
             <div className="offers-list">
-              {favoriteList.map(offer => (
+              +{" "}
+              {offers.map((offer) => (
                 <OfferCard
-  key={offer.id}
-  offer={offer}
-  isFavorite={favoriteOffers.includes(offer.id)}
-  onToggleFavorite={toggleFavorite}
-/>
+                  key={offer.id}
+                  offer={offer}
+                  showEdit // ← tell it “dashboard mode”
+                  onEdit={(id) => navigate(`/EditOffer/${id}`)}
+                />
               ))}
             </div>
           )}

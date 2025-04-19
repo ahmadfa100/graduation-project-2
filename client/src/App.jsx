@@ -49,14 +49,14 @@ function App() {
                         </NotificationsProvider>
                       }
                     />
-                    <Route
-                      path="/updateOffer"
-                      element={
-                        <NotificationsProvider>
-                          <UpdateOffer />
-                        </NotificationsProvider>
-                      }
-                    />
+ <Route
+   path="/updateOffer/:offerID"
+   element={
+     <NotificationsProvider>
+       <UpdateOffer />
+     </NotificationsProvider>
+   }
+ />
                     <Route path="/about" element={<About />} />
                     <Route
                       path="/chat/:offerID/:ReceiverID"

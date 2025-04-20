@@ -1,413 +1,105 @@
-import { useState, useEffect } from "react";
-import "../style/chat.css";
-import { FaCamera, FaPaperPlane, FaUpload } from "react-icons/fa";
-import { Link,useParams } from "react-router-dom";
-import io from "socket.io-client";
-import axios from "axios";
-import ClipLoader from "react-spinners/ClipLoader";
+import MainChat from "./MainChat";
+import React, { useState } from 'react';
+import Box from '@mui/material/Box';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import MenuIcon from '@mui/icons-material/Menu';
 
-const socket = io("http://localhost:3001", { autoConnect: false });
+export default function Chat() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-function Chat() {
-  const [message, setMessage] = useState(null);
-  const [messages, setMessages] = useState([]);
-  const [offer, setOffer] = useState(null);
-  const [offerOwner, setOfferOwner] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [isChatLoding, setChatLoading] = useState(true);
-  const [isOfferLoding, setOfferLoding] = useState(true);
-  const [isUserLoading,setUserLoading]= useState(true);
-  const [sessiondata, setSessiondata] = useState(null); 
-  const [sessionReady, setSessionReady] = useState(false);
-  const {offerID,ReceiverID}= useParams();
-  
-  const room = `other${ReceiverID}currentoffer${offerID}`;
-//
-useEffect(() => {
-  console.log("Offer ID:", offerID);
-  console.log("Owner ID:", ReceiverID);
-}, [offerID, ReceiverID]);
-useEffect(()=>{
-  
-fetchSession();
-},[]);
-  useEffect(() => {
-    console.log("enter");
-    if (!sessionReady || sessiondata === null) return;
-    console.log("vaild");
-    setMessages([]);
-    setMessage(null);
-    fetchOffer(offerID);
-
-    socket.emit("Initialize", {
-      sender: sessiondata.userID 
-,
-      receiver: ReceiverID,
-      offer: offerID,
-    }); //The receiver takes owner ID not work with all scenarios owner id will be taken from offer only if user click on the chat button
-    socket.on("InitialMessages", (id) => {
-      console.log("chat  client id:", id);
-      fetchChat(id);
-    });
-
-    socket.connect();
-    socket.emit("join", room);
-
-    socket.on("RecivedMessage", (newMessage) => {
-      console.log("Received message:", newMessage);
-
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          content: newMessage.message,
-          sender: "received",
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ]);
-    });
-
-    return () => {
-      socket.off("RecivedMessage");
-      socket.disconnect();
-    };
-  }, [sessionReady, sessiondata, room]);
-
-  async function fetchSession() {
-    try {
-      const sessionResponse = await axios.get(`http://localhost:3001/sessionInfo`, {
-        withCredentials: true, 
-      });
-      const user = sessionResponse.data.user;
-
-      if (user ) {
-        
-      setSessiondata({
-        userID:sessionResponse.data.user.id
-      });  
-        setSessionReady(true);  
-        console.log("Session data:", user);
-      } else {
-        console.warn("No user found in session.");
-      }
-     
-    } catch (err) {
-      console.error("Failed to fetch session info:", err);
-    }
-  }
-  async function fetchChat(chatID) {
-    try {
-      console.log("Fetching chat messages...");
-      const response = await axios.get(
-        `http://localhost:3001/getchatcontent/`,
-        { params: { chatID } }
-      );
-
-      console.log("respones :", response.data === "Not Found");
-      if (response.data.error) {
-        //  console.log("Error fetching chat messages:", response.data.error);
-        return;
-      }
-      if (response.data === "Not Found") {
-        console.log("No chat messages available.");
-        setChatLoading(false);
-      } else {
-        const oldMessages = response.data;
-        //  console.log(Array.isArray(oldMessages)); // Should print true
-        //   console.log("messages:",oldMessages);
-        oldMessages.forEach((element) => {
-          if (element.senderid === sessiondata.userID 
-) {
-            if (element.contenttext) {
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: element.contenttext,
-                  sender: "sent",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            } else if (element.contentfile) {
-              // console.log("image from db type: " + element.contentfile,"the actual image is: " +element.contentfile.data); //line 1
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: new Uint8Array(element.contentfile.data),
-                  sender: "sent",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            }
-          } else if (element.senderid === ReceiverID) {
-            if (element.contenttext) {
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: element.contenttext,
-                  sender: "received",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            } else if (element.contentfile) {
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: new Uint8Array(element.contentfile.data),
-                  sender: "received",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            }
-          }
-        });
-        setChatLoading(false);
-      }
-    } catch (error) {
-      setChatLoading(false);
-      console.error("Error fetching chat:", error);
-    }
-  }
-
-  async function fetchOffer(offerID) {
-    try {
-      const response = await axios.get(
-        `http://localhost:3001/getOffer/${offerID}`
-      );
-      //console.log("herrrrrr",);
-      if (response.data.error) {
-        console.log("Error fetching offer:", response.data.error);
-        return;
-      }
-      if (response.data) {
-        setOffer(response.data);
-        setOfferLoding(false);
-        console.log("Offer received:", response.data);
-      }
-      // owner
-
-      fetchOfferOwner(response.data.offer.ownerid);
-    } catch (error) {
-      console.error("Error fetching offer:", error);
-    }
-  }
-  async function fetchOfferOwner(ReceiverID) {
-    try {
-      const response = await axios.get(`http://localhost:3001/getUser/`, {
-        params: { userID: ReceiverID },
-      });
-console.log("here now :",response.data)
-      if (response.data.error) {
-        console.log("Error fetching owner:", response.data.error);
-        return;
-      }
-      if (response.data) {
-        setOfferOwner(response.data);
-        setUserLoading(false);
-        // console.log("owner k",offerOwner.firstname);
-      }
-    } catch (error) {
-      console.error("Error fetching owner:", error);
-    }
-  }
-
-  const sendMessage = () => {
-    document
-      .querySelectorAll("input")
-      .forEach((element) => (element.value = ""));
-
-    if (message == null) {
-      return;
-    }
-
-    const messageData = { message, room, sender: sessiondata.userID 
- }; // gpt: Include sender ID
-    socket.emit("sendMessage", messageData);
-
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        content: message,
-        sender: "sent",
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      },
-    ]);
-    setMessage(null);
-    setPreview(null);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
-  return (
-    <div className="chat-page">
-      {isChatLoding || isOfferLoding ||isUserLoading ||isUserLoading ? (
-        <ClipLoader color="green" size={50} />
-      ) : (
-        <div className="chat-container">
-          <div className="chat-header">
-            <div className="chat-offer-header">
-              <Link to="/offer">
-                <img
-                  src={offer.images[0] ? offer.images[0] : ""}
-                  alt="LandImage"
-                />
-              </Link>
-              <h3>{offer.offer.landtitle || ""}</h3>
-            </div>
-            <div className="chat-owner">
-              {" "}
-              <h4>
-                {offerOwner.firstname || " "} {offerOwner.lastname || " "}
-              </h4>
-            </div>
-          </div>
-
-          <div className="chat-box">
-            {messages.map((msg, index) =>
-              msg.sender === "sent" ? (
-                <Send key={index} content={msg.content} time={msg.time} />
-              ) : (
-                <Receive key={index} content={msg.content} time={msg.time} />
-              )
-            )}
-          </div>
-
-          <ChatInput
-            message={message}
-            setMessage={setMessage}
-            sendMessage={sendMessage}
-            preview={preview}
-            setPreview={setPreview}
-          />
-        </div>
-      )}
+  const drawer = (
+    <div> 
+      <List>
+        {['Settings', 'Profile', 'Help'].map((text) => (
+         <> <ListItem button key={text}>
+         <ListItemText primary={text} />
+         
+       </ListItem> 
+       <Divider/>
+       </>
+         
+        ))}
+      </List>
     </div>
+  );
+
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <Box sx={ { height: '100px',}}>
+      <Drawer
+  variant={isMobile ? 'temporary' : 'permanent'}
+  open={isMobile ? mobileOpen : true}
+  onClose={handleDrawerToggle}
+  ModalProps={{ keepMounted: true }}
+  PaperProps={{
+    sx: {
+        margin: '20px',
+        borderRadius:'15px',
+      height: '700px', // ✅ Fixed height
+      width: 400,
+      boxSizing: 'border-box',
+      position: 'relative', // Optional: relative instead of fixed
+    },
+  }}
+  sx={{
+    flexShrink: 0,
+    '& .MuiDrawer-paper': {
+      // You can keep this empty or remove to avoid double styling
+    },
+  }}
+>
+<Box
+      sx={{
+        height: 64,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        px: 2,
+        backgroundColor: 'rgb(76, 175, 80)',
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: '1.2rem',
+      }}
+    >
+     My Chats
+    </Box>
+  {drawer}
+</Drawer>
+
+      </Box>
+
+      {/* Main Content */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${400}px)` },
+          height: '800px ',
+        }}
+      >
+        <Toolbar />
+        <MainChat />
+      </Box>
+    </Box>
   );
 }
 
-function ChatInput({ message, setMessage, preview, setPreview, sendMessage }) {
-  return (
-    <div className="chat-input">
-      <button className="icon-btn">
-        <FaCamera />
-      </button>
-      <label htmlFor="file-upload" className="upload-label">
-        <FaUpload />
-      </label>
-      <input
-        type="file"
-        id="file-upload"
-        className="file-input"
-        name="chatImage"
-        onChange={(e) => {
-          setMessage(e.target.files[0]);
-          setPreview(URL.createObjectURL(e.target.files[0]));
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            sendMessage();
-          }
-        }}
-      />
-      <div>
-        {preview && (
-          <div className="message-preview">
-            <img src={preview} alt="Preview" />
-          </div>
-        )}
-      </div>
-      <input
-        type="text"
-        placeholder="Type a message..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            sendMessage();
-          }
-        }}
-      />
-      <button onClick={sendMessage}>
-        <FaPaperPlane />
-      </button>
-    </div>
-  );
-}
-
-function Send({ content, time }) {
-  //console.log("image type: " , typeof content, "the actual content:\n", content);//line 2
-
-  if (typeof content === "string") {
-    return (
-      <div className="send">
-        <div className="message">{content}</div>
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  } else if (
-    content instanceof ArrayBuffer ||
-    content instanceof Uint8Array ||
-    content instanceof File
-  ) {
-    const blob = new Blob([content], { type: "image/png" });
-    const imageUrl = URL.createObjectURL(blob);
-    return (
-      <div className="send">
-        <img src={imageUrl} alt="chatImage" />
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="send">
-        <div className="message error-message"> unknown type message❌</div>
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  }
-}
-
-function Receive({ content, time }) {
-  if (typeof content === "string") {
-    return (
-      <div className="received">
-        <div className="message">{content}</div>
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  } else if (content instanceof ArrayBuffer || content instanceof Uint8Array) {
-    const blob = new Blob([content], { type: "image/png" });
-    const imageUrl = URL.createObjectURL(blob);
-    return (
-      <div className="received">
-        <img src={imageUrl} alt="chatImage" />
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="received ">
-        <div className="message error-message"> unknown type message❌</div>
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  }
-}
-
-export default Chat;

@@ -299,6 +299,112 @@ io.on("connection", (socket) => {
   });
 });
 
+// Get user data
+app.post('/api/account', async (req, res) => {
+  const { userId } = req.body;
+  
+  if (!userId) return res.status(400).json({ error: 'Missing userId' });
+
+  try {
+      const  dbase = await db.query(`
+          SELECT firstname, lastname, email, phonenumber, gender, address, age, encode(pfp, 'base64') AS profileimage 
+          FROM users 
+          WHERE id = $1`, [userId]);
+
+      if (dbase.rowCount === 0) {
+        return res.status(404).json({ error: 'User not found' });
+       
+      }
+      const user = dbase.rows[0];
+  
+      res.json({
+          fullName: `${user.firstname} ${user.lastname}`,
+          email: user.email,
+          mobileNumber: user.phonenumber,
+          gender: user.gender,
+          address: user.address,
+          age: user.age,
+          profileImage: user.profileimage ? `data:image/png;base64,${user.profileimage}` : null,
+      });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+// Update user field
+app.post('/api/account/update', async (req, res) => {
+  const { userId, fullName, email, mobileNumber, gender, address, age, password } = req.body;
+
+  if (!userId) return res.status(400).json({ error: 'Missing userId' });
+
+  try {
+      if (fullName) {
+          const [firstname, ...last] = fullName.split(' ');
+          const lastname = last.join(' ') || '';
+          await db.query(`UPDATE users SET firstname = $1, lastname = $2 WHERE id = $3`, [firstname, lastname, userId]);
+      }
+      if (email) {
+          await db.query(`UPDATE users SET email = $1 WHERE id = $2`, [email, userId]);
+      }
+      if (mobileNumber) {
+          await db.query(`UPDATE users SET phonenumber = $1 WHERE id = $2`, [mobileNumber, userId]);
+      }
+      if (gender) {
+          await db.query(`UPDATE users SET gender = $1 WHERE id = $2`, [gender, userId]);
+      }
+      if (address) {
+          await db.query(`UPDATE users SET address = $1 WHERE id = $2`, [address, userId]);
+      }
+      if (age) {
+          await db.query(`UPDATE users SET age = $1 WHERE id = $2`, [age, userId]);
+      }
+      if (password) {
+          const hashed = await bcrypt.hash(password, 10);
+          await db.query(`UPDATE users SET password = $1 WHERE id = $2`, [hashed, userId]);
+      }
+
+      res.json({ success: true });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Update failed' });
+  }
+});
+
+// Upload profile image
+app.post('/api/account/upload-image', async (req, res) => {
+  const { userId, image } = req.body;
+
+  if (!userId || !image) return res.status(400).json({ error: 'Missing userId or image' });
+
+  try {
+      const base64Data = image.split(',')[1];
+      const buffer = Buffer.from(base64Data, 'base64');
+
+      await db.query(`UPDATE users SET pfp = $1 WHERE id = $2`, [buffer, userId]);
+      res.json({ success: true });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Image upload failed' });
+  }
+});
+
+// Delete profile image
+app.post('/api/account/delete-image', async (req, res) => {
+  const { userId } = req.body;
+
+  if (!userId) return res.status(400).json({ error: 'Missing userId' });
+
+  try {
+      await db.query(`UPDATE users SET pfp = NULL WHERE id = $1`, [userId]);
+      res.json({ success: true });
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Image deletion failed' });
+  }
+});
+
+
+
 // Start server
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);

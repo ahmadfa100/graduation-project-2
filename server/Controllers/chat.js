@@ -25,13 +25,13 @@ export async function getChatByUser(req, res) {
 
         // Fallback if no offer/image is found
         const offerData = offer.rows[0] || { landtitle: null, picture: null };
-
+console.log("offerData : ",offerData.offerid);
         // Get other participant
         const otherParticipantID =
           userID === item.senderid ? item.receiverid : item.senderid;
 
         const otherParticipant = await db.query(
-          "SELECT FirstName, LastName FROM USERS WHERE ID = $1",
+          "SELECT ID ,FirstName, LastName FROM USERS WHERE ID = $1",
           [otherParticipantID]
         );
 
@@ -39,16 +39,18 @@ export async function getChatByUser(req, res) {
           otherParticipant.rows.length > 0
             ? `${otherParticipant.rows[0].firstname} ${otherParticipant.rows[0].lastname}`
             : "Unknown User";
-
+console.log("otherParticipant.rows.id : ", );
         // Push final object
         response.push({
+          otherParticipantID: otherParticipant.rows[0].id ,
+          offerID: offerData.offerid,
           otherParticipantName: otherName,
           offerTitle: offerData.landtitle,
           offerPicture: offerData.picture ? `data:image/jpeg;base64,${offerData.picture.toString("base64")}`: null,
         });
       }
     }
-console.log("response: ",response)
+console.log("response: ",response[1]);
     res.status(200).json(response);
   } catch (error) {
     console.error("Error getChatByUser:", error);

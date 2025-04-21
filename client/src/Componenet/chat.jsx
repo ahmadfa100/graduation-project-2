@@ -1,5 +1,5 @@
 import MainChat from "./MainChat";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -10,12 +10,25 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import axios from "axios";
 
 export default function Chat() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [chatsList,setChatList]=useState({});
+useEffect(()=>{
+fetchChatsList()
+},[]);
 
+async function fetchChatsList() {
+  const chats= await axios.get("http://localhost:3001/getChatByUser/",{withCredentials:true});
+ // console.log("chats::",chats.data);
+ setChatList(chats.data)
+}
+
+
+
+const theme = useTheme();
+const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };

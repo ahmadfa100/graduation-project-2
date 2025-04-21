@@ -8,7 +8,10 @@ import ClipLoader from "react-spinners/ClipLoader";
 
 const socket = io("http://localhost:3001", { autoConnect: false });
 
-function MainChat() {
+function MainChat( props) {
+  ////
+console.log("from main : ",props.chatListData)
+  ///
   const [message, setMessage] = useState(null);
   const [messages, setMessages] = useState([]);
   const [offer, setOffer] = useState(null);
@@ -19,9 +22,24 @@ function MainChat() {
   const [isUserLoading,setUserLoading]= useState(true);
   const [sessiondata, setSessiondata] = useState(null); 
   const [sessionReady, setSessionReady] = useState(false);
-  const {offerID,ReceiverID}= useParams();
+  const [offerID,setOfferID]= useState(null);
+  const [ReceiverID,setReceiverID] =useState(null);
+  const { paramReceiverID, paramOfferID } = useParams();
   
   const room = `other${ReceiverID}currentoffer${offerID}`;
+  useEffect(() => {
+    if (props.chatListData && props.chatListData.offerID) {
+      setOfferID(props.chatListData.offerID);
+      setReceiverID(props.chatListData.otherParticipantID);
+      console.log("from props");
+    } else {
+      // fallback to URL params if available
+      setOfferID(paramOfferID);
+      setReceiverID(paramReceiverID);
+      console.log("from params");
+    }
+  }, [props.chatListData, paramOfferID, paramReceiverID]);
+
 //
 useEffect(() => {
   console.log("Offer ID:", offerID);

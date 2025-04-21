@@ -14,7 +14,9 @@ import axios from "axios";
 
 export default function Chat() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [chatsList,setChatList]=useState({});
+  const [chatsList,setChatList]=useState([]);
+  const [currentChat,setCurrentChat]=useState({});
+  const [isChatListReady,setIsChatListReady]=useState(true);
 useEffect(()=>{
 fetchChatsList()
 },[]);
@@ -22,7 +24,8 @@ fetchChatsList()
 async function fetchChatsList() {
   const chats= await axios.get("http://localhost:3001/getChatByUser/",{withCredentials:true});
  // console.log("chats::",chats.data);
- setChatList(chats.data)
+ setChatList(chats.data);
+ console.log("chatList att: ",chats.data);
 }
 
 
@@ -36,9 +39,9 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const drawer = (
     <div>
       <List>
-        {["Settings", "Profile", "Help"].map((text) => (
+        {chatsList.map((item) => (
           <>
-          <Button>
+          <Button onClick={()=>{setCurrentChat(item)}}>
           <Box
       sx={{
         display: 'flex',
@@ -50,7 +53,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
       }}
     >
       <img
-        src="https://cdn.pixabay.com/photo/2022/07/08/05/38/freelance-work-7308505_1280.png"
+        src={item.offerPicture}
         alt="offer img"
         style={{
           width: '50px',
@@ -63,11 +66,11 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
       <Box>
         <Typography sx={{ textTransform: 'none' }} fontWeight="700" color="black">
 
-          {text}
+          {item.offerTitle}
         </Typography> 
         <Typography variant="body2" color="gray"sx={{ textTransform: 'none' }}>
        
-          hhhhh
+        {item.otherParticipantName}
         </Typography>
       </Box>
     </Box>
@@ -135,7 +138,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
         }}
       >
         <Toolbar />
-        <MainChat />
+        <MainChat chatListData={currentChat} />
       </Box>
     </Box>
   );

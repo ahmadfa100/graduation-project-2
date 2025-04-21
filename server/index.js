@@ -6,7 +6,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import bcrypt from 'bcrypt';
 import session from "express-session";
-import db from "./db.js"; // Used in socket code
+import db from "./db.js"; 
 import notificationsRouter from "./Controllers/notifications.js";
 
 // Controllers
@@ -128,27 +128,43 @@ app.post('/api/signup', async (req, res) => {
 
 
 app.get("/FavoriteOffers", async (req, res) => {
-  
   const userID = req.session?.user?.id;
-const {offerID}=req.query;
-  if (!userID) {
-    return res.status(401).json({ error: "Not logged in" });
-  }
-  if(!offerID){
-    const result = await db.query("SELECT * FROM FavoriteOffers WHERE farmerID=($1)",[userID]);
-   console.log("ttt");
-console.log("rows: ",result.rows);
-    return res.status(200).json(result.rows);
-  }
-
+  if (!userID) return res.status(401).json({ error: "Not logged in" });
   try {
-    const result = await db.query("SELECT * FROM FavoriteOffers WHERE offerID=($1) AND farmerID=($2)",[offerID,userID]);
-   res.json(result.rows);
-  } catch (error) {
-    console.error("Error fetching favorite offers:", error);
+    const result = await db.query(
+      `
+      SELECT
+        o.id,
+        o.landTitle       AS "landTitle",
+        o.landSize        AS "landSize",
+        o.landLocation    AS "landLocation",
+        o.landLeasePrice  AS "landLeasePrice",
+        o.phoneNumber     AS "phoneNumber",
+        COALESCE(
+          ('data:image/jpeg;base64,' || encode(lp.picture, 'base64')),
+          ''
+        ) AS "image"
+      FROM FavoriteOffers f
+      JOIN offers o
+        ON f.offerID = o.id
+      LEFT JOIN LATERAL (
+        SELECT picture
+        FROM landPicture
+        WHERE landid = o.id
+        LIMIT 1
+      ) lp ON true
+      WHERE f.farmerID = $1
+      `,       // ← removed ORDER BY
+      [userID]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Error fetching favorite offers:", err);
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+
 app.post("/AddFavoriteOffers", async (req, res) => {
   const userID = req.session.user.id;
   const { offerID } = req.body; // ✅ Correct source

@@ -1,3 +1,20 @@
+.error-message {
+  color: red;
+  margin: 10px 0;
+  text-align: center;
+  font-size: 14px;
+}
+
+.signup-link {
+  color: #45a049;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
+
 .login-container {
     max-width: 400px;
     margin: 4rem auto;
@@ -48,3 +65,57 @@
     cursor: pointer;
     text-decoration: underline;
   }
+
+
+
+
+/* .login-container {
+    max-width: 400px;
+    margin: 4rem auto;
+    padding: 2rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background: #fff;
+  }
+  .login-container h2 {
+    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+    text-align: center;
+  }
+  .login-container p {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #555;
+  }
+  .login-form label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+  .login-form input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.25rem;  
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .login-form button {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .alt-action {
+    text-align: center;
+    margin-top: 1rem;
+    color: #333;
+  }
+  .signup-link {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+  } */

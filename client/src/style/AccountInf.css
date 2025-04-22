@@ -1,38 +1,40 @@
+
+
+/* AccountInf.css */
+
 .account-inf-container {
-    
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: #f4f4f4; /* Light background */
-}
-
-.account-inf-card {
+  }
+  
+  .account-inf-card {
     background-color: white;
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    width: 600px; /* Adjust width as needed */
     width: 80%;
     max-width: 800px;
-}
-
-.profile-picture-section {
+  }
+  
+  .profile-picture-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-bottom: 20px;
-}
-
-.profile-image {
+  }
+  
+  .profile-image {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
-}
-
-.profile-placeholder {
+  }
+  
+  .profile-placeholder {
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -40,73 +42,109 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* color: #666; */
     margin-bottom: 10px;
-}
-
-.picture-buttons {
+  }
+  
+  .picture-buttons {
     display: flex;
     gap: 10px;
-}
-
-.upload-btn, .delete-btn {
+  }
+  
+  .upload-btn,
+  .delete-btn {
     padding: 8px 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-}
-
-.upload-btn {
-    background-color: #4CAF50; /* Green */
+  }
+  
+  .upload-btn {
+    background-color: #4caf50; /* Green */
     color: white;
-}
-
-.delete-btn {
+  }
+  
+  .delete-btn {
     background-color: #f44336; /* Red */
     color: white;
-}
-
-.field-label {
-    margin-top: 20px;
-    margin-bottom: 5px;
-    font-size: 1.1em;
-    color: #333;
-}
-
-.input-with-button {
+  }
+  
+  /* --- UPDATED FORM STYLES --- */
+  .input-with-button {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     margin-bottom: 15px;
-}
-
-.full-width-input {
-    flex-grow: 1;
+    width: 100%;
+  }
+  
+  .input-with-button label {
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+  
+  .input-container {
+    display: flex;
+    width: 100%;
+  }
+  
+  .full-width-input {
+    flex: 1;
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
     margin-right: 10px;
-}
-
-.edit-btn {
+  }
+  
+  .full-width-input.input-error {
+    border-color: #f44336;
+  }
+  
+  .edit-btn {
     padding: 8px 15px;
     border: none;
     border-radius: 4px;
-    background-color: #2196F3; /* Blue */
+    background-color: #2196f3; /* Blue */
     color: white;
     cursor: pointer;
-}
-
-.edit-btn.save {
-    background-color: #4CAF50; /* Green for Save */
-}
-
-/* Responsive adjustments */
-@media (max-width: 480px) {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .edit-btn.save {
+    background-color: #4caf50; /* Green when saving */
+  }
+  
+  .field-error {
+    margin: 4px 0 0 0;
+    color: #f44336;
+    font-size: 0.9em;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 480px) {
     .account-inf-card {
-        width: 90%;
-        padding: 20px;
+      width: 90%;
+      padding: 20px;
     }
-}
+  
+    .input-container {
+      flex-direction: column;
+    }
+  
+    .full-width-input {
+      margin-right: 0;
+      margin-bottom: 8px;
+    }
+  
+    .edit-btn {
+      align-self: flex-end;
+    }
+  }
+  
+  
+
+
+
+
 
 /* 
 .AccountInf-location{

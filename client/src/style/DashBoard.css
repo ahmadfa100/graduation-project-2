@@ -4,20 +4,21 @@
   padding: 20px;
 }
 
-/* Remove the grid layout since we want a vertical stack */
 .top-row {
   display: block;
 }
 
-/* Common section container */
 .dashboard-section {
+  display: flex;
+  flex-direction: column;   
+  align-items: center;      
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
 
-/* Header styling for each section */
+
 .dashboard-section h2,
 .MuiAccordionSummary-root {
   margin: 0;
@@ -28,14 +29,12 @@
   width: 100%;
 }
 
-/* Inner content styling */
 .inner-content {
   padding: 15px;
   text-align: center;
   font-size: 14px;
 }
 
-/* Add Offer button styling */
 .add-offer-button {
   width: 30px;
   height: 30px;
@@ -55,12 +54,10 @@
   background-color: #45a049;
 }
 
-/* Spacer for vertical spacing */
 .spacer {
   height: 20px;
 }
 
-/* Offers list style for each offer item */
 .offer {
   background-color: white;
   padding: 10px;
@@ -78,7 +75,6 @@
   margin: 5px 0;
 }
 
-/* Style for the favorite toggle button */
 .favorite-toggle-button {
   margin-top: 5px;
   padding: 5px 10px;

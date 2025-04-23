@@ -85,10 +85,9 @@ const Header = () => {
   };
 
   const slidebarContent = [
-    { title: "My Account",      icon: <AccountCircle />, onClick: () => setOpen(false), link: "AccountInf" },
-    { title: "Dashboard",       icon: <Dashboard />,      onClick: () => setOpen(false), link: "DashBoard" },
-    { title: "Favorite offers", icon: <Favorite />,       onClick: () => setOpen(false), link: "DashBoard" },
-    { title: "My Chats",        icon: <Chat />,           onClick: () => setOpen(false) },
+    { title: "My Account",      icon: <AccountCircle />, onClick: () =>{ setOpen(false);navigate("/AccountInf")} },
+    { title: "Dashboard",       icon: <Dashboard />,      onClick: () => {setOpen(false);navigate("/DashBoard")}  },
+    { title: "My Chats",        icon: <Chat />,           onClick: () => {setOpen(false);navigate("/chat") }},
     { title: "Logout",          icon: <ExitToApp />,      onClick: handleLogout },
   ];
 
@@ -165,7 +164,7 @@ const Header = () => {
                 <List>
                   {slidebarContent.map((item, i) => (
                     <React.Fragment key={i}>
-                      <Link to={"/" + (item.link || "")}>
+                     
                         <ListItem button onClick={item.onClick}>
                           <ListItemIcon sx={{ color: "#57b676", fontSize: "2rem" }}>
                             {item.icon}
@@ -173,7 +172,7 @@ const Header = () => {
                           <ListItemText primary={item.title}/>
                         </ListItem>
                         <Divider/>
-                      </Link>
+                     
                     </React.Fragment>
                   ))}
                 </List>

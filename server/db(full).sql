@@ -69,14 +69,11 @@ CREATE TABLE Chats (
     senderID INT NOT NULL REFERENCES users(ID) ON DELETE CASCADE,
     receiverID INT NOT NULL REFERENCES users(ID) ON DELETE CASCADE,
     offerID INT NOT NULL REFERENCES offers(ID) ON DELETE CASCADE,
-    chatDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-    CONSTRAINT check_sender_receiver CHECK (senderID <> receiverID)
-    CONSTRAINT check_sender_receiver CHECK (senderID <> receiverID)
+    chatDate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT check_sender_receiver CHECK (senderID <> receiverID),
+    CONSTRAINT check_sender_receiver CHECK (senderID <> receiverID),
     CONSTRAINT  unique_chat_per_offer UNIQUE (senderID, receiverID, offerID)
 
-
-    
-  
 );
 CREATE TABLE ChatContents (
     contentID SERIAL PRIMARY KEY,

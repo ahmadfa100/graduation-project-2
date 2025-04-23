@@ -25,13 +25,49 @@ console.log("from main : ",props.chatListData)
   const [offerID,setOfferID]= useState(null);
   const [ReceiverID,setReceiverID] =useState(null);
   const { paramReceiverID, paramOfferID } = useParams();
-  const [room,setRoom]= useState();
+  const [chatID,setChatID]=useState(null);
+  const [room,setRoom]= useState(null);
+
   useEffect(() => {
-    if (!offerID || !ReceiverID || !sessionReady || !sessiondata) return;
+    const getChatID = async () => {
+      if (offerID && ReceiverID) {
+        const id = await fetchChatID(offerID, ReceiverID);
+        setChatID(id); 
+      }
+    };
+    getChatID();
+  }, [offerID, ReceiverID]);
   
-    setRoom( `other${ReceiverID}currentoffer${offerID}`);
-  }, [offerID, ReceiverID, sessionReady, sessiondata]);
+
+
+  useEffect(() => {
+    setRoom(chatID);
+    console.log("chat id useeffect :",chatID);
+  }, [chatID]);
+useEffect(()=>{
+console.log("room: ",room);
+},[room]);
+  const fetchChatID = async (offerID, userID) => {
+    try {
+      const response = await axios.get('http://localhost:3001/getchatID', {
+        params: { offerID, userID },
+      });
   
+      console.log('Chat ID is:', response.data.chatID);
+      return response.data.chatID;
+    } catch (error) {
+      if (error.response) {
+        console.log("sad");
+        console.error('Error response:', error.response.data);
+      } else {
+        console.error('Request error:', error.message);
+      }
+      return null;
+    }
+  };
+
+
+
   useEffect(() => {
     if (props.chatListData && props.chatListData.offerID) {
       setOfferID(props.chatListData.offerID);
@@ -132,7 +168,7 @@ fetchSession();
         { params: { chatID } }
       );
 
-      console.log("respones :", response.data === "Not Found");
+      console.log("respones :", response.data );
       if (response.data.error) {
         //  console.log("Error fetching chat messages:", response.data.error);
         return;

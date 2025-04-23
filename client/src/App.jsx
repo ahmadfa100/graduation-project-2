@@ -1,4 +1,3 @@
-// App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
@@ -22,7 +21,7 @@ import OfferDetails from "./Componenet/offerDetail";
 
 function App() {
   return (
-    <div className="App">   {/* <-- Use your .App CSS here */}
+    <div className="App">   {}
       <Router>
         <Routes>
           <Route path="/signup" element={<SignUp />} />

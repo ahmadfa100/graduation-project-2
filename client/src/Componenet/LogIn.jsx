@@ -11,7 +11,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setError(''); // Clear previous errors
+    setError(''); 
     try {
       const response = await fetch('http://localhost:3001/api/login', {
         method: 'POST',
@@ -22,9 +22,9 @@ const Login = () => {
       const data = await response.json();
       if (response.ok) {
         console.log('Session ID:', data.sessionID);
-        navigate('/dashboard');
+        navigate('/', { replace: true });
       } else {
-        setError(data.error); // Set error message to display
+        setError(data.error);
       }
     } catch (error) {
       console.error('Login error:', error);

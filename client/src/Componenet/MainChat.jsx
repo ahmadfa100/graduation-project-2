@@ -42,22 +42,22 @@ console.log("from main : ",props.chatListData)
 
   useEffect(() => {
     setRoom(chatID);
-    console.log("chat id useeffect :",chatID);
+    //console.log("chat id useeffect :",chatID);
   }, [chatID]);
-useEffect(()=>{
-console.log("room: ",room);
-},[room]);
+// useEffect(()=>{
+// console.log("room: ",room);
+// },[room]);
   const fetchChatID = async (offerID, userID) => {
     try {
       const response = await axios.get('http://localhost:3001/getchatID', {
         params: { offerID, userID },
       });
   
-      console.log('Chat ID is:', response.data.chatID);
+      //console.log('Chat ID is:', response.data.chatID);
       return response.data.chatID;
     } catch (error) {
       if (error.response) {
-        console.log("sad");
+       
         console.error('Error response:', error.response.data);
       } else {
         console.error('Request error:', error.message);
@@ -72,12 +72,12 @@ console.log("room: ",room);
     if (props.chatListData && props.chatListData.offerID) {
       setOfferID(props.chatListData.offerID);
       setReceiverID(props.chatListData.otherParticipantID);
-      console.log("from props");
+      //console.log("from props");
     } else {
       // fallback to URL params if available
       setOfferID(paramOfferID);
       setReceiverID(paramReceiverID);
-      console.log("from params");
+     // console.log("from params");
     }
   }, [props.chatListData, paramOfferID, paramReceiverID]);
 
@@ -86,10 +86,10 @@ useEffect(() => {
   setMessages([]);
 }, [offerID, ReceiverID]);
 
-useEffect(() => {
-  console.log("Offer ID:", offerID);
-  console.log("Owner ID:", ReceiverID);
-}, [offerID, ReceiverID]);
+// useEffect(() => {
+//   console.log("Offer ID:", offerID);
+//   console.log("Owner ID:", ReceiverID);
+// }, [offerID, ReceiverID]);
 useEffect(()=>{
   
 fetchSession();
@@ -97,7 +97,7 @@ fetchSession();
   useEffect(() => {
     console.log("enter");
     if (!sessionReady || sessiondata === null) return;
-    console.log("vaild");
+    //console.log("vaild");
     setMessages([]);
     setMessage(null);
     fetchOffer(offerID);
@@ -109,7 +109,7 @@ fetchSession();
       offer: offerID,
     }); //The receiver takes owner ID not work with all scenarios owner id will be taken from offer only if user click on the chat button
     socket.on("InitialMessages", (id) => {
-      console.log("chat  client id:", id);
+     // console.log("chat  client id:", id);
       fetchChat(id);
     });
 
@@ -117,7 +117,7 @@ fetchSession();
     socket.emit("join", room);
 
     socket.on("RecivedMessage", (newMessage) => {
-      console.log("Received message:", newMessage);
+    //  console.log("Received message:", newMessage);
 
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -162,13 +162,13 @@ fetchSession();
   }
   async function fetchChat(chatID) {
     try {
-      console.log("Fetching chat messages...");
+     // console.log("Fetching chat messages...");
       const response = await axios.get(
         `http://localhost:3001/getchatcontent/`,
         { params: { chatID } }
       );
 
-      console.log("respones :", response.data );
+    //  console.log("respones :", response.data );
       if (response.data.error) {
         //  console.log("Error fetching chat messages:", response.data.error);
         return;

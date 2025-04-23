@@ -1,6 +1,30 @@
 import { send } from "process";
 import db from "../db.js";
 
+export async function getChatID(req,res) {
+  const { offerID, userID } = req.query;
+
+  if (!offerID || !userID) {
+      return res.status(400).json({ error: 'Missing offerID or userID' });
+  }
+
+  try {
+      const result = await db.query(
+          `SELECT ID FROM Chats 
+           WHERE offerID = $1 AND (senderID = $2 OR receiverID = $2)`,
+          [offerID, userID]
+      );
+
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Chat not found' });
+      }
+
+      res.json({ chatID: result.rows[0].id });
+  } catch (err) {
+      console.error('Error fetching chat ID:', err);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+}
 export async function getChatByUser(req, res) {
   try {
     if (!req.session.user?.id) {

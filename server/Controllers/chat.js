@@ -1,11 +1,9 @@
-// Controllers/chat.js
 import db from "../db.js";
 
-// Helper function to retrieve chats based on query parameters.
 export const getChats = async ({ receiverID, senderID, chatID, offerID }) => {
   let query = "SELECT * FROM chats WHERE 1=1";
   let values = [];
-  let index = 1; // To track parameter position
+  let index = 1; 
 
   if (receiverID && senderID) {
     query += ` AND ((receiverID = $${index} AND senderID = $${index + 1}) OR (receiverID = $${index + 1} AND senderID = $${index}))`;
@@ -35,7 +33,6 @@ export const getChats = async ({ receiverID, senderID, chatID, offerID }) => {
   return result.rows;
 };
 
-// GET /getchat - Retrieve chats based on query parameters.
 export async function getChat(req, res) {
   try {
     const { receiverID, senderID, chatID, offerID } = req.query;
@@ -51,7 +48,6 @@ export async function getChat(req, res) {
   }
 }
 
-// GET /getchatcontent - Retrieve content for a specific chat.
 export async function getChatContent(req, res) {
   try {
     //console.log("refer",req.get("Referer"));

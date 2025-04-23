@@ -1,4 +1,3 @@
-// Controllers/dashboard.js
 import db from "../db.js";
 
 export const getMyOffers = async (req, res) => {

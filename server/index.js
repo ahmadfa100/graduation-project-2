@@ -19,7 +19,7 @@ import {
   getAllOffers,
 } from "./Controllers/offer.js";
 import { getNotifications } from "./Controllers/notification.js";
-import { getChat, getChatContent, addChat, getChats } from "./Controllers/chat.js";
+import { getChatID, getChatContent, addChat, getChats,getChatByUser } from "./Controllers/chat.js";
 import { getMyOffers } from "./Controllers/dashboard.js";
 
 // Load environment variables
@@ -353,9 +353,10 @@ app.get("/offers", getAllOffers);
 app.get("/api/notifications", getNotifications);
 
 // Chat (HTTP)
-app.get("/getchat", getChat);
+app.get("/getchatID", getChatID);
 app.get("/getchatcontent", getChatContent);
 app.post("/addchat", addChat);
+app.get("/getChatByUser",getChatByUser)
 
 // Session info (for debugging)
 app.get("/sessionInfo", (req, res) => {

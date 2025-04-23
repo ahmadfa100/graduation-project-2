@@ -1,9 +1,94 @@
+import { send } from "process";
 import db from "../db.js";
+
+export async function getChatID(req,res) {
+  const { offerID, userID } = req.query;
+
+  if (!offerID || !userID) {
+      return res.status(400).json({ error: 'Missing offerID or userID' });
+  }
+
+  try {
+      const result = await db.query(
+          `SELECT ID FROM Chats 
+           WHERE offerID = $1 AND (senderID = $2 OR receiverID = $2)`,
+          [offerID, userID]
+      );
+
+      if (result.rows.length === 0) {
+          return res.status(404).json({ error: 'Chat not found' });
+      }
+
+      res.json({ chatID: result.rows[0].id });
+  } catch (err) {
+      console.error('Error fetching chat ID:', err);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+}
+export async function getChatByUser(req, res) {
+  try {
+    if (!req.session.user?.id) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const userID = req.session.user.id;
+    let response = [];
+
+    const chats = await db.query(
+      "SELECT * FROM CHATS WHERE receiverID = $1 OR senderID = $1 ORDER BY chatDate DESC",
+      [userID]
+    );
+
+    if (chats.rowCount > 0) {
+      for (const item of chats.rows) {
+        // Get offer info with one image
+        const offer = await db.query(
+          "SELECT o.id AS offerID, o.landTitle, lp.picture FROM offers o JOIN landPicture lp ON lp.landID = o.id WHERE o.id = $1 LIMIT 1",
+          [item.offerid]
+        );
+
+        // Fallback if no offer/image is found
+        const offerData = offer.rows[0] || { landtitle: null, picture: null };
+//console.log("offerData : ",offerData.offerid);
+        // Get other participant
+        const otherParticipantID =
+          userID === item.senderid ? item.receiverid : item.senderid;
+
+        const otherParticipant = await db.query(
+          "SELECT ID ,FirstName, LastName FROM USERS WHERE ID = $1",
+          [otherParticipantID]
+        );
+
+        const otherName =
+          otherParticipant.rows.length > 0
+            ? `${otherParticipant.rows[0].firstname} ${otherParticipant.rows[0].lastname}`
+            : "Unknown User";
+
+        // Push final object
+        response.push({
+          otherParticipantID: otherParticipant.rows[0].id ,
+          offerID: offerData.offerid,
+          otherParticipantName: otherName,
+          offerTitle: offerData.landtitle,
+          offerPicture: offerData.picture ? `data:image/jpeg;base64,${offerData.picture.toString("base64")}`: null,
+        });
+      }
+    }
+//console.log("response: ",response[1]);
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("Error getChatByUser:", error);
+    res
+      .status(500)
+      .json({ error: "Internal Server Error (getChatByUser)" });
+  }
+}
+
 
 export const getChats = async ({ receiverID, senderID, chatID, offerID }) => {
   let query = "SELECT * FROM chats WHERE 1=1";
   let values = [];
-  let index = 1; 
+  let index = 1; //  track
 
   if (receiverID && senderID) {
     query += ` AND ((receiverID = $${index} AND senderID = $${index + 1}) OR (receiverID = $${index + 1} AND senderID = $${index}))`;

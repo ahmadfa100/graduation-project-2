@@ -57,7 +57,10 @@ function App() {
                       }
                     />
                     <Route path="/about" element={<About />} />
-                    <Route path="/chat/:offerID/:ReceiverID" element={<Chat />} />
+                    <Route
+                      path="/chat/:paramOfferID?/:paramReceiverID?"
+                      element={<Chat/>}
+                    />
                     <Route path="/AccountInf" element={<AccountInf />} />
                     <Route
                       path="/DashBoard"

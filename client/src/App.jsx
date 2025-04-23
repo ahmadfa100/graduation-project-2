@@ -59,7 +59,7 @@ function App() {
  />
                     <Route path="/about" element={<About />} />
                     <Route
-                      path="/chat/:paramOfferID/:paramReceiverID"
+                      path="/chat/:paramOfferID?/:paramReceiverID?"
                       element={<Chat/>}
                     />
                     <Route path="/AccountInf" element={<AccountInf />} />

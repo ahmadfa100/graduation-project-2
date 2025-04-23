@@ -20,10 +20,19 @@ export default function Chat() {
   const [chatsList,setChatList]=useState([]);
   const [currentChat,setCurrentChat]=useState({});
   const [isChatListReady,setIsChatListReady]=useState(true);
- 
-
+  const { paramReceiverID, paramOfferID } = useParams();
+  const [isChatSelected,setisChatSelected]=useState(true);
+  
+  useEffect(() => {
+    if (paramOfferID && paramReceiverID) {
+      console.log("Params exist");
+      setisChatSelected(false);
+    }
+  }, [paramOfferID, paramReceiverID]);
+  
 useEffect(()=>{
 fetchChatsList()
+
 
 },[]);
 
@@ -51,7 +60,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
       <List>
         {chatsList.map((item,index) => (
            <React.Fragment key={item._id || index}>
-          <Button onClick={()=>{setCurrentChat(item)}}>
+          <Button onClick={()=>{setCurrentChat(item);setisChatSelected(false)}}>
           <Box
       sx={{
         display: 'flex',
@@ -91,6 +100,27 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
       </List>
     </div>
   );
+  const Initialchat = () => {
+    return (
+      <Box 
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        height: '100%',
+        textAlign: 'center',
+  
+        p: 20,
+        m:0
+      }}
+      >
+       <Typography sx={{ textTransform: 'none' }} fontWeight="700" color="gray">
+       Select a chat to start chatting
+       </Typography>
+      </Box>
+    );
+  };
+  
 
   return (
    isChatListReady? 
@@ -107,18 +137,13 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
          sx: {
            margin: "20px",
            borderRadius: "15px",
-           height: "700px", // ✅ Fixed height
-           width: 400,
+           height: "700px", 
+           width: "100%",
            boxSizing: "border-box",
-           position: "relative", // Optional: relative instead of fixed
+           position: "relative", 
          },
        }}
-       sx={{
-         flexShrink: 0,
-         "& .MuiDrawer-paper": {
-           // You can keep this empty or remove to avoid double styling
-         },
-       }}
+       
      >
        <Box
          sx={{
@@ -150,8 +175,13 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
      }}
    >
      <Toolbar />
+    {isChatSelected?
+    <Initialchat/>
+    :
      <MainChat chatListData={currentChat} />
+    }
    </Box>
  </Box>
   );
 }
+

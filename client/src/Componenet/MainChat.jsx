@@ -25,8 +25,13 @@ console.log("from main : ",props.chatListData)
   const [offerID,setOfferID]= useState(null);
   const [ReceiverID,setReceiverID] =useState(null);
   const { paramReceiverID, paramOfferID } = useParams();
+  const [room,setRoom]= useState();
+  useEffect(() => {
+    if (!offerID || !ReceiverID || !sessionReady || !sessiondata) return;
   
-  const room = `other${ReceiverID}currentoffer${offerID}`;
+    setRoom( `other${ReceiverID}currentoffer${offerID}`);
+  }, [offerID, ReceiverID, sessionReady, sessiondata]);
+  
   useEffect(() => {
     if (props.chatListData && props.chatListData.offerID) {
       setOfferID(props.chatListData.offerID);
@@ -41,6 +46,10 @@ console.log("from main : ",props.chatListData)
   }, [props.chatListData, paramOfferID, paramReceiverID]);
 
 //
+useEffect(() => {
+  setMessages([]);
+}, [offerID, ReceiverID]);
+
 useEffect(() => {
   console.log("Offer ID:", offerID);
   console.log("Owner ID:", ReceiverID);
@@ -272,7 +281,7 @@ console.log("here now :",response.data)
 
   return (
     <div className="chat-page">
-      {isChatLoding || isOfferLoding ||isUserLoading ||isUserLoading ? (
+      {isChatLoding || isOfferLoding ||isUserLoading  ? (
         <ClipLoader color="green" size={50} />
       ) : (
         <div className="chat-container">

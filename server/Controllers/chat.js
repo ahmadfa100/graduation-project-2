@@ -39,7 +39,7 @@ console.log("offerData : ",offerData.offerid);
           otherParticipant.rows.length > 0
             ? `${otherParticipant.rows[0].firstname} ${otherParticipant.rows[0].lastname}`
             : "Unknown User";
-console.log("otherParticipant.rows.id : ", );
+
         // Push final object
         response.push({
           otherParticipantID: otherParticipant.rows[0].id ,

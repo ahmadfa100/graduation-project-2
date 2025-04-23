@@ -1,5 +1,6 @@
 import MainChat from "./MainChat";
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,8 +18,11 @@ export default function Chat() {
   const [chatsList,setChatList]=useState([]);
   const [currentChat,setCurrentChat]=useState({});
   const [isChatListReady,setIsChatListReady]=useState(true);
+ 
+
 useEffect(()=>{
 fetchChatsList()
+
 },[]);
 
 async function fetchChatsList() {
@@ -39,8 +43,8 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const drawer = (
     <div>
       <List>
-        {chatsList.map((item) => (
-          <>
+        {chatsList.map((item,index) => (
+           <React.Fragment key={item._id || index}>
           <Button onClick={()=>{setCurrentChat(item)}}>
           <Box
       sx={{
@@ -76,7 +80,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     </Box>
           </Button>
             <Divider />
-          </>
+            </React.Fragment>
         ))}
       </List>
     </div>

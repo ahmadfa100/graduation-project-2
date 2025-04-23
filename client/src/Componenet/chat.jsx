@@ -12,6 +12,8 @@ import { useTheme } from "@mui/material/styles";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import axios from "axios";
+import ClipLoader from "react-spinners/ClipLoader";
+
 
 export default function Chat() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -26,10 +28,14 @@ fetchChatsList()
 },[]);
 
 async function fetchChatsList() {
+ try{
   const chats= await axios.get("http://localhost:3001/getChatByUser/",{withCredentials:true});
- // console.log("chats::",chats.data);
- setChatList(chats.data);
- console.log("chatList att: ",chats.data);
+  setChatList(chats.data);
+  //console.log("chatList att: ",chats.data);
+  setIsChatListReady(false)
+ }catch(err){
+  console.log("Error while fetch chatlists",err);
+ }
 }
 
 
@@ -87,63 +93,65 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <CssBaseline />
-      <Box sx={{ height: "100px" }}>
-        <Drawer
-          variant={isMobile ? "temporary" : "permanent"}
-          open={isMobile ? mobileOpen : true}
-          onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}
-          PaperProps={{
-            sx: {
-              margin: "20px",
-              borderRadius: "15px",
-              height: "700px", // ✅ Fixed height
-              width: 400,
-              boxSizing: "border-box",
-              position: "relative", // Optional: relative instead of fixed
-            },
-          }}
-          sx={{
-            flexShrink: 0,
-            "& .MuiDrawer-paper": {
-              // You can keep this empty or remove to avoid double styling
-            },
-          }}
-        >
-          <Box
-            sx={{
-              height: 64,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              px: 2,
-              backgroundColor: "rgb(76, 175, 80)",
-              color: "white",
-              fontWeight: "bold",
-              fontSize: "1.2rem",
-            }}
-          >
-            My Chats
-          </Box>
-          {drawer}
-        </Drawer>
-      </Box>
+   isChatListReady? 
+   <Box sx={{display:"flex", justifyContent:"center",marginTop:"150px" }}> <ClipLoader color="green" size={50} /></Box>:
+   <Box sx={{ display: "flex" }}>
+   <CssBaseline />
+   <Box sx={{ height: "100px" }}>
+     <Drawer
+       variant={isMobile ? "temporary" : "permanent"}
+       open={isMobile ? mobileOpen : true}
+       onClose={handleDrawerToggle}
+       ModalProps={{ keepMounted: true }}
+       PaperProps={{
+         sx: {
+           margin: "20px",
+           borderRadius: "15px",
+           height: "700px", // ✅ Fixed height
+           width: 400,
+           boxSizing: "border-box",
+           position: "relative", // Optional: relative instead of fixed
+         },
+       }}
+       sx={{
+         flexShrink: 0,
+         "& .MuiDrawer-paper": {
+           // You can keep this empty or remove to avoid double styling
+         },
+       }}
+     >
+       <Box
+         sx={{
+           height: 64,
+           display: "flex",
+           alignItems: "center",
+           justifyContent: "center",
+           px: 2,
+           backgroundColor: "rgb(76, 175, 80)",
+           color: "white",
+           fontWeight: "bold",
+           fontSize: "1.2rem",
+         }}
+       >
+         My Chats
+       </Box>
+       {drawer}
+     </Drawer>
+   </Box>
 
-      {/* Main Content */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${400}px)` },
-          height: "800px ",
-        }}
-      >
-        <Toolbar />
-        <MainChat chatListData={currentChat} />
-      </Box>
-    </Box>
+   {/* Main Content */}
+   <Box
+     component="main"
+     sx={{
+       flexGrow: 1,
+       p: 3,
+       width: { sm: `calc(100% - ${400}px)` },
+       height: "800px ",
+     }}
+   >
+     <Toolbar />
+     <MainChat chatListData={currentChat} />
+   </Box>
+ </Box>
   );
 }

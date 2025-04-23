@@ -25,7 +25,7 @@ export async function getChatByUser(req, res) {
 
         // Fallback if no offer/image is found
         const offerData = offer.rows[0] || { landtitle: null, picture: null };
-console.log("offerData : ",offerData.offerid);
+//console.log("offerData : ",offerData.offerid);
         // Get other participant
         const otherParticipantID =
           userID === item.senderid ? item.receiverid : item.senderid;
@@ -50,7 +50,7 @@ console.log("offerData : ",offerData.offerid);
         });
       }
     }
-console.log("response: ",response[1]);
+//console.log("response: ",response[1]);
     res.status(200).json(response);
   } catch (error) {
     console.error("Error getChatByUser:", error);

@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+.farmer-dashboard {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.farmer-dashboard h1 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #2e7d32;
+}
+
+.section {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.section .MuiAccordionSummary-root {
+  background-color: #e8f5e9;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1b5e20;
+}
+
+.section .MuiAccordionDetails-root {
+  padding: 16px;
+}
+
+.land-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.land-list li {
+  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 0;
+}
+
+.land-list li:last-child {
+  border-bottom: none;
+}
+
+.land-list h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  color: #333333;
+}
+
+.land-list p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555555;
+}
+
+.section:nth-of-type(3) .MuiAccordionSummary-root {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.MuiAccordion-root {
+  box-shadow: none;
+}
+
+.MuiPaper-elevation1 {
+  box-shadow: none;
+}
+
+@media (max-width: 600px) {
+  .farmer-dashboard {
+    padding: 12px;
+  }
+  .section .MuiAccordionSummary-root {
+    font-size: 14px;
+    padding: 10px;
+  }
+  .land-list h3 {
+    font-size: 16px;
+  }
+  .land-list p {
+    font-size: 13px;
+  }
+}

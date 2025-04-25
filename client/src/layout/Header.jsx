@@ -149,7 +149,9 @@ const Header = () => {
               <Button onClick={() => setOpen(true)}>
                 <div className="User-Avatar-Header">
                   {user.pfp
-                    ? <img src={URL.createObjectURL(user.pfp)} alt="pfp" />
+                    ? <img src={`data:${user.pfp.mime};base64,${btoa(String.fromCharCode(...user.pfp.data))}`} alt="profile" />
+
+
                     : <img src="./user.png" alt="pfp" />}
                   <h3>Hi {user.firstname}</h3>
                   <FaCaretDown style={{ position: 'relative', top: '10px', color: 'green' }}/>

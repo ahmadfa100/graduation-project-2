@@ -4,9 +4,9 @@ import env from "dotenv";
 import multer from "multer";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import session from "express-session";
-import db from "./db.js"; 
+import db from "./db.js";
 import notificationsRouter from "./Controllers/notifications.js";
 
 // Controllers
@@ -19,9 +19,19 @@ import {
   getAllOffers,
 } from "./Controllers/offer.js";
 import { getNotifications } from "./Controllers/notification.js";
-import { getChat2, getChatContent, addChat, getChats,getChatByUser } from "./Controllers/chat.js";
+import {
+  getChat2,
+  getChatContent,
+  addChat,
+  getChats,
+  getChatByUser,
+} from "./Controllers/chat.js";
 import { getMyOffers } from "./Controllers/dashboard.js";
-import { getFav, AddFavoriteOffers, DeleteFavoriteOffer } from './Controllers/fav.js';
+import {
+  getFav,
+  AddFavoriteOffers,
+  DeleteFavoriteOffer,
+} from "./Controllers/fav.js";
 // Load environment variables
 env.config();
 const app = express();
@@ -29,10 +39,12 @@ const port = process.env.PORT || 3001;
 const saltRounds = parseInt(process.env.SALT_ROUNDS) || 10;
 
 // CORS configuration
-app.use(cors({
-  origin: "http://localhost:3000",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 // Body parsers
 app.use(express.json());
@@ -40,32 +52,36 @@ app.use(express.urlencoded({ extended: true }));
 app.use(notificationsRouter);
 
 // Session configuration
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false,    // set true in production with HTTPS
-    httpOnly: false,  // allow JS to read cookie (dev only)
-    sameSite: 'lax'
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "your-secret-key",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // set true in production with HTTPS
+      httpOnly: false, // allow JS to read cookie (dev only)
+      sameSite: "lax",
+    },
+  })
+);
 
 // ——————————————
 // Session‐update endpoint
 // ——————————————
-app.post('/api/addObjectSession', (req, res) => {
+app.post("/api/addObjectSession", (req, res) => {
   const { key, value } = req.body;
 
   if (!key || value === undefined) {
-    return res.status(400).json({ message: 'You must provide a key and value' });
+    return res
+      .status(400)
+      .json({ message: "You must provide a key and value" });
   }
 
   req.session[key] = value;
 
   res.json({
     message: `Session key '${key}' set`,
-    session: req.session
+    session: req.session,
   });
 });
 
@@ -74,9 +90,9 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // Authentication routes
-app.post('/api/login', loginUser);
+app.post("/api/login", loginUser);
 
-app.post('/api/signup', async (req, res) => {
+app.post("/api/signup", async (req, res) => {
   const {
     firstName,
     lastName,
@@ -88,7 +104,7 @@ app.post('/api/signup', async (req, res) => {
     mobileNumber,
     email,
     password,
-    confirmPassword
+    confirmPassword,
   } = req.body;
 
   // Validation functions
@@ -96,49 +112,66 @@ app.post('/api/signup', async (req, res) => {
   const isValidPhone = (phone) => /^\d{10}$/.test(phone);
   const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isValidPassword = (pw) => {
-    return pw.length >= 8 &&
-           /[A-Z]/.test(pw) &&
-           /[0-9]/.test(pw) &&
-           // include dash, underscore, equals, plus, brackets, slash, semicolon, `~ etc.
-           /[!@#$%^&*(),.?":{}|<>\-_=+\[\]\\/;'`~]/.test(pw);
+    return (
+      pw.length >= 8 &&
+      /[A-Z]/.test(pw) &&
+      /[0-9]/.test(pw) &&
+      // include dash, underscore, equals, plus, brackets, slash, semicolon, `~ etc.
+      /[!@#$%^&*(),.?":{}|<>\-_=+\[\]\\/;'`~]/.test(pw)
+    );
   };
   const isValidDate = (d, m, y) => {
     const date = new Date(y, m - 1, d);
-    return date.getFullYear() == y && date.getMonth() == m - 1 && date.getDate() == d;
+    return (
+      date.getFullYear() == y && date.getMonth() == m - 1 && date.getDate() == d
+    );
   };
 
   // Safely parse date parts
-  const d = parseInt(day), m = parseInt(month), y = parseInt(year);
+  const d = parseInt(day),
+    m = parseInt(month),
+    y = parseInt(year);
 
   // Field validations
   if (!firstName || !isValidName(firstName)) {
-    return res.status(400).json({ error: 'First name must be 2-30 letters only' });
+    return res
+      .status(400)
+      .json({ error: "First name must be 2-30 letters only" });
   }
   if (!lastName || !isValidName(lastName)) {
-    return res.status(400).json({ error: 'Last name must be 2-30 letters only' });
+    return res
+      .status(400)
+      .json({ error: "Last name must be 2-30 letters only" });
   }
   if (!address || address.length < 5) {
-    return res.status(400).json({ error: 'Address must be at least 5 characters' });
+    return res
+      .status(400)
+      .json({ error: "Address must be at least 5 characters" });
   }
   if (!d || !m || !y || !isValidDate(d, m, y)) {
-    return res.status(400).json({ error: 'Invalid date of birth' });
+    return res.status(400).json({ error: "Invalid date of birth" });
   }
-  if (!gender || !['male', 'female'].includes(gender.toLowerCase())) {
-    return res.status(400).json({ error: 'Please select a gender' });
+  if (!gender || !["male", "female"].includes(gender.toLowerCase())) {
+    return res.status(400).json({ error: "Please select a gender" });
   }
   if (!mobileNumber || !isValidPhone(mobileNumber)) {
-    return res.status(400).json({ error: 'Phone number must be exactly 10 digits' });
+    return res
+      .status(400)
+      .json({ error: "Phone number must be exactly 10 digits" });
   }
   if (!email || !isValidEmail(email)) {
-    return res.status(400).json({ error: 'Please enter a valid email address' });
+    return res
+      .status(400)
+      .json({ error: "Please enter a valid email address" });
   }
   if (!password || !isValidPassword(password)) {
     return res.status(400).json({
-      error: 'Password must be at least 8 characters with at least one uppercase letter, one number, and one symbol'
+      error:
+        "Password must be at least 8 characters with at least one uppercase letter, one number, and one symbol",
     });
   }
   if (password !== confirmPassword) {
-    return res.status(400).json({ error: 'Passwords do not match' });
+    return res.status(400).json({ error: "Passwords do not match" });
   }
 
   // Age validation (minimum 13 years)
@@ -148,7 +181,7 @@ app.post('/api/signup', async (req, res) => {
   const age = Math.abs(ageDate.getUTCFullYear() - 1970);
 
   if (age < 13) {
-    return res.status(400).json({ error: 'You must be at least 13 years old' });
+    return res.status(400).json({ error: "You must be at least 13 years old" });
   }
 
   try {
@@ -158,111 +191,65 @@ app.post('/api/signup', async (req, res) => {
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING id, email, firstname, lastname
     `;
-    const values = [firstName, lastName, hashedPassword, mobileNumber, email, age, address, gender];
+    const values = [
+      firstName,
+      lastName,
+      hashedPassword,
+      mobileNumber,
+      email,
+      age,
+      address,
+      gender,
+    ];
 
     const result = await db.query(query, values);
     const user = result.rows[0];
 
     res.status(201).json({
-      message: 'User created successfully',
-      user: user
+      message: "User created successfully",
+      user: user,
     });
   } catch (error) {
-    console.error('Error during signup:', error);
-    if (error.code === '23505') {
-      if (error.constraint === 'users_email_key') {
-        return res.status(400).json({ error: 'Email already exists' });
+    console.error("Error during signup:", error);
+    if (error.code === "23505") {
+      if (error.constraint === "users_email_key") {
+        return res.status(400).json({ error: "Email already exists" });
       }
-      if (error.constraint === 'users_phonenumber_key') {
-        return res.status(400).json({ error: 'Phone number already exists' });
+      if (error.constraint === "users_phonenumber_key") {
+        return res.status(400).json({ error: "Phone number already exists" });
       }
     }
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-
-
-
-// app.post('/api/signup', async (req, res) => {
-//   const {
-//     firstName,
-//     lastName,
-//     address,
-//     day,
-//     month,
-//     year,
-//     gender,
-//     mobileNumber,
-//     email,
-//     password,
-//     confirmPassword
-//   } = req.body;
-
-//   if (password !== confirmPassword) {
-//     return res.status(400).json({ error: 'Passwords do not match' });
-//   }
-//   if (!['male', 'female'].includes(gender)) {
-//     return res.status(400).json({ error: 'Invalid gender' });
-//   }
-
-//   const birthDate = new Date(year, month - 1, day);
-//   const ageDiff = Date.now() - birthDate.getTime();
-//   const ageDate = new Date(ageDiff);
-//   const age = Math.abs(ageDate.getUTCFullYear() - 1970);
-
-//   try {
-//     const hashedPassword = await bcrypt.hash(password, saltRounds);
-//     const query = `
-//       INSERT INTO users (firstname, lastname, password, phonenumber, email, age, address, gender)
-//       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-//       RETURNING id, email, firstname, lastname
-//     `;
-//     const values = [firstName, lastName, hashedPassword, mobileNumber, email, age, address, gender];
-//     const result = await db.query(query, values);
-//     res.status(201).json({ message: 'User created successfully', user: result.rows[0] });
-//   } catch (error) {
-//     console.error('Error during signup:', error);
-//     if (error.code === '23505') {
-//       if (error.constraint === 'users_email_key') {
-//         return res.status(400).json({ error: 'Email already exists' });
-//       }
-//       if (error.constraint === 'users_phonenumber_key') {
-//         return res.status(400).json({ error: 'Phone number already exists' });
-//       }
-//     }
-//     res.status(500).json({ error: 'Internal server error' });
-//   }
-// });
-
-
-
-
-
-app.get('/getuser', async (req, res) => {
+app.get("/getuser", async (req, res) => {
   try {
     const userID = Number(req.query.userID);
-    if (!userID) return res.status(400).json({ error: 'userID is required' });
-    const response = await db.query('SELECT * FROM users WHERE id = $1', [userID]);
-    if (response.rowCount === 0) return res.status(404).json({ error: 'User not found' });
+    if (!userID) return res.status(400).json({ error: "userID is required" });
+    const response = await db.query("SELECT * FROM users WHERE id = $1", [
+      userID,
+    ]);
+    if (response.rowCount === 0)
+      return res.status(404).json({ error: "User not found" });
     res.json(response.rows[0]);
   } catch (error) {
-    console.error('Database error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Database error:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-app.post('/api/logout', (req, res) => {
-  req.session.destroy(err => {
-    if (err) return res.status(500).json({ error: 'Logout failed' });
-    res.clearCookie('connect.sid');
-    res.json({ message: 'Logged out' });
+app.post("/api/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) return res.status(500).json({ error: "Logout failed" });
+    res.clearCookie("connect.sid");
+    res.json({ message: "Logged out" });
   });
 });
 //fav
-app.get('/FavoriteOffers', getFav);
-app.post('/AddFavoriteOffers', AddFavoriteOffers);
-app.delete('/DeleteFavoriteOffer', DeleteFavoriteOffer);
+app.get("/FavoriteOffers", getFav);
+app.post("/AddFavoriteOffers", AddFavoriteOffers);
+app.delete("/DeleteFavoriteOffer", DeleteFavoriteOffer);
 
 // Offers endpoints
 app.get("/getOffer/:offerID", getOffer);
@@ -278,7 +265,7 @@ app.get("/api/notifications", getNotifications);
 app.get("/getchat", getChat2);
 app.get("/getchatcontent", getChatContent);
 app.post("/addchat", addChat);
-app.get("/getChatByUser",getChatByUser)
+app.get("/getChatByUser", getChatByUser);
 
 // Session info (for debugging)
 app.get("/sessionInfo", (req, res) => {
@@ -294,8 +281,8 @@ const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
 // Socket.io setup
@@ -310,7 +297,12 @@ io.on("connection", (socket) => {
 
   socket.on("Initialize", async ({ sender, receiver, offer }) => {
     try {
-      let chat = await getChats({ receiverID: receiver, senderID: sender, chatID: null, offerID: offer });
+      let chat = await getChats({
+        receiverID: receiver,
+        senderID: sender,
+        chatID: null,
+        offerID: offer,
+      });
       if (chat.length > 0) {
         chatID = chat[0].id;
       } else {
@@ -347,31 +339,33 @@ io.on("connection", (socket) => {
   });
 });
 
-
 // Add this middleware to check session
-app.get('/api/check-session', (req, res) => {
+app.get("/api/check-session", (req, res) => {
   if (!req.session.user) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
   res.json({ user: req.session.user });
 });
 // Get user data
-app.post('/api/account', async (req, res) => {
+app.post("/api/account", async (req, res) => {
   if (!req.session.user) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   try {
-    const dbase = await db.query(`
+    const dbase = await db.query(
+      `
       SELECT firstname, lastname, email, phonenumber, gender, address, age, encode(pfp, 'base64') AS profileimage 
       FROM users 
-      WHERE id = $1`, [req.session.user.id]);
+      WHERE id = $1`,
+      [req.session.user.id]
+    );
 
     if (dbase.rowCount === 0) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
     const user = dbase.rows[0];
-  
+
     res.json({
       fullName: `${user.firstname} ${user.lastname}`,
       email: user.email,
@@ -379,67 +373,27 @@ app.post('/api/account', async (req, res) => {
       gender: user.gender,
       address: user.address,
       age: user.age,
-      profileImage: user.profileimage ? `data:image/png;base64,${user.profileimage}` : null,
+      profileImage: user.profileimage
+        ? `data:image/png;base64,${user.profileimage}`
+        : null,
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to fetch user' });
+    res.status(500).json({ error: "Failed to fetch user" });
   }
 });
-
-
-
-
-// app.post('/api/account', async (req, res) => {
-//   const { userId } = req.body;
-  
-//   if (!userId) return res.status(400).json({ error: 'Missing userId' });
-
-//   try {
-//       const  dbase = await db.query(`
-//           SELECT firstname, lastname, email, phonenumber, gender, address, age, encode(pfp, 'base64') AS profileimage 
-//           FROM users 
-//           WHERE id = $1`, [userId]);
-
-//       if (dbase.rowCount === 0) {
-//         return res.status(404).json({ error: 'User not found' });
-       
-//       }
-//       const user = dbase.rows[0];
-  
-//       res.json({
-//           fullName: `${user.firstname} ${user.lastname}`,
-//           email: user.email,
-//           mobileNumber: user.phonenumber,
-//           gender: user.gender,
-//           address: user.address,
-//           age: user.age,
-//           profileImage: user.profileimage ? `data:image/png;base64,${user.profileimage}` : null,
-//       });
-//   } catch (err) {
-//       console.error(err);
-//       res.status(500).json({ error: 'Failed to fetch user' });
-//   }
-// });
-
 
 // Update user field
 app.post("/api/account/update", async (req, res) => {
   if (!req.session.user) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const {
-    fullName,
-    email,
-    mobileNumber,
-    gender,
-    address,
-    age,
-    password,
-  } = req.body;
+  const { fullName, email, mobileNumber, gender, address, age, password } =
+    req.body;
 
-  if (!req.session.user.id) return res.status(400).json({ error: "Missing userId" });
+  if (!req.session.user.id)
+    return res.status(400).json({ error: "Missing userId" });
 
   // same validators as signup
   const isValidName = (n) => /^[a-zA-Z\s]{2,30}$/.test(n);
@@ -456,19 +410,21 @@ app.post("/api/account/update", async (req, res) => {
     /[0-9]/.test(pw) &&
     /[!@#$%^&*(),.?":{}|<>\-_=+\[\]\\/;'`~]/.test(pw);
 
-    try {
-      if (fullName !== undefined) {
-        if (!isValidName(fullName)) {
-          return res.status(400).json({ error: "Name must be 2-30 letters and spaces only" });
-        }
-        const [first, ...rest] = fullName.split(" ");
-        const last = rest.join(" ") || "";
-        await db.query(
-          `UPDATE users SET firstname = $1, lastname = $2 WHERE id = $3`,
-          [first, last, req.session.user.id]
-        );
+  try {
+    if (fullName !== undefined) {
+      if (!isValidName(fullName)) {
+        return res
+          .status(400)
+          .json({ error: "Name must be 2-30 letters and spaces only" });
       }
-        if (email !== undefined) {
+      const [first, ...rest] = fullName.split(" ");
+      const last = rest.join(" ") || "";
+      await db.query(
+        `UPDATE users SET firstname = $1, lastname = $2 WHERE id = $3`,
+        [first, last, req.session.user.id]
+      );
+    }
+    if (email !== undefined) {
       if (!isValidEmail(email)) {
         return res.status(400).json({ error: "Please enter a valid email" });
       }
@@ -540,7 +496,82 @@ app.post("/api/account/update", async (req, res) => {
   }
 });
 
+// Upload profile image
+app.post("/api/account/upload-image", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
 
+  const { image } = req.body;
+  if (!image) return res.status(400).json({ error: "Missing image" });
+
+  try {
+    const base64Data = image.split(",")[1];
+    const buffer = Buffer.from(base64Data, "base64");
+    await db.query(`UPDATE users SET pfp = $1 WHERE id = $2`, [
+      buffer,
+      req.session.user.id,
+    ]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Image upload failed" });
+  }
+});
+
+// Delete profile image
+app.post("/api/account/delete-image", async (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  try {
+    await db.query(`UPDATE users SET pfp = NULL WHERE id = $1`, [
+      req.session.user.id,
+    ]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Image deletion failed" });
+  }
+});
+
+// Start server
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+// app.post('/api/account', async (req, res) => {
+//   const { userId } = req.body;
+
+//   if (!userId) return res.status(400).json({ error: 'Missing userId' });
+
+//   try {
+//       const  dbase = await db.query(`
+//           SELECT firstname, lastname, email, phonenumber, gender, address, age, encode(pfp, 'base64') AS profileimage
+//           FROM users
+//           WHERE id = $1`, [userId]);
+
+//       if (dbase.rowCount === 0) {
+//         return res.status(404).json({ error: 'User not found' });
+
+//       }
+//       const user = dbase.rows[0];
+
+//       res.json({
+//           fullName: `${user.firstname} ${user.lastname}`,
+//           email: user.email,
+//           mobileNumber: user.phonenumber,
+//           gender: user.gender,
+//           address: user.address,
+//           age: user.age,
+//           profileImage: user.profileimage ? `data:image/png;base64,${user.profileimage}` : null,
+//       });
+//   } catch (err) {
+//       console.error(err);
+//       res.status(500).json({ error: 'Failed to fetch user' });
+//   }
+// });
 
 // app.post('/api/account/update', async (req, res) => {
 //   const { userId, fullName, email, mobileNumber, gender, address, age, password } = req.body;
@@ -580,29 +611,6 @@ app.post("/api/account/update", async (req, res) => {
 //   }
 // });
 
-// Upload profile image
-app.post('/api/account/upload-image', async (req, res) => {
-  if (!req.session.user) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  const { image } = req.body;
-  if (!image) return res.status(400).json({ error: 'Missing image' });
-
-  try {
-    const base64Data = image.split(',')[1];
-    const buffer = Buffer.from(base64Data, 'base64');
-    await db.query(`UPDATE users SET pfp = $1 WHERE id = $2`, [buffer, req.session.user.id]);
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Image upload failed' });
-  }
-});
-
-
-
-
 // app.post('/api/account/upload-image', async (req, res) => {
 //   const { userId, image } = req.body;
 
@@ -620,24 +628,6 @@ app.post('/api/account/upload-image', async (req, res) => {
 //   }
 // });
 
-// Delete profile image
-app.post('/api/account/delete-image', async (req, res) => {
-  if (!req.session.user) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  try {
-    await db.query(`UPDATE users SET pfp = NULL WHERE id = $1`, [req.session.user.id]);
-    res.json({ success: true });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Image deletion failed' });
-  }
-});
-
-
-
-
 // app.post('/api/account/delete-image', async (req, res) => {
 //   const { userId } = req.body;
 
@@ -652,9 +642,53 @@ app.post('/api/account/delete-image', async (req, res) => {
 //   }
 // });
 
+// app.post('/api/signup', async (req, res) => {
+//   const {
+//     firstName,
+//     lastName,
+//     address,
+//     day,
+//     month,
+//     year,
+//     gender,
+//     mobileNumber,
+//     email,
+//     password,
+//     confirmPassword
+//   } = req.body;
 
+//   if (password !== confirmPassword) {
+//     return res.status(400).json({ error: 'Passwords do not match' });
+//   }
+//   if (!['male', 'female'].includes(gender)) {
+//     return res.status(400).json({ error: 'Invalid gender' });
+//   }
 
-// Start server
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+//   const birthDate = new Date(year, month - 1, day);
+//   const ageDiff = Date.now() - birthDate.getTime();
+//   const ageDate = new Date(ageDiff);
+//   const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+
+//   try {
+//     const hashedPassword = await bcrypt.hash(password, saltRounds);
+//     const query = `
+//       INSERT INTO users (firstname, lastname, password, phonenumber, email, age, address, gender)
+//       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+//       RETURNING id, email, firstname, lastname
+//     `;
+//     const values = [firstName, lastName, hashedPassword, mobileNumber, email, age, address, gender];
+//     const result = await db.query(query, values);
+//     res.status(201).json({ message: 'User created successfully', user: result.rows[0] });
+//   } catch (error) {
+//     console.error('Error during signup:', error);
+//     if (error.code === '23505') {
+//       if (error.constraint === 'users_email_key') {
+//         return res.status(400).json({ error: 'Email already exists' });
+//       }
+//       if (error.constraint === 'users_phonenumber_key') {
+//         return res.status(400).json({ error: 'Phone number already exists' });
+//       }
+//     }
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// });

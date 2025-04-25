@@ -21,7 +21,7 @@ import {
 import { getNotifications } from "./Controllers/notification.js";
 import { getChat2, getChatContent, addChat, getChats,getChatByUser } from "./Controllers/chat.js";
 import { getMyOffers } from "./Controllers/dashboard.js";
-
+import { getFav, AddFavoriteOffers, DeleteFavoriteOffer } from './Controllers/fav.js';
 // Load environment variables
 env.config();
 const app = express();
@@ -236,89 +236,7 @@ app.post('/api/signup', async (req, res) => {
 // });
 
 
-app.get("/FavoriteOffers", async (req, res) => {
-  const userID = req.session?.user?.id;
-  if (!userID) return res.status(401).json({ error: "Not logged in" });
-  try {
-    const result = await db.query(
-      `
-      SELECT
-        o.id,
-        o.landTitle       AS "landTitle",
-        o.landSize        AS "landSize",
-        o.landLocation    AS "landLocation",
-        o.landLeasePrice  AS "landLeasePrice",
-        o.phoneNumber     AS "phoneNumber",
-        COALESCE(
-          ('data:image/jpeg;base64,' || encode(lp.picture, 'base64')),
-          ''
-        ) AS "image"
-      FROM FavoriteOffers f
-      JOIN offers o
-        ON f.offerID = o.id
-      LEFT JOIN LATERAL (
-        SELECT picture
-        FROM landPicture
-        WHERE landid = o.id
-        LIMIT 1
-      ) lp ON true
-      WHERE f.farmerID = $1
-      `,       // ← removed ORDER BY
-      [userID]
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error("Error fetching favorite offers:", err);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
 
-
-app.post("/AddFavoriteOffers", async (req, res) => {
-  const userID = req.session.user.id;
-  const { offerID } = req.body; // ✅ Correct source
-
-  //console.log(userID, "///", offerID);
-
-  if (!userID || !offerID) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-
-  try {
-    await db.query(
-      "INSERT INTO FavoriteOffers (farmerID, offerID) VALUES ($1, $2) ON CONFLICT DO NOTHING",
-      [userID, offerID] // ✅ Correct way to pass params
-    );
-    res.status(200).json({ message: "Favorite offer added successfully" });
-    console.log("Successfully added to favorite offer");
-  } catch (error) {
-    console.error("Error adding favorite offer:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-app.delete("/DeleteFavoriteOffer", async (req, res) => {
- // console.log("kkkk :", req.session.user.id);
-  const userID = req.session.user.id;
-  const { offerID } = req.body;
-
-  if (!userID || !offerID) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-
-
-  try {
-    await db.query(
-      "DELETE FROM FavoriteOffers WHERE farmerID = $1 AND offerID = $2",
-      [userID, offerID]
-    );
-    res.status(200).json({ message: "Favorite offer deleted successfully" });
-    console.log("Successfully deleted from favorite offer");
-  } catch (error) {
-    console.error("Error deleting favorite offer:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
 
 
 app.get('/getuser', async (req, res) => {
@@ -341,6 +259,10 @@ app.post('/api/logout', (req, res) => {
     res.json({ message: 'Logged out' });
   });
 });
+//fav
+app.get('/FavoriteOffers', getFav);
+app.post('/AddFavoriteOffers', AddFavoriteOffers);
+app.delete('/DeleteFavoriteOffer', DeleteFavoriteOffer);
 
 // Offers endpoints
 app.get("/getOffer/:offerID", getOffer);

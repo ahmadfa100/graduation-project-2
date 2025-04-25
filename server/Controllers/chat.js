@@ -3,16 +3,18 @@ import db from "../db.js";
 
 export async function getChat2(req,res) {
   const { offerID, userID } = req.query;
-
+  if (!req.session.user?.id) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
   if (!offerID || !userID) {
       return res.status(400).json({ error: 'Missing offerID or userID' });
   }
-
+ const currentUserID= req.session.user.id;
   try {
       const result = await db.query(
           `SELECT * FROM Chats 
-           WHERE offerID = $1 AND (senderID = $2 OR receiverID = $2)`,
-          [offerID, userID]
+           WHERE offerID = $1 AND ((senderID = $2 AND receiverID = $3)OR(senderID = $3 AND receiverID = $2))`,
+          [offerID,currentUserID ,userID]
       );
 
       if (result.rows.length === 0) {

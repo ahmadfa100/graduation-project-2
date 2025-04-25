@@ -23,7 +23,7 @@ import {
   getChat2,
   getChatContent,
   addChat,
-  getChats,
+  initSocket,
   getChatByUser,
 } from "./Controllers/chat.js";
 import { getMyOffers } from "./Controllers/dashboard.js";
@@ -64,7 +64,6 @@ app.use(
     },
   })
 );
-
 // ——————————————
 // Session‐update endpoint
 // ——————————————
@@ -286,58 +285,7 @@ const io = new Server(server, {
 });
 
 // Socket.io setup
-io.on("connection", (socket) => {
-  console.log("New client connected:", socket.id);
-  let chatID = 0;
-
-  socket.on("join", (room) => {
-    socket.join(room);
-    console.log(`User joined room: ${room}`);
-  });
-
-  socket.on("Initialize", async ({ sender, receiver, offer }) => {
-    try {
-      let chat = await getChats({
-        receiverID: receiver,
-        senderID: sender,
-        chatID: null,
-        offerID: offer,
-      });
-      if (chat.length > 0) {
-        chatID = chat[0].id;
-      } else {
-        const result = await db.query(
-          "INSERT INTO chats (senderID, receiverID, offerID) VALUES ($1, $2, $3) RETURNING id",
-          [sender, receiver, offer]
-        );
-        chatID = result.rows[0].id;
-      }
-      socket.emit("InitialMessages", chatID);
-    } catch (error) {
-      console.error("Error initializing chat:", error);
-    }
-  });
-
-  socket.on("sendMessage", async ({ message, room, sender }) => {
-    if (!chatID) return;
-    if (typeof message === "string") {
-      await db.query(
-        "INSERT INTO ChatContents (chatID, senderID, contentText) VALUES ($1, $2, $3)",
-        [chatID, sender, message]
-      );
-    } else {
-      await db.query(
-        "INSERT INTO ChatContents (chatID, senderID, contentFile) VALUES ($1, $2, $3)",
-        [chatID, sender, message]
-      );
-    }
-    socket.to(room).emit("RecivedMessage", { message });
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Client disconnected:", socket.id);
-  });
-});
+initSocket(io);
 
 // Add this middleware to check session
 app.get("/api/check-session", (req, res) => {

@@ -50,7 +50,7 @@ function MainChat( props) {
   const fetchChatID = async (offerID, userID) => {
     try {
       const response = await axios.get('http://localhost:3001/getchat', {
-        params: { offerID, userID },
+        params: { offerID, userID }, withCredentials: true
       });
   
       console.log('Chat dtat is:', response.data);

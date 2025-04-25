@@ -1,7 +1,7 @@
 import { send } from "process";
 import db from "../db.js";
 
-export async function getChatID(req,res) {
+export async function getChat2(req,res) {
   const { offerID, userID } = req.query;
 
   if (!offerID || !userID) {
@@ -10,7 +10,7 @@ export async function getChatID(req,res) {
 
   try {
       const result = await db.query(
-          `SELECT ID FROM Chats 
+          `SELECT * FROM Chats 
            WHERE offerID = $1 AND (senderID = $2 OR receiverID = $2)`,
           [offerID, userID]
       );
@@ -19,9 +19,9 @@ export async function getChatID(req,res) {
           return res.status(404).json({ error: 'Chat not found' });
       }
 
-      res.json({ chatID: result.rows[0].id });
+      res.json(result.rows[0] );
   } catch (err) {
-      console.error('Error fetching chat ID:', err);
+      console.error('Error fetching chat :', err);
       res.status(500).json({ error: 'Internal server error' });
   }
 }

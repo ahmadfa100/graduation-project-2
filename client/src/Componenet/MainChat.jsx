@@ -10,12 +10,12 @@ const socket = io("http://localhost:3001", { autoConnect: false });
 
 function MainChat( props) {
   ////
-console.log("from main : ",props.chatListData)
+//console.log("from main : ",props.chatListData)
   ///
   const [message, setMessage] = useState(null);
   const [messages, setMessages] = useState([]);
   const [offer, setOffer] = useState(null);
-  const [offerOwner, setOfferOwner] = useState(null);
+  const [otherParticipant, setOtherParticipant] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isChatLoding, setChatLoading] = useState(true);
   const [isOfferLoding, setOfferLoding] = useState(true);
@@ -36,7 +36,7 @@ console.log("from main : ",props.chatListData)
       }
     };
     getChatID();
-  }, [offerID, ReceiverID]);
+  }, [offerID, ReceiverID,sessiondata]);
   
 
 
@@ -49,12 +49,14 @@ console.log("from main : ",props.chatListData)
 // },[room]);
   const fetchChatID = async (offerID, userID) => {
     try {
-      const response = await axios.get('http://localhost:3001/getchatID', {
+      const response = await axios.get('http://localhost:3001/getchat', {
         params: { offerID, userID },
       });
   
-      //console.log('Chat ID is:', response.data.chatID);
-      return response.data.chatID;
+      console.log('Chat dtat is:', response.data);
+    
+      fetchParticipant(response.data.receiverid,response.data.senderid);
+      return response.data.id;
     } catch (error) {
       if (error.response) {
        
@@ -65,7 +67,28 @@ console.log("from main : ",props.chatListData)
       return null;
     }
   };
-
+  async function fetchParticipant(receiver,sender) {
+    try {
+      const otherID = sessiondata.userID === receiver ? sender : receiver;
+      console.log("otherID :"+otherID);
+      const response = await axios.get(`http://localhost:3001/getUser/`, {
+        params: { userID: otherID },
+      });
+//console.log("here now :",response.data)
+      if (response.data.error) {
+        console.log("Error fetching owner:", response.data.error);
+        return;
+      }
+      if (response.data) {
+        console.log("other data: "+response.data);
+        setOtherParticipant(response.data);
+        setUserLoading(false);
+        // console.log("owner k",otherParticipant.firstname);
+      }
+    } catch (error) {
+      console.error("Error fetching owner:", error);
+    }
+  }
 
 
   useEffect(() => {
@@ -95,7 +118,7 @@ useEffect(()=>{
 fetchSession();
 },[]);
   useEffect(() => {
-    console.log("enter");
+    //console.log("enter");
     if (!sessionReady || sessiondata === null) return;
     //console.log("vaild");
     setMessages([]);
@@ -151,7 +174,7 @@ fetchSession();
         userID:sessionResponse.data.user.id
       });  
         setSessionReady(true);  
-        console.log("Session data:", user);
+        //console.log("Session data:", user);
       } else {
         console.warn("No user found in session.");
       }
@@ -258,34 +281,16 @@ fetchSession();
       if (response.data) {
         setOffer(response.data);
         setOfferLoding(false);
-        console.log("Offer received:", response.data);
+        //console.log("Offer received:", response.data);
       }
       // owner
 
-      fetchOfferOwner(response.data.offer.ownerid);
+     
     } catch (error) {
       console.error("Error fetching offer:", error);
     }
   }
-  async function fetchOfferOwner(ReceiverID) {
-    try {
-      const response = await axios.get(`http://localhost:3001/getUser/`, {
-        params: { userID: ReceiverID },
-      });
-console.log("here now :",response.data)
-      if (response.data.error) {
-        console.log("Error fetching owner:", response.data.error);
-        return;
-      }
-      if (response.data) {
-        setOfferOwner(response.data);
-        setUserLoading(false);
-        // console.log("owner k",offerOwner.firstname);
-      }
-    } catch (error) {
-      console.error("Error fetching owner:", error);
-    }
-  }
+
 
   const sendMessage = () => {
     document
@@ -334,7 +339,7 @@ console.log("here now :",response.data)
             <div className="chat-owner">
               {" "}
               <h4>
-                {offerOwner.firstname || " "} {offerOwner.lastname || " "}
+                {otherParticipant.firstname || " "} {otherParticipant.lastname || " "}
               </h4>
             </div>
           </div>

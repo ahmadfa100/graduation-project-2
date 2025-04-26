@@ -43,6 +43,11 @@ async function fetchChatsList() {
   //console.log("chatList att: ",chats.data);
   setIsChatListReady(false)
  }catch(err){
+  if (err.response && err.response.status === 401) {
+    console.log("Not authenticated! Redirecting to login...");
+    window.location.href = '/login';
+    return; 
+  }
   console.log("Error while fetch chatlists",err);
  }
 }

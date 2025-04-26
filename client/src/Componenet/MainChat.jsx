@@ -86,6 +86,11 @@ function MainChat( props) {
         // console.log("owner k",otherParticipant.firstname);
       }
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.log("Not authenticated! Redirecting to login...");
+        window.location.href = '/login';
+        return; 
+      }
       console.error("Error fetching owner:", error);
     }
   }
@@ -180,6 +185,11 @@ fetchSession();
       }
      
     } catch (err) {
+      if (err.response && err.response.status === 401) {
+        console.log("Not authenticated! Redirecting to login...");
+        window.location.href = '/login';
+        return; 
+      }
       console.error("Failed to fetch session info:", err);
     }
   }
@@ -263,6 +273,11 @@ fetchSession();
         setChatLoading(false);
       }
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.log("Not authenticated! Redirecting to login...");
+        window.location.href = '/login';
+        return; 
+      }
       setChatLoading(false);
       console.error("Error fetching chat:", error);
     }
@@ -287,6 +302,11 @@ fetchSession();
 
      
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.log("Not authenticated! Redirecting to login...");
+        window.location.href = '/login';
+        return; 
+      }
       console.error("Error fetching offer:", error);
     }
   }

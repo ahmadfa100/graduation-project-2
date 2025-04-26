@@ -68,6 +68,11 @@ function UpdateOffer() {
       })));
         setIsLoading(false);
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.log("Not authenticated! Redirecting to login...");
+        window.location.href = '/login';
+        return; 
+      }
       console.error("Error fetching offer:", error);
     }
   
@@ -90,6 +95,11 @@ function UpdateOffer() {
         
       });
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.log("Not authenticated! Redirecting to login...");
+        window.location.href = '/login';
+        return; 
+      }
       console.error("Error updating offer:", error);
       notifications.show("Error updating offer. Please try again.", {
         severity: "error",

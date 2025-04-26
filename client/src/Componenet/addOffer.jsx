@@ -64,14 +64,20 @@ export default function AddOffer() {
     images.forEach(({ file }) => formData.append("images", file));
 
     try {
-      const response = await axios.post(
+       await axios.post(
         "http://localhost:3001/addOffer",
         formData,
-        { withCredentials: true }         // ← include session cookie
+        { withCredentials: true }   
       );
-      console.log(response.data);
-      notifications.show('Offer saved successfully!', { severity: 'success' });
+     // console.log(response.data);
+     
+      notifications.show('Offer saved successfully!', { severity: 'success', autoHideDuration:3000});
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.log("Not authenticated! Redirecting to login...");
+        window.location.href = '/login';
+        return; // Stop here
+      }
       console.error("Error saving offer:", error);
       notifications.show('Error saving offer. Please try again.', { severity: 'error' });
     }
@@ -85,7 +91,7 @@ export default function AddOffer() {
           {/* NO more hidden landOwnerID input! */}
           <div className="group-input">
           
-            <input type="text" placeholder="Enter offer title" name="offer_title" minlength="5" maxlength="100" error="hi"/>
+            <input type="text" placeholder="Enter offer title" name="offer_title" minLength="5" maxLength="100" error="hi"/>
             <UnitInput type="number" unit="m²" message="Enter the number of dunums" name="size" />
 
             <div className="detailed-input">
@@ -94,7 +100,7 @@ export default function AddOffer() {
             </div>
 
             <UnitInput type="number" unit="JOD" message="Enter price" name="price" min="1" max="100000000" />
-            <input type="text" placeholder="Enter location" name="location"  minlength="2" maxlength="100" />
+            <input type="text" placeholder="Enter location" name="location"  minLength="2" maxLength="100" />
            
         
             <textarea
@@ -109,13 +115,15 @@ export default function AddOffer() {
 
             <div className="center">
               <label className="file-upload">
-                Click here to upload images (you can select multiple)
+              Recommended: select 4 images 
+              (multiple selection allowed)
                 <input
                   type="file"
                   multiple
                   hidden
                   accept="image/*"
                   onChange={handleImageUpload}
+                  required
                 />
               </label>
 

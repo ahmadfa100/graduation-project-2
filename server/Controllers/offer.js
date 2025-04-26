@@ -87,14 +87,15 @@ export const addOffer = async (req, res) => {
 };
 
 export const updateOffer = async (req, res) => {
+  if (!req.session.user?.id) {    
+    console.log("Not authenticated ):" );
+   return res.status(401).json({ error: "Not authenticated" });
+ }
   try {
     const { offer_title, size, years, months, price, location, description } = req.body;
     const { offerID } = req.params;
-    if (!req.session.user?.id) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-    const landOwnerID =req.session?.user?.id;
-    if (!offerID || !offer_title || !size || !location || !description || !price || !years || !months || !landOwnerID) {
+    const landOwnerID =req.session.user.id;
+    if (!offerID || !offer_title || !size || !location || !description || !price || !years || !months ) {
       return res.status(400).json({ error: "Missing required fields" });
     }
     

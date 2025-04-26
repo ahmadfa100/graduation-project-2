@@ -17,6 +17,11 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
 
   const [favoriteOffersList, setFavoriteOffersList] = useState([]);
   const [likedOffers, setLikedOffers] = useState([]);
+const [useID,setUserID]=useState();
+
+useEffect(()=>{
+  fetchSession();
+},[]);
 
   const handleClear = () => {
     setCity("");
@@ -25,7 +30,27 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
     setOffset(0);
     fetchOffers(false, 0);
   };
-
+  async function fetchSession() {
+    try {
+      const sessionResponse = await axios.get(`http://localhost:3001/sessionInfo`, {
+        withCredentials: true, 
+      });
+      const user = sessionResponse.data.user;
+  
+      if (user) {
+      setUserID(
+        sessionResponse.data.user.id
+      );  
+        //console.log("Session data:", user);
+      } else {
+        console.warn("No user found in session.");
+      }
+     
+    } catch (err) {
+     
+      console.error("Failed to fetch session info:", err);
+    }
+  }
   async function fetchFavoriteOfferList() {
     try {
       const response = await axios.get("http://localhost:3001/FavoriteOffers", {
@@ -33,6 +58,7 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
       });
       setFavoriteOffersList(response.data);
     } catch (error) {
+    
       console.error("Error fetching favorite offer:", error);
     }
   }
@@ -84,8 +110,9 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
     setOffset(newOffset);
     fetchOffers(true, newOffset);
   };
-
+console.log("Outside use effect :",useID);
   return (
+   
     <div className="offers-section">
       <h2 className="section-title">Available Offers</h2>
 
@@ -187,82 +214,87 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
       {/* Offers List */}
       <div className="offers-list">
         {offers.map((offer) => (
+          useID!==offer.ownerid&&
           <div
-            key={offer.id}
-            className="offer-item"
-            onClick={() => navigate(`/OfferDetails/${offer.id}`)}
-          >
-            <div className="offer-image-container">
-              <img src={offer.image} alt={offer.name} className="offer-image" />
+          key={offer.id}
+          className="offer-item"
+          onClick={() => navigate(`/OfferDetails/${offer.id}`)}
+        >
+          <div className="offer-image-container">
+            <img src={offer.image} alt={offer.name} className="offer-image" />
+          </div>
+          <div className="offer-details">
+            <div className="offer-header">
+              <h3 className="offer-title">{offer.landtitle}</h3>
+              <span className="offer-price">{offer.landleaseprice}</span>
             </div>
-            <div className="offer-details">
-              <div className="offer-header">
-                <h3 className="offer-title">{offer.landtitle}</h3>
-                <span className="offer-price">{offer.landleaseprice}</span>
-              </div>
-              <p className="offer-subtitle">
-                Land area: {offer.landsize}, location: {offer.landlocation}
-              </p>
-              <div className="offer-actions">
-                <button
-                  className="action-button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    window.location.href = `tel:${offer.PhoneNumber}`;
-                  }}
-                >
-                  <FaPhone />
-                </button>
-                <button
-                  className="action-button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(`/chat/${offer.id}/${offer.ownerid}`);
-                  }}
-                >
-                  <FaComments />
-                </button>
-                <button
-                  className="action-button favorite-button"
-                  onClick={async (e) => {
-                    e.stopPropagation();
+            <p className="offer-subtitle">
+              Land area: {offer.landsize}, location: {offer.landlocation}
+            </p>
+            <div className="offer-actions">
+              <button
+                className="action-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.location.href = `tel:${offer.PhoneNumber}`;
+                }}
+              >
+                <FaPhone />
+              </button>
+              <button
+                className="action-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/chat/${offer.id}/${offer.ownerid}`);
+                }}
+              >
+                <FaComments />
+              </button>
+              <button
+                className="action-button favorite-button"
+                onClick={async (e) => {
+                  e.stopPropagation();
 
-                    const isLiked = likedOffers.includes(offer.id);
+                  const isLiked = likedOffers.includes(offer.id);
 
-                    setLikedOffers((prev) =>
-                      isLiked
-                        ? prev.filter((id) => id !== offer.id)
-                        : [...prev, offer.id]
-                    );
+                  setLikedOffers((prev) =>
+                    isLiked
+                      ? prev.filter((id) => id !== offer.id)
+                      : [...prev, offer.id]
+                  );
 
-                    try {
-                      if (!isLiked) {
-                        await axios.post(
-                          "http://localhost:3001/AddFavoriteOffers",
-                          { offerID: offer.id },
-                          { withCredentials: true }
-                        );
-                      } else {
-                        await axios.delete(
-                          "http://localhost:3001/DeleteFavoriteOffer",
-                          {
-                            data: { offerID: offer.id },
-                            withCredentials: true,
-                          }
-                        );
-                      }
-                    } catch (err) {
-                      console.error("Favorite toggle error:", err);
+                  try {
+                    if (!isLiked) {
+                      await axios.post(
+                        "http://localhost:3001/AddFavoriteOffers",
+                        { offerID: offer.id },
+                        { withCredentials: true }
+                      );
+                    } else {
+                      await axios.delete(
+                        "http://localhost:3001/DeleteFavoriteOffer",
+                        {
+                          data: { offerID: offer.id },
+                          withCredentials: true,
+                        }
+                      );
                     }
+                  } catch (err) {
+                    if (err.status === 401) {
+                     
+                      window.location.href = '/login';
+                    }
+                    console.error("Favorite toggle error:", err);
+                  }
 
-                    if (toggleFavorite) toggleFavorite(offer.id);
-                  }}
-                >
-                  {likedOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
-                </button>
-              </div>
+                  if (toggleFavorite) toggleFavorite(offer.id);
+                }}
+              >
+                {likedOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
+              </button>
             </div>
           </div>
+        </div>
         ))}
       </div>
 
@@ -277,3 +309,4 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
 }
 
 export default OffersSection;
+

@@ -82,10 +82,12 @@ function UpdateOffer() {
     });
 
     try {
-      await axios.put(`http://localhost:3001/updateOffer/${offerID}`, formData);
+      await axios.put(`http://localhost:3001/updateOffer/${offerID}`  , formData,{ withCredentials: true } );
       notifications.show("Offer updated successfully!", {
         severity: "success",
         autoHideDuration: 3000,
+
+        
       });
     } catch (error) {
       console.error("Error updating offer:", error);

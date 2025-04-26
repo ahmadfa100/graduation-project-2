@@ -23,7 +23,7 @@ export const getOffer = async (req, res) => {
   }
 };
 
-// POST /addOffer
+
 export const addOffer = async (req, res) => {
   try {
  
@@ -47,14 +47,12 @@ export const addOffer = async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // 3) Compute duration & insert landowner record
     const leaseDuration = parseInt(years) * 12 + parseInt(months);
     await db.query(
       "INSERT INTO Landowners (ID) VALUES ($1) ON CONFLICT (ID) DO NOTHING",
       [landOwnerID]
     );
 
-    // 4) Insert offer
     const addOfferResponse = await db.query(
       `INSERT INTO offers
          (landTitle, landSize, landLocation, offerDescription, landLeasePrice, leaseDuration, OwnerID,phoneNumber)
@@ -73,7 +71,7 @@ export const addOffer = async (req, res) => {
     );
     const offerId = addOfferResponse.rows[0].id;
 
-    // 5) Save images
+  
     for (const file of req.files) {
       await db.query(
         "INSERT INTO landPicture (landID, picture) VALUES ($1, $2)",
@@ -88,12 +86,14 @@ export const addOffer = async (req, res) => {
   }
 };
 
-// PUT /updateOffer/:offerID
 export const updateOffer = async (req, res) => {
   try {
-    const { offer_title, size, years, months, price, location, description, landOwnerID } = req.body;
+    const { offer_title, size, years, months, price, location, description } = req.body;
     const { offerID } = req.params;
-
+    if (!req.session.user?.id) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    const landOwnerID =req.session?.user?.id;
     if (!offerID || !offer_title || !size || !location || !description || !price || !years || !months || !landOwnerID) {
       return res.status(400).json({ error: "Missing required fields" });
     }

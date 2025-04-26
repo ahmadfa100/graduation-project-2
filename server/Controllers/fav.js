@@ -1,18 +1,22 @@
 import db from "../db.js";
 export const getFav= async (req, res) => {
     console.log("getfav");
-  const userID = req.session?.user?.id;
+ 
   const {offerID}=req.query;
-    if (!userID) {
-      return res.status(401).json({ error: "Not logged in" });
-    }
+  if (!req.session.user?.id) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  const userID = req?.session?.user?.id;
     if(!offerID){
       const result = await db.query("SELECT * FROM FavoriteOffers WHERE farmerID=($1)",[userID]);
-     console.log("ttt");
-  console.log("rows: ",result.rows);
+     //console.log("ttt");
+     //console.log("rows: ",result.rows);
       return res.status(200).json(result.rows);
     }
-  
+    if (!req.session.user?.id) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    
     try {
       const result = await db.query("SELECT * FROM FavoriteOffers WHERE offerID=($1) AND farmerID=($2)",[offerID,userID]);
      res.json(result.rows);
@@ -24,19 +28,22 @@ export const getFav= async (req, res) => {
   
   
   export const AddFavoriteOffers =async (req, res) => {
-    const userID = req.session.user.id;
-    const { offerID } = req.body; // ✅ Correct source
-  
+    
+    const { offerID } = req.body; 
+    if (!req.session.user?.id) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
     //console.log(userID, "///", offerID);
   
-    if (!userID || !offerID) {
+    if ( !offerID) {
       return res.status(400).json({ error: "Missing required fields" });
     }
+    const userID = req?.session?.user?.id;
   
     try {
       await db.query(
         "INSERT INTO FavoriteOffers (farmerID, offerID) VALUES ($1, $2) ON CONFLICT DO NOTHING",
-        [userID, offerID] // ✅ Correct way to pass params
+        [userID, offerID] 
       );
       res.status(200).json({ message: "Favorite offer added successfully" });
       console.log("Successfully added to favorite offer");
@@ -48,13 +55,16 @@ export const getFav= async (req, res) => {
   
   export const DeleteFavoriteOffer= async (req, res) => {
    // console.log("kkkk :", req.session.user.id);
-    const userID = req.session.user.id;
-    const { offerID } = req.body;
   
-    if (!userID || !offerID) {
+    const { offerID } = req.body;
+    if (!req.session.user?.id) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+    
+    if ( !offerID) {
       return res.status(400).json({ error: "Missing required fields" });
     }
-  
+    const userID = req?.session?.user?.id;
   
     try {
       await db.query(

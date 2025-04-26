@@ -4,6 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useParams } from "react-router-dom";
 function UnitInput(props) {
   return (
     <div className="unit-Input">
@@ -23,7 +24,7 @@ function UnitInput(props) {
 }
 
 function UpdateOffer() {
-  const offerID = 5;
+  const {offerID}=useParams(); 
   const [isLoading, setIsLoading] = useState(true);
   const [form, setForm] = useState({});
   const notifications = useNotifications();
@@ -101,8 +102,6 @@ function UpdateOffer() {
         <h3>Land Lease Information</h3>
       { isLoading? (   <ClipLoader color="green" size={50}    />):
         <form onSubmit={UpdateOfferSubmit}>
-     
-        <input type="hidden" name="landOwnerID" value="1" />
         <div className="group-input">
           <input className="textInput" type="text" placeholder="Enter offer title" name="offer_title" defaultValue={form.landtitle} minLength="5" maxLength="100" required />
           <UnitInput type="number" unit="m²" message="Enter land size" name="size" defaultValue={form.landsize} />

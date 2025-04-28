@@ -37,7 +37,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/homepage" element={<HomePage />} />
-                    <Route path="/OfferDetails/:offerID" element={<OfferDetails />} />
+                    <Route path="/OfferDetails/:offerID" element={ <NotificationsProvider><OfferDetails /></NotificationsProvider>} />
                     <Route path="/education" element={<Educational />} />
                     <Route path="/article/:id" element={<ArticleDetail />} />
                     <Route
@@ -78,16 +78,7 @@ function App() {
                         </NotificationsProvider>
                       }
                     />
-                    <Route
-                      path="/OfferDetails"
-                      element={
-                        <NotificationsProvider>
-                           <div className="p-10">
-                          <OfferDetails />
-                        </div>
-                      </NotificationsProvider>
-                      }
-                    />
+                  
                   </Routes>
                 </div>
                 <Footer />

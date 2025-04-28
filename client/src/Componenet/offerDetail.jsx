@@ -12,9 +12,10 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import "../style/offerdetail.css";
-import { Alert } from '@mui/material';
+import { useNotifications } from '@toolpad/core/useNotifications';
 
 const EcommerceSlider = () => {
+ 
   const { offerID } = useParams();  
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -24,6 +25,7 @@ const EcommerceSlider = () => {
   
   useEffect(() => {
     fetchoffer();
+    
    }, []);
    async function fetchoffer() {
      
@@ -106,10 +108,14 @@ const EcommerceSlider = () => {
   );
 };
 function Details(props) {
-
+  const [userID,setUserID]= useState();
+  const notifications = useNotifications();
   const[isLiked,setIsLiked]=useState(true);
   const navigate = useNavigate();
   //console.log("detail props: ",props);
+  useEffect(()=>{
+    fetchSession();
+  },[]);
 
   useEffect(() => {
     async function checkFavorite() {
@@ -125,8 +131,30 @@ function Details(props) {
     }
   
     checkFavorite();
-  }, [props.id]);
+  }, [props.id,isLiked]);
   
+  async function fetchSession() {
+    try {
+      const sessionResponse = await axios.get(`http://localhost:3001/sessionInfo`, {
+        withCredentials: true, 
+      });
+      const user = sessionResponse.data.user;
+  
+      if (user) {
+      setUserID(
+        sessionResponse.data.user.id
+      );  
+        //console.log("Session data:", user);
+      } else {
+        console.warn("No user found in session.");
+      }
+     
+    } catch (err) {
+     
+      console.error("Failed to fetch session info:", err);
+    }
+  }
+
   async function fetchFavoriteOffer(offerID) {
     try {
       const response = await axios.get("http://localhost:3001/FavoriteOffers", {
@@ -174,7 +202,7 @@ try {
   console.log("Sending rent request:", { props});
 
   const response = await axios.post("http://localhost:3001/rentRequest/",{ offerID :props.id,landOwner:(props.ownerid) },{ withCredentials: true });
-  
+  notifications.show('Offer reserved successfully!', { severity: 'success', autoHideDuration:3000});
   console.log('Created deal:',response.data);
 } catch (error) {
   console.error('Error creating rental deal:', error);
@@ -187,11 +215,9 @@ try {
    
     if(error.response&&error.response.status ===409){
 console.log("409");
-      return( 
-         <Alert severity="success">
-        This is a success alert — check it out!
-      </Alert>); 
+notifications.show('You have already send the request.', { severity: 'error', autoHideDuration:3000});
     }
+    notifications.show('Somthing went wrong', { severity: 'error', autoHideDuration:3000});
 }
  }
   return (
@@ -233,7 +259,7 @@ console.log("409");
       <div className="custom-element">
         <LeafLine></LeafLine>
       </div>
-      <div className="button-container">
+     {userID!==props.ownerid&&<div> <div className="button-container">
         <Button.Call onClick={()=>{(window.location.href = `tel:${props.PhoneNumber}`)}}>
         
         </Button.Call>
@@ -247,7 +273,7 @@ console.log("409");
         </div>
       
       </div>
- <Button.Rent onClick={handleRent}/>
+ <Button.Rent onClick={handleRent}/></div>}
     </div>
   );
 }

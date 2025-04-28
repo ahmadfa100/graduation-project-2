@@ -41,7 +41,8 @@ CREATE TABLE RentalDeals (
     farmerID INT NOT NULL REFERENCES Farmers(ID) ON DELETE CASCADE,
     isAccepted BOOLEAN NOT NULL DEFAULT FALSE,
     createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT unique_deal UNIQUE (offerID, landownerID, farmerID)
+    CONSTRAINT unique_deal UNIQUE (offerID, landownerID, farmerID),
+    CONSTRAINT landowner_farmer_different CHECK (landownerID <> farmerID)
 );
 
 

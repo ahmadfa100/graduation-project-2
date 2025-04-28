@@ -1,6 +1,6 @@
 import db from "../db.js";
 export const getFav= async (req, res) => {
-    console.log("getfav");
+  //  console.log("getfav");
  
   const {offerID}=req.query;
   if (!req.session.user?.id) {

@@ -12,6 +12,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import "../style/offerdetail.css";
+import { Alert } from '@mui/material';
 
 const EcommerceSlider = () => {
   const { offerID } = useParams();  
@@ -170,20 +171,27 @@ function Details(props) {
  async function handleRent(){
 console.log("Rent");
 try {
-  console.log("Sending rent request:", { offerID: props.id});
+  console.log("Sending rent request:", { props});
 
-  const response = await axios.post(`http://localhost:3001/rentRequest/`,{ offerID :props.id},{ withCredentials: true });
+  const response = await axios.post("http://localhost:3001/rentRequest/",{ offerID :props.id,landOwner:(props.ownerid) },{ withCredentials: true });
   
   console.log('Created deal:',response.data);
 } catch (error) {
   console.error('Error creating rental deal:', error);
+  
   if (error.response && error.response.status === 401) {
-    console.log("Not authenticated! Redirecting to login...");
+  
     window.location.href = '/login';
     return; 
-  
   }
-
+   
+    if(error.response&&error.response.status ===409){
+console.log("409");
+      return( 
+         <Alert severity="success">
+        This is a success alert — check it out!
+      </Alert>); 
+    }
 }
  }
   return (

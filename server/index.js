@@ -152,24 +152,19 @@ app.post('/rentRequest', async (req, res) => {
     }
 
     const farmerID = req.session.user.id;
-    const {offerID  } = req.body;
-    console.log("offer and its owner:",req.body.offerID,);
-    if (!offerID ) {
+     const {landOwner,offerID}=req.body;
+    
+    if (!offerID ||!landOwner ) {
       return res.status(400).json({ error: 'offerID and landownerID are required.' });
     }
 
-await db.query("INSERT INTO Farmers (ID) VALUES ($1)",[farmerID]);
+await db.query("INSERT INTO Farmers (ID) VALUES ($1) ON CONFLICT DO NOTHING" ,[farmerID]);
 
-
-const responseOwner = await db.query("SELECT OwnerID FROM Offers WHERE ID=($1)",[offerID]);
-
-const landownerID= responseOwner.rows[0].ownerid;
-console.log(" owner:",landownerID);
-    const values = [offerID, landownerID, farmerID];
-
-     await db.query(`  INSERT INTO RentalDeals (offerID, landownerID, farmerID)    VALUES ($1, $2, $3) `, values);
-
+    const values = [offerID, landOwner, farmerID];
+console.log("values:",values);
+      await db.query(`  INSERT INTO RentalDeals (offerID, landownerID, farmerID)    VALUES ($1, $2, $3) `, values);
     res.status(201).json({ message: 'Rental deal created successfully.' });
+    console.log('Rental deal created successfully.');
   } catch (err) {
     if (err.code === '23505') {
       return res.status(409).json({ error: 'Rental deal already exists.' });

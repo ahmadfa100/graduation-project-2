@@ -30,9 +30,20 @@ CREATE TABLE Offers (
     landLeasePrice NUMERIC(10, 2) NOT NULL,-- in jordan its impossible but may be in other countries--
     leaseDuration int ,-- leaseDuration in mounths
     offerDate Date NOT NULL DEFAULT CURRENT_DATE, 
-    OwnerID INT NOT NULL   REFERENCES Landowners(ID) ON DELETE CASCADE
+    OwnerID INT NOT NULL   REFERENCES Landowners(ID) ON DELETE CASCADE,
+     isReserved BOOLEAN NOT NULL DEFAULT FALSE
    
 );
+CREATE TABLE RentalDeals (
+    dealID SERIAL PRIMARY KEY,
+    offerID INT NOT NULL REFERENCES Offers(ID) ON DELETE CASCADE,
+    landownerID INT NOT NULL REFERENCES Landowners(ID) ON DELETE CASCADE,
+    farmerID INT NOT NULL REFERENCES Farmers(ID) ON DELETE CASCADE,
+    isAccepted BOOLEAN NOT NULL DEFAULT FALSE,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT unique_deal UNIQUE (offerID, landownerID, farmerID)
+);
+
 
 CREATE TABLE  landPicture(
 ID SERIAL PRIMARY KEY,

@@ -81,9 +81,11 @@ function App() {
                     <Route
                       path="/OfferDetails"
                       element={
-                        <div className="p-10">
+                        <NotificationsProvider>
+                           <div className="p-10">
                           <OfferDetails />
                         </div>
+                      </NotificationsProvider>
                       }
                     />
                   </Routes>

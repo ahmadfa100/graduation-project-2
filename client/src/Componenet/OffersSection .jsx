@@ -214,7 +214,7 @@ console.log("Outside use effect :",useID);
       {/* Offers List */}
       <div className="offers-list">
         {offers.map((offer) => (
-          useID!==offer.ownerid&&
+          !offer.isreserved&&
           <div
           key={offer.id}
           className="offer-item"
@@ -231,7 +231,7 @@ console.log("Outside use effect :",useID);
             <p className="offer-subtitle">
               Land area: {offer.landsize}, location: {offer.landlocation}
             </p>
-            <div className="offer-actions">
+          {  useID!==offer.ownerid&&  <div className="offer-actions">
               <button
                 className="action-button"
                 onClick={(e) => {
@@ -292,7 +292,7 @@ console.log("Outside use effect :",useID);
               >
                 {likedOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
               </button>
-            </div>
+            </div>}
           </div>
         </div>
         ))}

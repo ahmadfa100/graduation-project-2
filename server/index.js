@@ -144,6 +144,50 @@ app.get("/api/check-session", (req, res) => {
   }
   res.json({ user: req.session.user });
 });
+
+app.post('/rentRequest', async (req, res) => {
+  try {
+    if (!req.session.user?.id) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    const farmerID = req.session.user.id;
+    const {offerID  } = req.body;
+    console.log("offer and its owner:",req.body.offerID,);
+    if (!offerID ) {
+      return res.status(400).json({ error: 'offerID and landownerID are required.' });
+    }
+
+await db.query("INSERT INTO Farmers (ID) VALUES ($1)",[farmerID]);
+
+
+const responseOwner = await db.query("SELECT OwnerID FROM Offers WHERE ID=($1)",[offerID]);
+
+const landownerID= responseOwner.rows[0].ownerid;
+console.log(" owner:",landownerID);
+    const values = [offerID, landownerID, farmerID];
+
+     await db.query(`  INSERT INTO RentalDeals (offerID, landownerID, farmerID)    VALUES ($1, $2, $3) `, values);
+
+    res.status(201).json({ message: 'Rental deal created successfully.' });
+  } catch (err) {
+    if (err.code === '23505') {
+      return res.status(409).json({ error: 'Rental deal already exists.' });
+    }
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error.' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
 // Start server
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);

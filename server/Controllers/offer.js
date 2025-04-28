@@ -4,7 +4,7 @@ import db from "../db.js";
 export const getOffer = async (req, res) => {
   try {
     const offerID = req.params.offerID;
-    console.log("offerID0 :",offerID);
+   // console.log("offerID :",offerID);
     const offerinfo = await db.query("SELECT * FROM offers WHERE id = $1", [offerID]);
     if (offerinfo.rowCount === 0) {
       return res.status(404).json({ error: "Offer not found" });

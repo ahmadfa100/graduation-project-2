@@ -19,7 +19,7 @@ const EcommerceSlider = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [details, setDetails] = useState([]);
   const [productImages, setProductImages] = useState([]);
-
+ 
   
   useEffect(() => {
     fetchoffer();
@@ -105,6 +105,7 @@ const EcommerceSlider = () => {
   );
 };
 function Details(props) {
+
   const[isLiked,setIsLiked]=useState(true);
   const navigate = useNavigate();
   //console.log("detail props: ",props);
@@ -142,23 +143,49 @@ function Details(props) {
     setIsLiked(!isLiked);
     console.log("handleLikedOffer ",isLiked);
   
-    if (isLiked) {
-       await axios.post(
-        "http://localhost:3001/AddFavoriteOffers",
-        { offerID: props.id },
-        { withCredentials: true }
-      );
-    } else {
-       await axios.delete(
-        "http://localhost:3001/DeleteFavoriteOffer",
-        {
-          data: { offerID: props.id }, // ✅ wrap offerID in `data`
-          withCredentials: true
-        }
-      );
-    }
+ try{   
+  if (isLiked) {
+  await axios.post(
+   "http://localhost:3001/AddFavoriteOffers",
+   { offerID: props.id },
+   { withCredentials: true }
+ );
+} else {
+  await axios.delete(
+   "http://localhost:3001/DeleteFavoriteOffer",
+   {
+     data: { offerID: props.id }, // ✅ wrap offerID in `data`
+     withCredentials: true
+   }
+ );
+}}catch(err){
+  if (err.response && err.response.status === 401) {
+    console.log("Not authenticated! Redirecting to login...");
+    window.location.href = '/login';
+    return; 
   }
+  console.log(err);
+}
+  }
+ async function handleRent(){
+console.log("Rent");
+try {
+  console.log("Sending rent request:", { offerID: props.id});
+
+  const response = await axios.post(`http://localhost:3001/rentRequest/`,{ offerID :props.id},{ withCredentials: true });
   
+  console.log('Created deal:',response.data);
+} catch (error) {
+  console.error('Error creating rental deal:', error);
+  if (error.response && error.response.status === 401) {
+    console.log("Not authenticated! Redirecting to login...");
+    window.location.href = '/login';
+    return; 
+  
+  }
+
+}
+ }
   return (
     <div className="details-container">
       <h1>Offer information </h1>
@@ -210,7 +237,9 @@ function Details(props) {
         <Button.Like isLiked={!isLiked} onClick={handleLikedOffer} />
 
         </div>
+      
       </div>
+ <Button.Rent onClick={handleRent}/>
     </div>
   );
 }

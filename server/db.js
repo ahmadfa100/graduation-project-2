@@ -1,6 +1,8 @@
 import pkg from "pg";
-const { Pool } = pkg;
+import cron from "node-cron";
 import env from "dotenv";
+
+const { Pool } = pkg;
 env.config();
 
 const db = new Pool({
@@ -21,6 +23,7 @@ const db = new Pool({
 //    port:  process.env.DBport,
 // });
 
+
 db.connect((err) => {
   if (err) {
     console.error("Failed to connect to the database:", err);
@@ -28,5 +31,22 @@ db.connect((err) => {
     console.log("Connected to PostgreSQL database!");
   }
 });
+
+cron.schedule('19 20 * * *', async () => {
+  try {
+    console.log('Running scheduled offer cleanup...');
+    await db.query(`
+      DELETE FROM offers
+      WHERE offerDate < NOW() - INTERVAL '1 year' AND isReserved = false
+    `);
+    await db.query(`
+      DELETE FROM RentalDeals WHERE createdAt < NOW() - INTERVAL '1 year' AND isAccepted = false
+      `);
+    console.log('Old offers AND deals deleted successfully.');
+  } catch (err) {
+    console.error('Error deleting old offers:', err);
+  }
+});
+
 
 export default db;

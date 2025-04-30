@@ -187,7 +187,7 @@ export async function getChatContent(req, res) {
       return res.status(400).send("Missing chatID");
     }
     const chatContents = await db.query(
-      "SELECT contentFile, contentText, senderID, sent_at FROM ChatContents WHERE chatID = $1 ORDER BY sent_at DESC LIMIT 50",
+      "SELECT contentFile, contentText, senderID, sent_at FROM ChatContents WHERE chatID = $1 ORDER BY sent_at ASC LIMIT 50",
       [chatID]
     );
     if (chatContents.rowCount > 0) {

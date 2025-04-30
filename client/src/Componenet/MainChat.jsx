@@ -31,14 +31,18 @@ function MainChat(props) {
   }, [room]);
   
   useEffect(() => {
-    if (props.chatListData) {
+    if (props.chatListData.offerID&&props.chatListData.otherParticipantID) {
       setOfferID(props.chatListData.offerID);
       setReceiverID(props.chatListData.otherParticipantID);
-    } else {
+      console.log("by props");
+    } else if(paramReceiverID&&paramOfferID) {
+      console.log("by params");
       setOfferID(paramOfferID);
       setReceiverID(paramReceiverID);
     }
-  }, [props.chatListData.offerID, props.chatListData.otherParticipantID, paramOfferID, paramReceiverID, props.chatListData]);
+    setChatLoading(true);
+    setIsChatDataLoading(true);
+  }, [ paramOfferID, paramReceiverID, props.chatListData.offerID,props.chatListData.otherParticipantID]);
   
   useEffect(() => {
     console.log("offerID, ReceiverID", offerID, ReceiverID);
@@ -149,14 +153,18 @@ function MainChat(props) {
   const content = element.contenttext
     ? element.contenttext
     : new Uint8Array(element.contentfile?.data || []);
+    const date = new Date(element.sent_at);
+    date.setHours(date.getHours() + 3); // Add 3 hours
+    
+    const time = date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   return {
     content,
     sender,
-    time: new Date(element.sent_at).toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    }),
+    time: time
   };
 });
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import "../style/chat.css";
 import { FaCamera, FaPaperPlane, FaUpload } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
@@ -13,34 +13,40 @@ function MainChat(props) {
   const [messages, setMessages] = useState([]);
   const [preview, setPreview] = useState(null);
   const [isChatLoding, setChatLoading] = useState(true);
-  const [sessiondata, setSessiondata] = useState(null);
-  const [sessionReady, setSessionReady] = useState(false);
   const [offerID, setOfferID] = useState(null);
   const [ReceiverID, setReceiverID] = useState(null);
   const { paramReceiverID, paramOfferID } = useParams();
   const [chatData, setChatData] = useState({});
   const [room, setRoom] = useState(null);
   const [isChatDataLoading, setIsChatDataLoading] = useState(true);
-
+  const chatDataRef = useRef(chatData);
+  const roomRef = useRef(room);
+  
   useEffect(() => {
-    console.log("chat params:", paramReceiverID);
-    fetchSession();
-  }, []);
-
+    chatDataRef.current = chatData;
+  }, [chatData]);
+  
   useEffect(() => {
-    if (props.chatListData && props.chatListData.offerID) {
+    roomRef.current = room;
+  }, [room]);
+  
+  useEffect(() => {
+    if (props.chatListData) {
       setOfferID(props.chatListData.offerID);
       setReceiverID(props.chatListData.otherParticipantID);
     } else {
       setOfferID(paramOfferID);
       setReceiverID(paramReceiverID);
     }
-  }, [props.chatListData, paramOfferID, paramReceiverID]);
-
+  }, [props.chatListData.offerID, props.chatListData.otherParticipantID, paramOfferID, paramReceiverID, props.chatListData]);
+  
   useEffect(() => {
     console.log("offerID, ReceiverID", offerID, ReceiverID);
+    if(offerID&&ReceiverID){
+      setMessages([]);
     fetchChatData(offerID, ReceiverID);
-  }, [offerID, ReceiverID, sessiondata]);
+  }
+  }, [offerID, ReceiverID]);
 
   useEffect(() => {
     setRoom(chatData.chatid);
@@ -49,27 +55,17 @@ function MainChat(props) {
 
   useEffect(() => {
     setMessages([]);
-  }, [offerID, ReceiverID]);
+    setMessage([]);
+  }, [offerID, ReceiverID,props]);
 
   useEffect(() => {
-    //console.log("enter");
-    if (!sessionReady || sessiondata === null) return;
-    //console.log("vaild");
-    setMessages([]);
-    setMessage(null);
-
-    socket.emit("Initialize", {
-      sender: sessiondata.userID,
-      receiver: chatData.participantid,
-      offer: offerID,
-    }); 
+    socket.connect();
+    socket.off("InitialMessages");
     socket.on("InitialMessages", (id) => {
       fetchChat(id);
     });
-
-    socket.connect();
-    socket.emit("join", room);
-
+  
+    socket.off("RecivedMessage");
     socket.on("RecivedMessage", (newMessage) => {
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -83,19 +79,29 @@ function MainChat(props) {
         },
       ]);
     });
-
+  
     return () => {
+      socket.off("InitialMessages");
       socket.off("RecivedMessage");
       socket.disconnect();
     };
-  }, [
-    sessionReady,
-    sessiondata,
-    room,
-    offerID,
-    ReceiverID,
-    chatData.participantid,
-  ]);
+  }, []); // ✅ Run once only
+  
+  useEffect(() => {
+    if (!room || !chatData.currentUserID || !chatData.participantid) return;
+  
+    setMessages([]);
+    setMessage(null);
+  
+    socket.emit("Initialize", {
+      sender: chatData.currentUserID,
+      receiver: chatData.participantid,
+      offer: offerID,
+    });
+  
+    socket.emit("join", room);
+  }, [room, offerID, chatData]);
+  
 
   const fetchChatData = async (offerID, userID) => {
     try {
@@ -108,7 +114,6 @@ function MainChat(props) {
 
       setChatData(response.data);
       setIsChatDataLoading(false);
-      //console.log("chatID :",chatID);
     } catch (error) {
       if (error.response) {
         console.error("Error response:", error.response.data);
@@ -119,36 +124,9 @@ function MainChat(props) {
     }
   };
 
-  async function fetchSession() {
-    try {
-      const sessionResponse = await axios.get(
-        `http://localhost:3001/sessionInfo`,
-        {
-          withCredentials: true,
-        }
-      );
-      const user = sessionResponse.data.user;
-
-      if (user) {
-        setSessiondata({
-          userID: sessionResponse.data.user.id,
-        });
-        setSessionReady(true);
-        //console.log("Session data:", user);
-      } else {
-        console.log("No user found in session.");
-      }
-    } catch (err) {
-      if (err.response && err.response.status === 401) {
-        console.log("Not authenticated! Redirecting to login...");
-        window.location.href = "/login";
-        return;
-      }
-      console.error("Failed to fetch session info:", err);
-    }
-  }
   async function fetchChat(chatID) {
     try {
+
       // console.log("Fetching chat messages...");
       const response = await axios.get(
         `http://localhost:3001/getchatcontent/`,
@@ -165,62 +143,26 @@ function MainChat(props) {
         const oldMessages = response.data;
         //  console.log(Array.isArray(oldMessages)); // Should print true
         console.log("messages:", oldMessages);
-        oldMessages.forEach((element) => {
-          if (element.senderid === sessiondata.userID) {
-            if (element.contenttext) {
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: element.contenttext,
-                  sender: "sent",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            } else if (element.contentfile) {
-              // console.log("image from db type: " + element.contentfile,"the actual image is: " +element.contentfile.data); //line 1
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: new Uint8Array(element.contentfile.data),
-                  sender: "sent",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            }
-          } else if (element.senderid === ReceiverID) {
-            if (element.contenttext) {
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: element.contenttext,
-                  sender: "received",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            } else if (element.contentfile) {
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: new Uint8Array(element.contentfile.data),
-                  sender: "received",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            }
-          }
-        });
+        const formattedMessages = oldMessages.map((element) => {
+  const isCurrentUser = element.senderid === chatDataRef.current.currentUserID;
+  const sender = isCurrentUser ? "sent" : "received";
+  const content = element.contenttext
+    ? element.contenttext
+    : new Uint8Array(element.contentfile?.data || []);
+
+  return {
+    content,
+    sender,
+    time: new Date(element.sent_at).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+  };
+});
+
+setMessages(formattedMessages); // ✅ Set once, no duplicates
+
+        console.log(messages);
         setChatLoading(false);
       }
     } catch (error) {
@@ -243,7 +185,7 @@ function MainChat(props) {
       return;
     }
 
-    const messageData = { message, room, sender: sessiondata.userID }; // gpt: Include sender ID
+    const messageData = { message, room, sender: chatData.currentUserID}; // gpt: Include sender ID
     socket.emit("sendMessage", messageData);
 
     setMessages((prevMessages) => [
@@ -263,7 +205,7 @@ function MainChat(props) {
 
   return (
     <div className="chat-page">
-      {isChatDataLoading ? (
+      {isChatDataLoading &&isChatLoding ? (
         <ClipLoader color="green" size={50} />
       ) : (
         <div className="chat-container">
@@ -345,7 +287,7 @@ function ChatInput({ message, setMessage, preview, setPreview, sendMessage }) {
       <input
         type="text"
         placeholder="Type a message..."
-        value={message}
+        value={message||" "}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {

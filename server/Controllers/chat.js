@@ -1,5 +1,6 @@
 import { send } from "process";
 import db from "../db.js";
+import { error } from "console";
 
 //Complex query will returnon initial data about chat such as the offer title and its image  Other participant and chatID
 export async function getChatData(req, res) {
@@ -16,29 +17,44 @@ export async function getChatData(req, res) {
 
   try {
     const result = await db.query(
-      `SELECT 
-         C.ID AS chatID,
-         U.ID AS participantID,
-         U.FirstName,
-         U.LastName,
-         O.landTitle,
-         LP.picture AS offerImage
-       FROM Chats C
-       JOIN users U ON (U.ID = CASE 
-                                 WHEN C.senderID = $2 THEN C.receiverID 
-                                 ELSE C.senderID 
-                               END)
-       JOIN Offers O ON O.ID = C.offerID
-       LEFT JOIN landPicture LP ON LP.landID = C.offerID
-       WHERE C.offerID = $1 
-         AND ((C.senderID = $2 AND C.receiverID = $3) OR (C.senderID = $3 AND C.receiverID = $2))
-       LIMIT 1;
+      ` WITH existing_chat AS (
+      SELECT ID FROM Chats 
+      WHERE offerID = $1 AND 
+            ((senderID = $2 AND receiverID = $3) OR (senderID = $3 AND receiverID = $2))
+      LIMIT 1
+    ), new_chat AS (
+      INSERT INTO Chats (senderID, receiverID, offerID)
+      SELECT $2, $3, $1
+      WHERE NOT EXISTS (SELECT 1 FROM existing_chat)
+      RETURNING ID
+    ), final_chat AS (
+      SELECT ID FROM existing_chat
+      UNION
+      SELECT ID FROM new_chat
+    )
+    SELECT 
+      C.ID AS chatID,
+      U.ID AS participantID,
+      U.FirstName,
+      U.LastName,
+      O.landTitle,
+      LP.picture AS offerImage
+    FROM Chats C
+    JOIN final_chat fc ON C.ID = fc.ID
+    JOIN users U ON (U.ID = CASE 
+                              WHEN C.senderID = $2 THEN C.receiverID 
+                              ELSE C.senderID 
+                            END)
+    JOIN Offers O ON O.ID = C.offerID
+    LEFT JOIN landPicture LP ON LP.landID = C.offerID
+    LIMIT 1;
       `,
       [offerID, currentUserID, userID]
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Chat not found' });
+      console.log("not found");
+      return res.status(404).json({error:'Not Found'});
     }
 
     // Convert image to base64 string if it exists
@@ -46,6 +62,7 @@ export async function getChatData(req, res) {
     if (chatInfo.offerimage) {
       chatInfo.offerImage = chatInfo.offerimage.toString('base64');
     }
+    chatInfo.currentUserID = currentUserID;
 
     res.json(chatInfo);
   } catch (err) {
@@ -170,7 +187,7 @@ export async function getChatContent(req, res) {
       return res.status(400).send("Missing chatID");
     }
     const chatContents = await db.query(
-      "SELECT contentFile, contentText, senderID, sent_at FROM ChatContents WHERE chatID = $1",
+      "SELECT contentFile, contentText, senderID, sent_at FROM ChatContents WHERE chatID = $1 ORDER BY sent_at DESC LIMIT 50",
       [chatID]
     );
     if (chatContents.rowCount > 0) {

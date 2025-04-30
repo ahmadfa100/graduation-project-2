@@ -1,32 +1,59 @@
 import { send } from "process";
 import db from "../db.js";
 
-export async function getChat2(req,res) {
+//Complex query will returnon initial data about chat such as the offer title and its image  Other participant and chatID
+export async function getChatData(req, res) {
   const { offerID, userID } = req.query;
   if (!req.session.user?.id) {
     return res.status(401).json({ error: "Not authenticated" });
   }
+
   if (!offerID || !userID) {
-      return res.status(400).json({ error: 'Missing offerID or userID' });
+    return res.status(400).json({ error: 'Missing offerID or userID' });
   }
- const currentUserID= req.session.user.id;
+
+  const currentUserID = req.session.user.id;
+
   try {
-      const result = await db.query(
-          `SELECT * FROM Chats 
-           WHERE offerID = $1 AND ((senderID = $2 AND receiverID = $3)OR(senderID = $3 AND receiverID = $2))`,
-          [offerID,currentUserID ,userID]
-      );
+    const result = await db.query(
+      `SELECT 
+         C.ID AS chatID,
+         U.ID AS participantID,
+         U.FirstName,
+         U.LastName,
+         O.landTitle,
+         LP.picture AS offerImage
+       FROM Chats C
+       JOIN users U ON (U.ID = CASE 
+                                 WHEN C.senderID = $2 THEN C.receiverID 
+                                 ELSE C.senderID 
+                               END)
+       JOIN Offers O ON O.ID = C.offerID
+       LEFT JOIN landPicture LP ON LP.landID = C.offerID
+       WHERE C.offerID = $1 
+         AND ((C.senderID = $2 AND C.receiverID = $3) OR (C.senderID = $3 AND C.receiverID = $2))
+       LIMIT 1;
+      `,
+      [offerID, currentUserID, userID]
+    );
 
-      if (result.rows.length === 0) {
-          return res.status(404).json({ error: 'Chat not found' });
-      }
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Chat not found' });
+    }
 
-      res.json(result.rows[0] );
+    // Convert image to base64 string if it exists
+    const chatInfo = result.rows[0];
+    if (chatInfo.offerimage) {
+      chatInfo.offerImage = chatInfo.offerimage.toString('base64');
+    }
+
+    res.json(chatInfo);
   } catch (err) {
-      console.error('Error fetching chat :', err);
-      res.status(500).json({ error: 'Internal server error' });
+    console.error('Error fetching chat:', err);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
+
 export async function getChatByUser(req, res) {
   try {
     if (!req.session.user?.id) {

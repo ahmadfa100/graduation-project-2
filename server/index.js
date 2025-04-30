@@ -19,7 +19,7 @@ import {
 } from "./Controllers/offer.js";
 import { getNotifications } from "./Controllers/notification.js";
 import {
-  getChat2,
+  getChatData,
   getChatContent,
   addChat,
   initSocket,
@@ -125,7 +125,7 @@ app.get("/offers", getAllOffers);
 app.get("/api/notifications", getNotifications);
 
 // Chat (HTTP)
-app.get("/getchat", getChat2);
+app.get("/getChatData", getChatData);
 app.get("/getchatcontent", getChatContent);
 app.post("/addchat", addChat);
 app.get("/getChatByUser", getChatByUser);

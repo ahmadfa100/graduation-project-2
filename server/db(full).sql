@@ -85,7 +85,6 @@ CREATE TABLE Chats (
     CONSTRAINT check_sender_receiver CHECK (senderID <> receiverID),
     CONSTRAINT check_sender_receiver CHECK (senderID <> receiverID),
     CONSTRAINT  unique_chat_per_offer UNIQUE (senderID, receiverID, offerID)
-
 );
 CREATE TABLE ChatContents (
     contentID SERIAL PRIMARY KEY,

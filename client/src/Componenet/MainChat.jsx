@@ -1,152 +1,76 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import "../style/chat.css";
 import { FaCamera, FaPaperPlane, FaUpload } from "react-icons/fa";
-import { Link,useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import io from "socket.io-client";
 import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const socket = io("http://localhost:3001", { autoConnect: false });
 
-function MainChat( props) {
-  ////
-//console.log("from main : ",props.chatListData)
-  ///
+function MainChat(props) {
   const [message, setMessage] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [offer, setOffer] = useState(null);
-  const [otherParticipant, setOtherParticipant] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isChatLoding, setChatLoading] = useState(true);
-  const [isOfferLoding, setOfferLoding] = useState(true);
-  const [isUserLoading,setUserLoading]= useState(true);
-  const [sessiondata, setSessiondata] = useState(null); 
-  const [sessionReady, setSessionReady] = useState(false);
-  const [offerID,setOfferID]= useState(null);
-  const [ReceiverID,setReceiverID] =useState(null);
+  const [offerID, setOfferID] = useState(null);
+  const [ReceiverID, setReceiverID] = useState(null);
   const { paramReceiverID, paramOfferID } = useParams();
-  const [chatID,setChatID]=useState(null);
-  const [room,setRoom]= useState(null);
-
-  useEffect(() => {
-    const getChatID = async () => {
-      if (offerID && ReceiverID) {
-        const id = await fetchChatID(offerID, ReceiverID);
-        setChatID(id); 
-      }
-    };
-    getChatID();
-  }, [offerID, ReceiverID,sessiondata]);
+  const [chatData, setChatData] = useState({});
+  const [room, setRoom] = useState(null);
+  const [isChatDataLoading, setIsChatDataLoading] = useState(true);
+  const chatDataRef = useRef(chatData);
+  const roomRef = useRef(room);
   
-
-
   useEffect(() => {
-    setRoom(chatID);
-    //console.log("chat id useeffect :",chatID);
-  }, [chatID]);
-// useEffect(()=>{
-// console.log("room: ",room);
-// },[room]);
-  const fetchChatID = async (offerID, userID) => {
-    try {
-      const response = await axios.get('http://localhost:3001/getchat', {
-        params: { offerID, userID }, withCredentials: true
-      });
+    chatDataRef.current = chatData;
+  }, [chatData]);
   
-      console.log('Chat dtat is:', response.data);
-    
-      fetchParticipant(response.data.receiverid,response.data.senderid);
-      return response.data.id;
-    } catch (error) {
-      if (error.response) {
-       
-        console.error('Error response:', error.response.data);
-      } else {
-        console.error('Request error:', error.message);
-      }
-      return null;
-    }
-  };
-  async function fetchParticipant(receiver,sender) {
-    try {
-      const otherID = sessiondata.userID === receiver ? sender : receiver;
-      console.log("otherID :"+otherID);
-      const response = await axios.get(`http://localhost:3001/getUser/`, {
-        params: { userID: otherID },
-      });
-//console.log("here now :",response.data)
-      if (response.data.error) {
-        console.log("Error fetching owner:", response.data.error);
-        return;
-      }
-      if (response.data) {
-        console.log("other data: "+response.data);
-        setOtherParticipant(response.data);
-        setUserLoading(false);
-        // console.log("owner k",otherParticipant.firstname);
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        console.log("Not authenticated! Redirecting to login...");
-        window.location.href = '/login';
-        return; 
-      }
-      console.error("Error fetching owner:", error);
-    }
-  }
-
-
   useEffect(() => {
-    if (props.chatListData && props.chatListData.offerID) {
+    roomRef.current = room;
+  }, [room]);
+  
+  useEffect(() => {
+    if (props.chatListData.offerID&&props.chatListData.otherParticipantID) {
       setOfferID(props.chatListData.offerID);
       setReceiverID(props.chatListData.otherParticipantID);
-      //console.log("from props");
-    } else {
-      // fallback to URL params if available
+      console.log("by props");
+    } else if(paramReceiverID&&paramOfferID) {
+      console.log("by params");
       setOfferID(paramOfferID);
       setReceiverID(paramReceiverID);
-     // console.log("from params");
     }
-  }, [props.chatListData, paramOfferID, paramReceiverID]);
-
-//
-useEffect(() => {
-  setMessages([]);
-}, [offerID, ReceiverID]);
-
-// useEffect(() => {
-//   console.log("Offer ID:", offerID);
-//   console.log("Owner ID:", ReceiverID);
-// }, [offerID, ReceiverID]);
-useEffect(()=>{
+    setChatLoading(true);
+    setIsChatDataLoading(true);
+  }, [ paramOfferID, paramReceiverID, props.chatListData.offerID,props.chatListData.otherParticipantID]);
   
-fetchSession();
-},[]);
   useEffect(() => {
-    //console.log("enter");
-    if (!sessionReady || sessiondata === null) return;
-    //console.log("vaild");
-    setMessages([]);
-    setMessage(null);
-    fetchOffer(offerID);
+    console.log("offerID, ReceiverID", offerID, ReceiverID);
+    if(offerID&&ReceiverID){
+      setMessages([]);
+    fetchChatData(offerID, ReceiverID);
+  }
+  }, [offerID, ReceiverID]);
 
-    socket.emit("Initialize", {
-      sender: sessiondata.userID 
-,
-      receiver: ReceiverID,
-      offer: offerID,
-    }); //The receiver takes owner ID not work with all scenarios owner id will be taken from offer only if user click on the chat button
+  useEffect(() => {
+    setRoom(chatData.chatid);
+    console.log("chatData ", chatData);
+  }, [chatData]);
+
+  useEffect(() => {
+    setMessages([]);
+    setMessage([]);
+  }, [offerID, ReceiverID,props]);
+
+  useEffect(() => {
+    socket.connect();
+    socket.off("InitialMessages");
     socket.on("InitialMessages", (id) => {
-     // console.log("chat  client id:", id);
       fetchChat(id);
     });
-
-    socket.connect();
-    socket.emit("join", room);
-
+  
+    socket.off("RecivedMessage");
     socket.on("RecivedMessage", (newMessage) => {
-    //  console.log("Received message:", newMessage);
-
       setMessages((prevMessages) => [
         ...prevMessages,
         {
@@ -159,51 +83,61 @@ fetchSession();
         },
       ]);
     });
-
+  
     return () => {
+      socket.off("InitialMessages");
       socket.off("RecivedMessage");
       socket.disconnect();
     };
-  }, [sessionReady, sessiondata, room]);
+  }, []); // ✅ Run once only
+  
+  useEffect(() => {
+    if (!room || !chatData.currentUserID || !chatData.participantid) return;
+  
+    setMessages([]);
+    setMessage(null);
+  
+    socket.emit("Initialize", {
+      sender: chatData.currentUserID,
+      receiver: chatData.participantid,
+      offer: offerID,
+    });
+  
+    socket.emit("join", room);
+  }, [room, offerID, chatData]);
+  
 
-  async function fetchSession() {
+  const fetchChatData = async (offerID, userID) => {
     try {
-      const sessionResponse = await axios.get(`http://localhost:3001/sessionInfo`, {
-        withCredentials: true, 
+      const response = await axios.get("http://localhost:3001/getChatData", {
+        params: { offerID, userID },
+        withCredentials: true,
       });
-      const user = sessionResponse.data.user;
 
-      if (user ) {
-        
-      setSessiondata({
-        userID:sessionResponse.data.user.id
-      });  
-        setSessionReady(true);  
-        //console.log("Session data:", user);
+      console.log("ChatID data:", response.data);
+
+      setChatData(response.data);
+      setIsChatDataLoading(false);
+    } catch (error) {
+      if (error.response) {
+        console.error("Error response:", error.response.data);
       } else {
-        console.warn("No user found in session.");
+        console.error("Request error:", error.message);
       }
-     
-    } catch (err) {
-      if (err.response && err.response.status === 401) {
-        console.log("Not authenticated! Redirecting to login...");
-        window.location.href = '/login';
-        return; 
-      }
-      console.error("Failed to fetch session info:", err);
+      return null;
     }
-  }
+  };
+
   async function fetchChat(chatID) {
     try {
-     // console.log("Fetching chat messages...");
+
+      // console.log("Fetching chat messages...");
       const response = await axios.get(
         `http://localhost:3001/getchatcontent/`,
         { params: { chatID } }
       );
 
-    //  console.log("respones :", response.data );
       if (response.data.error) {
-        //  console.log("Error fetching chat messages:", response.data.error);
         return;
       }
       if (response.data === "Not Found") {
@@ -212,105 +146,43 @@ fetchSession();
       } else {
         const oldMessages = response.data;
         //  console.log(Array.isArray(oldMessages)); // Should print true
-        //   console.log("messages:",oldMessages);
-        oldMessages.forEach((element) => {
-          if (element.senderid === sessiondata.userID 
-) {
-            if (element.contenttext) {
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: element.contenttext,
-                  sender: "sent",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            } else if (element.contentfile) {
-              // console.log("image from db type: " + element.contentfile,"the actual image is: " +element.contentfile.data); //line 1
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: new Uint8Array(element.contentfile.data),
-                  sender: "sent",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            }
-          } else if (element.senderid === ReceiverID) {
-            if (element.contenttext) {
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: element.contenttext,
-                  sender: "received",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            } else if (element.contentfile) {
-              setMessages((prevMessages) => [
-                ...prevMessages,
-                {
-                  content: new Uint8Array(element.contentfile.data),
-                  sender: "received",
-                  time: new Date(element.sent_at).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }),
-                },
-              ]);
-            }
-          }
-        });
+        console.log("messages:", oldMessages);
+        const formattedMessages = oldMessages.map((element) => {
+  const isCurrentUser = element.senderid === chatDataRef.current.currentUserID;
+  const sender = isCurrentUser ? "sent" : "received";
+  const content = element.contenttext
+    ? element.contenttext
+    : new Uint8Array(element.contentfile?.data || []);
+    const date = new Date(element.sent_at);
+    date.setHours(date.getHours() + 3); // Add 3 hours
+    
+    const time = date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+  return {
+    content,
+    sender,
+    time: time
+  };
+});
+
+setMessages(formattedMessages); // ✅ Set once, no duplicates
+
+        console.log(messages);
         setChatLoading(false);
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
         console.log("Not authenticated! Redirecting to login...");
-        window.location.href = '/login';
-        return; 
+        window.location.href = "/login";
+        return;
       }
       setChatLoading(false);
       console.error("Error fetching chat:", error);
     }
   }
-
-  async function fetchOffer(offerID) {
-    try {
-      const response = await axios.get(
-        `http://localhost:3001/getOffer/${offerID}`
-      );
-      //console.log("herrrrrr",);
-      if (response.data.error) {
-        console.log("Error fetching offer:", response.data.error);
-        return;
-      }
-      if (response.data) {
-        setOffer(response.data);
-        setOfferLoding(false);
-        //console.log("Offer received:", response.data);
-      }
-      // owner
-
-     
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        console.log("Not authenticated! Redirecting to login...");
-        window.location.href = '/login';
-        return; 
-      }
-      console.error("Error fetching offer:", error);
-    }
-  }
-
 
   const sendMessage = () => {
     document
@@ -321,8 +193,7 @@ fetchSession();
       return;
     }
 
-    const messageData = { message, room, sender: sessiondata.userID 
- }; // gpt: Include sender ID
+    const messageData = { message, room, sender: chatData.currentUserID}; // gpt: Include sender ID
     socket.emit("sendMessage", messageData);
 
     setMessages((prevMessages) => [
@@ -342,24 +213,26 @@ fetchSession();
 
   return (
     <div className="chat-page">
-      {isChatLoding || isOfferLoding ||isUserLoading  ? (
+      {isChatDataLoading &&isChatLoding ? (
         <ClipLoader color="green" size={50} />
       ) : (
         <div className="chat-container">
           <div className="chat-header">
             <div className="chat-offer-header">
               <Link to="/offer">
-                <img
-                  src={offer.images[0] ? offer.images[0] : ""}
-                  alt="LandImage"
-                />
+                {chatData.offerImage && (
+                  <img
+                    src={`data:image/jpeg;base64,${chatData.offerImage}`}
+                    alt="land"
+                  />
+                )}
               </Link>
-              <h3>{offer.offer.landtitle || ""}</h3>
+              <h3>{chatData.landtitle || ""}</h3>
             </div>
             <div className="chat-owner">
               {" "}
               <h4>
-                {otherParticipant.firstname || " "} {otherParticipant.lastname || " "}
+                {chatData.firstname || " "} {chatData.lastname || " "}
               </h4>
             </div>
           </div>
@@ -422,7 +295,7 @@ function ChatInput({ message, setMessage, preview, setPreview, sendMessage }) {
       <input
         type="text"
         placeholder="Type a message..."
-        value={message}
+        value={message||" "}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
@@ -439,8 +312,7 @@ function ChatInput({ message, setMessage, preview, setPreview, sendMessage }) {
 }
 
 function Send({ content, time }) {
-  //console.log("image type: " , typeof content, "the actual content:\n", content);//line 2
-
+  
   if (typeof content === "string") {
     return (
       <div className="send">

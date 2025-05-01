@@ -1,10 +1,10 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Button from "@mui/material/Button";
 import { FaPlus } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "../style/DashBoard.css";
@@ -14,12 +14,13 @@ import OfferCard from "./offerCard";
 export default function Dashboard() {
   const [myOffers, setMyOffers] = useState([]);
   const [favoriteOffers, setFavoriteOffers] = useState([]);
+  const [requests, setRequests] = useState([]);
   const navigate = useNavigate();
 
   // fetch “My Offers” as owner
   useEffect(() => {
     fetch("http://localhost:3001/dashboard/offers", { credentials: "include" })
-      .then((r) => r.ok ? r.json() : Promise.reject())
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then(setMyOffers)
       .catch(() => setMyOffers([]));
   }, []);
@@ -27,9 +28,17 @@ export default function Dashboard() {
   // fetch “Favorite Offers”
   useEffect(() => {
     fetch("http://localhost:3001/FavoriteOffers", { credentials: "include" })
-      .then((r) => r.ok ? r.json() : Promise.reject())
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then(setFavoriteOffers)
       .catch(() => setFavoriteOffers([]));
+  }, []);
+
+  // fetch pending rental requests
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/dashboard/requests", { withCredentials: true })
+      .then((res) => setRequests(res.data))
+      .catch(() => setRequests([]));
   }, []);
 
   // handler to REMOVE one favorite
@@ -42,19 +51,35 @@ export default function Dashboard() {
           withCredentials: true,
         }
       );
-      // drop it from local state so the UI re‐renders
       setFavoriteOffers((prev) => prev.filter((o) => o.id !== offerId));
     } catch (err) {
       console.error("Failed to remove favorite:", err);
     }
   };
 
+  // accept or reject rental request
+  const handleRequestAction = async (requestId, action) => {
+    try {
+      await axios.post(
+        `http://localhost:3001/dashboard/requests/${requestId}/${action}`,
+        {},
+        { withCredentials: true }
+      );
+      setRequests((prev) => prev.filter((r) => r.id !== requestId));
+    } catch (err) {
+      console.error(`Failed to ${action} request`, err);
+    }
+  };
+
   return (
     <div className="dashboard">
       {/* — Add Offer button — */}
-      <div className="dashboard-section">
+      <div className="dashboard-section top-row">
         <h2>Add Offer</h2>
-        <button className="add-offer-button" onClick={() => navigate("/AddOffer")}>
+        <button
+          className="add-offer-button"
+          onClick={() => navigate("/AddOffer")}
+        >
           <FaPlus />
         </button>
       </div>
@@ -97,15 +122,62 @@ export default function Dashboard() {
               <OfferCard
                 key={offer.id}
                 offer={offer}
-                // Tell OfferCard “this one is favorited”
-                isFavorite={true}
-                // And give it a callback for “un-favorite”
+                isFavorite
                 onToggleFavorite={() => handleRemoveFavorite(offer.id)}
               />
             ))}
           </div>
         )}
       </div>
+
+      <div className="spacer" />
+
+      {/* — Requested Lands Accordion — */}
+      <Accordion className="dashboard-section">
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          Requested Lands
+        </AccordionSummary>
+        <AccordionDetails>
+          {requests.length === 0 ? (
+            <p>No pending requests.</p>
+          ) : (
+            <div className="requests-list">
+              {requests.map((req) => (
+                <div key={req.id} className="request-card">
+                  <div className="request-content">
+                    <h4 className="request-title">{req.landTitle}</h4>
+                    <p className="request-farmer">
+                      Farmer: {req.farmerFirstName} {req.farmerLastName}{" "}
+                      (age {req.farmerAge})
+                    </p>
+                  </div>
+                  <div className="request-actions">
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={() =>
+                        handleRequestAction(req.id, "accept")
+                      }
+                    >
+                      ACCEPT
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      fullWidth
+                      onClick={() =>
+                        handleRequestAction(req.id, "reject")
+                      }
+                      className="reject-button"
+                    >
+                      REJECT
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </AccordionDetails>
+      </Accordion>
     </div>
   );
 }

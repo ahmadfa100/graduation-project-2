@@ -10,14 +10,13 @@
 
 .dashboard-section {
   display: flex;
-  flex-direction: column;   
-  align-items: center;      
+  flex-direction: column;
+  align-items: center;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
 }
-
 
 .dashboard-section h2,
 .MuiAccordionSummary-root {
@@ -58,6 +57,7 @@
   height: 20px;
 }
 
+/* Offer cards */
 .offer {
   background-color: white;
   padding: 10px;
@@ -90,3 +90,49 @@
 .favorite-toggle-button:hover {
   background-color: #e73370;
 }
+
+/* Requests list & cards */
+.requests-list {
+  display: grid;
+  grid-gap: 12px;
+  padding: 8px;
+}
+
+.request-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  margin-bottom: 12px;
+}
+
+.request-content {
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.request-title {
+  margin: 0 0 4px;
+  font-size: 18px;
+  color: #2e7d32;
+}
+
+.request-farmer {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.request-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.request-actions button {
+  min-height: 36px;
+}
+

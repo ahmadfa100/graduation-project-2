@@ -7,6 +7,11 @@ import { Server } from "socket.io";
 import session from "express-session";
 import db from "./db.js";
 import notificationsRouter from "./Controllers/notifications.js";
+import {
+  getRequests,
+  acceptRequest,
+  rejectRequest
+} from "./Controllers/rentalRequests.js";
 
 // Controllers
 import { loginUser } from "./Controllers/login.js";
@@ -174,12 +179,9 @@ console.log("values:",values);
   }
 });
 
-
-
-
-
-
-
+app.get("/dashboard/requests", getRequests);
+app.post("/dashboard/requests/:id/accept", acceptRequest);
+app.post("/dashboard/requests/:id/reject", rejectRequest);
 
 
 

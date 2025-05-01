@@ -1,6 +1,4 @@
-import { send } from "process";
 import db from "../db.js";
-import { error } from "console";
 
 //Complex query will returnon initial data about chat such as the offer title and its image  Other participant and chatID
 export async function getChatData(req, res) {
@@ -17,43 +15,31 @@ export async function getChatData(req, res) {
 
   try {
     const result = await db.query(
-      ` WITH existing_chat AS (
-      SELECT ID FROM Chats 
-      WHERE offerID = $1 AND 
-            ((senderID = $2 AND receiverID = $3) OR (senderID = $3 AND receiverID = $2))
-      LIMIT 1
-    ), new_chat AS (
-      INSERT INTO Chats (senderID, receiverID, offerID)
-      SELECT $2, $3, $1
-      WHERE NOT EXISTS (SELECT 1 FROM existing_chat)
-      RETURNING ID
-    ), final_chat AS (
-      SELECT ID FROM existing_chat
-      UNION
-      SELECT ID FROM new_chat
-    )
-    SELECT 
-      C.ID AS chatID,
-      U.ID AS participantID,
-      U.FirstName,
-      U.LastName,
-      O.landTitle,
-      LP.picture AS offerImage
-    FROM Chats C
-    JOIN final_chat fc ON C.ID = fc.ID
-    JOIN users U ON (U.ID = CASE 
-                              WHEN C.senderID = $2 THEN C.receiverID 
-                              ELSE C.senderID 
-                            END)
-    JOIN Offers O ON O.ID = C.offerID
-    LEFT JOIN landPicture LP ON LP.landID = C.offerID
-    LIMIT 1;
+      `
+      SELECT 
+        C.ID AS chatID,
+        U.ID AS participantID,
+        U.FirstName,
+        U.LastName,
+        O.landTitle,
+        LP.picture AS offerImage
+      FROM Chats C
+      JOIN users U ON (U.ID = CASE 
+                                WHEN C.senderID = $2 THEN C.receiverID 
+                                ELSE C.senderID 
+                              END)
+      JOIN Offers O ON O.ID = C.offerID
+      LEFT JOIN landPicture LP ON LP.landID = C.offerID
+      WHERE C.offerID = $1 AND 
+            ((C.senderID = $2 AND C.receiverID = $3) OR (C.senderID = $3 AND C.receiverID = $2))
+      LIMIT 1;
       `,
       [offerID, currentUserID, userID]
     );
-
+    
     if (result.rows.length === 0) {
-      console.log("not found");
+      console.log("add chat in chatData");
+     
       return res.status(404).json({error:'Not Found'});
     }
 
@@ -72,6 +58,8 @@ export async function getChatData(req, res) {
 }
 
 export async function getChatByUser(req, res) {
+  const {ownerID,offerID}= req.query;
+  console.log("body:",ownerID,offerID);
   try {
     if (!req.session.user?.id) {
       return res.status(401).json({ error: "Not authenticated" });
@@ -79,7 +67,12 @@ export async function getChatByUser(req, res) {
 
     const userID = req.session.user.id;
     let response = [];
-
+    if(ownerID&&offerID){
+      console.log("add chat from user");
+      db.query(`INSERT INTO Chats (senderID, receiverID, offerID) VALUES ($1, $2, $3)
+         ON CONFLICT ON CONSTRAINT unique_chat_per_offer DO NOTHING;
+  `,[userID,ownerID,offerID]);
+    }
     const chats = await db.query(
       "SELECT * FROM CHATS WHERE receiverID = $1 OR senderID = $1 ORDER BY chatDate DESC",
       [userID]
@@ -204,6 +197,7 @@ export async function getChatContent(req, res) {
 // POST /addchat - Create a new chat.
 export async function addChat(req, res) {
   try {
+    console.log("add chat in addChat");
     const { receiverID, senderID, offerID } = req.body;
     const response = await db.query(
       "INSERT INTO chats (receiverID, senderID, offerID) VALUES ($1, $2, $3) RETURNING ID",
@@ -235,10 +229,8 @@ export const initSocket = (io) => {io.on("connection", (socket) => {
       if (chat.length > 0) {
         chatID = chat[0].id;
       } else {
-        const result = await db.query(
-          "INSERT INTO chats (senderID, receiverID, offerID) VALUES ($1, $2, $3) RETURNING id",
-          [sender, receiver, offer]
-        );
+        console.log("add chat in socket");
+       
         chatID = result.rows[0].id;
       }
       socket.emit("InitialMessages", chatID);

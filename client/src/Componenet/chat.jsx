@@ -1,19 +1,18 @@
-import MainChat from "./MainChat";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import MainChat from "./MainChat";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import axios from "axios";
 import ClipLoader from "react-spinners/ClipLoader";
-
 
 export default function Chat() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -38,7 +37,14 @@ fetchChatsList()
 
 async function fetchChatsList() {
  try{
-  const chats= await axios.get("http://localhost:3001/getChatByUser/",{withCredentials:true});
+  const chats = await axios.get("http://localhost:3001/getChatByUser", {
+    params: {
+      offerID: paramOfferID,
+      ownerID: paramReceiverID
+    },
+    withCredentials: true
+  });
+  
   setChatList(chats.data);
   //console.log("chatList att: ",chats.data);
   setIsChatListReady(false)

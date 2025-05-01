@@ -8,7 +8,7 @@ import {
   MdDoneOutline,
 } from "react-icons/md";
 import { Drawer, Button, Divider, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import { AccountCircle, Chat, Dashboard, Favorite, ExitToApp } from "@mui/icons-material";
+import { AccountCircle, Chat, Dashboard, ExitToApp } from "@mui/icons-material";
 import { FaCaretDown } from "react-icons/fa";
 import "./Header.css";
 
@@ -167,7 +167,10 @@ const Header = () => {
                   {slidebarContent.map((item, i) => (
                     <React.Fragment key={i}>
                      
-                        <ListItem button onClick={item.onClick}>
+                        <ListItem button onClick={item.onClick} sx={{ 
+    cursor: "pointer", 
+    "&:hover": { backgroundColor: "#f0f0f0" } 
+  }}>
                           <ListItemIcon sx={{ color: "#57b676", fontSize: "2rem" }}>
                             {item.icon}
                           </ListItemIcon>

@@ -22,6 +22,7 @@ export async function getChatData(req, res) {
         U.FirstName,
         U.LastName,
         O.landTitle,
+        O.id AS offerID,
         LP.picture AS offerImage
       FROM Chats C
       JOIN users U ON (U.ID = CASE 

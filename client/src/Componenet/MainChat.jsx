@@ -6,6 +6,7 @@ import { ChatInput } from "../layout/buttons";
 import { Send, Receive } from "./chatComponent";
 import "../style/chat.css";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useNavigate } from "react-router-dom";
 
 const socket = io("http://localhost:3001", { autoConnect: false });
 
@@ -22,7 +23,7 @@ function MainChat(props) {
   const [isChatDataLoading, setIsChatDataLoading] = useState(true);
   const chatDataRef = useRef(chatData);
   const roomRef = useRef(room);
-  
+  const navigate = useNavigate();
   useEffect(() => {
     chatDataRef.current = chatData;
   }, [chatData]);
@@ -220,14 +221,14 @@ setMessages(formattedMessages); // ✅ Set once, no duplicates
         <div className="chat-container">
           <div className="chat-header">
             <div className="chat-offer-header">
-              <Link to="/offer">
                 {chatData.offerImage && (
+                  <div onClick={()=>{chatData.offerid && navigate(`/OfferDetails/${chatData.offerid}`)}}>
                   <img
                     src={`data:image/jpeg;base64,${chatData.offerImage}`}
                     alt="land"
                   />
+                  </div>
                 )}
-              </Link>
               <h3>{chatData.landtitle || ""}</h3>
             </div>
             <div className="chat-owner">

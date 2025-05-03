@@ -1,9 +1,10 @@
-import { useState, useEffect,useRef } from "react";
-import "../style/chat.css";
-import { FaCamera, FaPaperPlane, FaUpload } from "react-icons/fa";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
-import io from "socket.io-client";
 import axios from "axios";
+import io from "socket.io-client";
+import { ChatInput } from "../layout/buttons";
+import { Send, Receive } from "./chatComponent";
+import "../style/chat.css";
 import ClipLoader from "react-spinners/ClipLoader";
 
 const socket = io("http://localhost:3001", { autoConnect: false });
@@ -258,116 +259,6 @@ setMessages(formattedMessages); // ✅ Set once, no duplicates
       )}
     </div>
   );
-}
-
-function ChatInput({ message, setMessage, preview, setPreview, sendMessage }) {
-  return (
-    <div className="chat-input">
-      <button className="icon-btn">
-        <FaCamera />
-      </button>
-      <label htmlFor="file-upload" className="upload-label">
-        <FaUpload />
-      </label>
-      <input
-        type="file"
-        id="file-upload"
-        className="file-input"
-        name="chatImage"
-        onChange={(e) => {
-          setMessage(e.target.files[0]);
-          setPreview(URL.createObjectURL(e.target.files[0]));
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            sendMessage();
-          }
-        }}
-      />
-      <div>
-        {preview && (
-          <div className="message-preview">
-            <img src={preview} alt="Preview" />
-          </div>
-        )}
-      </div>
-      <input
-        type="text"
-        placeholder="Type a message..."
-        value={message||" "}
-        onChange={(e) => setMessage(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            e.preventDefault();
-            sendMessage();
-          }
-        }}
-      />
-      <button onClick={sendMessage}>
-        <FaPaperPlane />
-      </button>
-    </div>
-  );
-}
-
-function Send({ content, time }) {
-  
-  if (typeof content === "string") {
-    return (
-      <div className="send">
-        <div className="message">{content}</div>
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  } else if (
-    content instanceof ArrayBuffer ||
-    content instanceof Uint8Array ||
-    content instanceof File
-  ) {
-    const blob = new Blob([content], { type: "image/png" });
-    const imageUrl = URL.createObjectURL(blob);
-    return (
-      <div className="send">
-        <img src={imageUrl} alt="chatImage" />
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="send">
-        <div className="message error-message"> unknown type message❌</div>
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  }
-}
-
-function Receive({ content, time }) {
-  if (typeof content === "string") {
-    return (
-      <div className="received">
-        <div className="message">{content}</div>
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  } else if (content instanceof ArrayBuffer || content instanceof Uint8Array) {
-    const blob = new Blob([content], { type: "image/png" });
-    const imageUrl = URL.createObjectURL(blob);
-    return (
-      <div className="received">
-        <img src={imageUrl} alt="chatImage" />
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="received ">
-        <div className="message error-message"> unknown type message❌</div>
-        <div className="timestamp">{time}</div>
-      </div>
-    );
-  }
 }
 
 export default MainChat;

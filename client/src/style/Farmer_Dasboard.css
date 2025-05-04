@@ -89,3 +89,33 @@
     font-size: 13px;
   }
 }
+
+/* container for cards */
+.land-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.land-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(46, 125, 50, 0.1);
+  transition: transform 0.15s ease;
+}
+
+.land-card:hover {
+  transform: translateY(-4px);
+}
+
+.land-title {
+  color: #2e7d32;
+  margin-bottom: 8px;
+}
+
+/* tighten up card content spacing */
+.land-card .MuiCardContent-root {
+  padding: 16px;
+}
+
+/* rest of your existing styles… */

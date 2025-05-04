@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Card,
+  CardContent,
+  Typography,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { FaLeaf } from "react-icons/fa";
-import "../style/Farmer_Dasboard.css";
+import "../style/Farmer_Dasboard.css"; // adjust path/filename if needed
 
 export default function FarmerDashboard() {
   const [currentLands, setCurrentLands] = useState([]);
@@ -36,62 +40,84 @@ export default function FarmerDashboard() {
       .catch(() => setFavoriteOffers([]));
   }, []);
 
+  const renderLands = (lands, emptyMessage, includeOwner = false) => {
+    if (lands.length === 0) {
+      return <Typography>{emptyMessage}</Typography>;
+    }
+    return (
+      <div className="land-cards">
+        {lands.map(land => (
+          <Card className="land-card" key={land.id}>
+            <CardContent>
+              <Typography variant="h6" className="land-title">
+                {land.landTitle}
+              </Typography>
+              {includeOwner && (
+                <Typography variant="body2">
+                  <strong>Owner:</strong> {land.landownerFirstName}{" "}
+                  {land.landownerLastName}
+                </Typography>
+              )}
+              <Typography variant="body2">
+                <strong>Location:</strong> {land.landLocation}
+              </Typography>
+              <Typography variant="body2">
+                <strong>
+                  {includeOwner ? "Lease ends:" : "Worked on until:"}
+                </strong>{" "}
+                {new Date(land.endDate).toLocaleDateString()}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="farmer-dashboard">
       <h1>Farmer Dashboard</h1>
 
       <Accordion className="section">
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>Current Lands</AccordionSummary>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          Current Lands
+        </AccordionSummary>
         <AccordionDetails>
-          {currentLands.length > 0 ? (
-            <ul className="land-list">
-              {currentLands.map(land => (
-                <li key={land.id}>
-                  <h3>{land.landTitle}</h3>
-                  <p>Location: {land.landLocation}</p>
-                  <p>Lease ends: {new Date(land.endDate).toLocaleDateString()}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No current lands.</p>
-          )}
+          {renderLands(currentLands, "No current lands.", true)}
         </AccordionDetails>
       </Accordion>
 
       <Accordion className="section">
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>Past Lands</AccordionSummary>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          Past Lands
+        </AccordionSummary>
         <AccordionDetails>
-          {pastLands.length > 0 ? (
-            <ul className="land-list">
-              {pastLands.map(land => (
-                <li key={land.id}>
-                  <h3>{land.landTitle}</h3>
-                  <p>Location: {land.landLocation}</p>
-                  <p>Worked on until: {new Date(land.endDate).toLocaleDateString()}</p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No past lands.</p>
-          )}
+          {renderLands(pastLands, "No past lands.")}
         </AccordionDetails>
       </Accordion>
 
       <Accordion className="section">
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>Favorite Offers</AccordionSummary>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          Favorite Offers
+        </AccordionSummary>
         <AccordionDetails>
           {favoriteOffers.length > 0 ? (
-            <ul className="land-list">
+            <div className="land-cards">
               {favoriteOffers.map(offer => (
-                <li key={offer.id}>
-                  <h3>{offer.landTitle}</h3>
-                  <p>Price: {offer.landLeasePrice}</p>
-                </li>
+                <Card className="land-card" key={offer.id}>
+                  <CardContent>
+                    <Typography variant="h6" className="land-title">
+                      {offer.landTitle}
+                    </Typography>
+                    <Typography variant="body2">
+                      <strong>Price:</strong> {offer.landLeasePrice}
+                    </Typography>
+                  </CardContent>
+                </Card>
               ))}
-            </ul>
+            </div>
           ) : (
-            <p>No favorite offers.</p>
+            <Typography>No favorite offers.</Typography>
           )}
         </AccordionDetails>
       </Accordion>

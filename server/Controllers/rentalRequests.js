@@ -25,7 +25,6 @@ export async function getRequests(req, res) {
        ORDER BY rd.id DESC`,
       [ownerID]
     );
-
     res.json(result.rows);
   } catch (err) {
     console.error("Error fetching requests:", err);
@@ -41,13 +40,16 @@ export async function acceptRequest(req, res) {
 
   try {
     await db.query(
-      `UPDATE rentaldeals
-         SET status = 'accepted'
-       WHERE id = $1
-         AND landownerid = $2`,
+      `UPDATE rentaldeals rd
+         SET status     = 'accepted',
+             start_date = NOW(),
+             end_date   = NOW() + (o.leaseduration * INTERVAL '1 month')
+       FROM offers o
+       WHERE rd.offerid     = o.id
+         AND rd.id          = $1
+         AND rd.landownerid = $2`,
       [id, ownerID]
     );
-
     res.json({ message: "Request accepted" });
   } catch (err) {
     console.error("Error accepting request:", err);
@@ -69,7 +71,6 @@ export async function rejectRequest(req, res) {
          AND landownerid = $2`,
       [id, ownerID]
     );
-
     res.json({ message: "Request rejected" });
   } catch (err) {
     console.error("Error rejecting request:", err);

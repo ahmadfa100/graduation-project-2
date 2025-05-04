@@ -9,26 +9,34 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import "../style/Farmer_Dasboard.css"; // adjust path/filename if needed
+import "../style/Farmer_Dasboard.css";
 
 export default function FarmerDashboard() {
   const [currentLands, setCurrentLands] = useState([]);
   const [pastLands, setPastLands] = useState([]);
   const [favoriteOffers, setFavoriteOffers] = useState([]);
 
-  // fetch current lands
+  // helper to strip out expired leases
+  const filterActive = (lands) => {
+    const now = Date.now();
+    return lands.filter((l) => new Date(l.endDate).getTime() > now);
+  };
+
+  // fetch current lands, then drop any that are expired
   useEffect(() => {
     axios
       .get("http://localhost:3001/farmer/current-lands", { withCredentials: true })
-      .then(res => setCurrentLands(res.data))
+      .then((res) => {
+        setCurrentLands(filterActive(res.data));
+      })
       .catch(() => setCurrentLands([]));
   }, []);
 
-  // fetch past lands
+  // fetch past lands (you might choose to show expired here, or leave it empty)
   useEffect(() => {
     axios
       .get("http://localhost:3001/farmer/past-lands", { withCredentials: true })
-      .then(res => setPastLands(res.data))
+      .then((res) => setPastLands(res.data))
       .catch(() => setPastLands([]));
   }, []);
 
@@ -36,43 +44,38 @@ export default function FarmerDashboard() {
   useEffect(() => {
     axios
       .get("http://localhost:3001/FavoriteOffers", { withCredentials: true })
-      .then(res => setFavoriteOffers(res.data))
+      .then((res) => setFavoriteOffers(res.data))
       .catch(() => setFavoriteOffers([]));
   }, []);
 
-  const renderLands = (lands, emptyMessage, includeOwner = false) => {
-    if (lands.length === 0) {
-      return <Typography>{emptyMessage}</Typography>;
-    }
-    return (
+  const renderCards = (items, emptyText, includeOwner = false, dateLabel = "Lease ends") =>
+    items.length ? (
       <div className="land-cards">
-        {lands.map(land => (
-          <Card className="land-card" key={land.id}>
+        {items.map((i) => (
+          <Card className="land-card" key={i.id}>
             <CardContent>
               <Typography variant="h6" className="land-title">
-                {land.landTitle}
+                {i.landTitle}
               </Typography>
               {includeOwner && (
                 <Typography variant="body2">
-                  <strong>Owner:</strong> {land.landownerFirstName}{" "}
-                  {land.landownerLastName}
+                  <strong>Owner:</strong> {i.landownerFirstName} {i.landownerLastName}
                 </Typography>
               )}
               <Typography variant="body2">
-                <strong>Location:</strong> {land.landLocation}
+                <strong>Location:</strong> {i.landLocation}
               </Typography>
               <Typography variant="body2">
-                <strong>
-                  {includeOwner ? "Lease ends:" : "Worked on until:"}
-                </strong>{" "}
-                {new Date(land.endDate).toLocaleDateString()}
+                <strong>{dateLabel}:</strong>{" "}
+                {new Date(i.endDate).toLocaleDateString()}
               </Typography>
             </CardContent>
           </Card>
         ))}
       </div>
+    ) : (
+      <Typography>{emptyText}</Typography>
     );
-  };
 
   return (
     <div className="farmer-dashboard">
@@ -83,7 +86,7 @@ export default function FarmerDashboard() {
           Current Lands
         </AccordionSummary>
         <AccordionDetails>
-          {renderLands(currentLands, "No current lands.", true)}
+          {renderCards(currentLands, "No current lands.", true, "Lease ends")}
         </AccordionDetails>
       </Accordion>
 
@@ -92,7 +95,7 @@ export default function FarmerDashboard() {
           Past Lands
         </AccordionSummary>
         <AccordionDetails>
-          {renderLands(pastLands, "No past lands.")}
+          {renderCards(pastLands, "No past lands.", false, "Worked on until")}
         </AccordionDetails>
       </Accordion>
 
@@ -101,16 +104,16 @@ export default function FarmerDashboard() {
           Favorite Offers
         </AccordionSummary>
         <AccordionDetails>
-          {favoriteOffers.length > 0 ? (
+          {favoriteOffers.length ? (
             <div className="land-cards">
-              {favoriteOffers.map(offer => (
-                <Card className="land-card" key={offer.id}>
+              {favoriteOffers.map((o) => (
+                <Card className="land-card" key={o.id}>
                   <CardContent>
                     <Typography variant="h6" className="land-title">
-                      {offer.landTitle}
+                      {o.landTitle}
                     </Typography>
                     <Typography variant="body2">
-                      <strong>Price:</strong> {offer.landLeasePrice}
+                      <strong>Price:</strong> {o.landLeasePrice}
                     </Typography>
                   </CardContent>
                 </Card>

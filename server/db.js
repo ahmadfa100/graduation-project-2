@@ -6,11 +6,11 @@ const { Pool } = pkg;
 env.config();
 
 const db = new Pool({
-  user: "ahmad",
-  host: "dpg-cvr63195pdvs73ecfu9g-a.frankfurt-postgres.render.com",
-  database: "green_bridge_pryw",
-  password: "l34MLDs3bW2TbqPdS1KCMH8FNGLqeNvV",
-  port: 5432,
+  user:     process.env.DB_USER,
+  host:     process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port:     parseInt(process.env.DB_PORT, 10),
   ssl: {
     rejectUnauthorized: false,
   },

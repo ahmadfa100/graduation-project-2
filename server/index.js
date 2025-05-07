@@ -12,7 +12,8 @@ import { getCurrentLands } from "./Controllers/farmerLands.js";
 import {
   getRequests,
   acceptRequest,
-  rejectRequest
+  rejectRequest,
+  rentRequest
 } from "./Controllers/rentalRequests.js";
 
 // Controllers
@@ -109,7 +110,7 @@ app.post("/api/logout", (req, res) => {
   });
 });
 // account & signup2
-app.post("/api/login", loginUser);
+{app.post("/api/login", loginUser);
 app.post("/api/signup",signUp);
 app.get("/getuser",getUser);
 app.post("/api/account",account);
@@ -136,7 +137,7 @@ app.get("/getChatData", getChatData);
 app.get("/getchatcontent", getChatContent);
 app.post("/addchat", addChat);
 app.get("/getChatByUser", getChatByUser);
-initSocket(io);
+initSocket(io);}
 // Session info (for debugging)
 app.get("/sessionInfo", (req, res) => {
   res.json(req.session);
@@ -152,34 +153,7 @@ app.get("/api/check-session", (req, res) => {
   res.json({ user: req.session.user });
 });
 
-app.post('/rentRequest', async (req, res) => {
-  try {
-    if (!req.session.user?.id) {
-      return res.status(401).json({ error: "Not authenticated" });
-    }
-
-    const farmerID = req.session.user.id;
-     const {landOwner,offerID}=req.body;
-    
-    if (!offerID ||!landOwner ) {
-      return res.status(400).json({ error: 'offerID and landownerID are required.' });
-    }
-
-await db.query("INSERT INTO Farmers (ID) VALUES ($1) ON CONFLICT DO NOTHING" ,[farmerID]);
-
-    const values = [offerID, landOwner, farmerID];
-console.log("values:",values);
-      await db.query(`  INSERT INTO RentalDeals (offerID, landownerID, farmerID)    VALUES ($1, $2, $3) `, values);
-    res.status(201).json({ message: 'Rental deal created successfully.' });
-    console.log('Rental deal created successfully.');
-  } catch (err) {
-    if (err.code === '23505') {
-      return res.status(409).json({ error: 'Rental deal already exists.' });
-    }
-    console.error(err);
-    res.status(500).json({ error: 'Internal server error.' });
-  }
-});
+app.post('/rentRequest', rentRequest);
 
 app.get("/dashboard/requests", getRequests);
 app.post("/dashboard/requests/:id/accept", acceptRequest);

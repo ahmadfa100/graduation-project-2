@@ -202,7 +202,7 @@ try {
   console.log("Sending rent request:", { props});
 
   const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rentRequest/`,{ offerID :props.id,landOwner:(props.ownerid) },{ withCredentials: true });
-  notifications.show('Offer reserved successfully!', { severity: 'success', autoHideDuration:3000});
+  notifications.show('Offer request reserved successfully', { severity: 'success', autoHideDuration:3000});
   console.log('Created deal:',response.data);
 } catch (error) {
   console.error('Error creating rental deal:', error);

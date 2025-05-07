@@ -20,6 +20,7 @@ import OfferDetails from "./Componenet/offerDetail";
 import FarmerDashboard from "./Componenet/Farmer_Dashboard";
 import Policy from "./Componenet/policy";
 import Terms from "./Componenet/terms";
+import Contact from "./Componenet/contact";
 
 import "./App.css";
 
@@ -61,6 +62,7 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/policy" element={<Policy />} />
                     <Route path="/terms" element={<Terms />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route
                       path="/chat/:paramOfferID?/:paramReceiverID?"
                       element={<Chat/>}

@@ -23,7 +23,7 @@ const Header = () => {
 
   // 1) session check
   useEffect(() => {
-    axios.get("http://localhost:3001/sessionInfo", { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/sessionInfo`, { withCredentials: true })
       .then(res => {
         if (res.data && res.data.user) {
           setUser(res.data.user);
@@ -37,7 +37,7 @@ const Header = () => {
   // 2) fetch notifications only after we know the user is logged in
   useEffect(() => {
     if (!user) return;   // <-- skip if not logged in
-    axios.get("http://localhost:3001/api/notifications", { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/api/notifications`, { withCredentials: true })
       .then(res => setNotifications(res.data.notifications || []))
       .catch(err => console.error("Error fetching notifications:", err));
   }, [user]);
@@ -75,7 +75,7 @@ const Header = () => {
   // 6) logout
   const handleLogout = async () => {
     try {
-      await axios.post("http://localhost:3001/api/logout", {}, { withCredentials: true });
+      await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/logout`, {}, { withCredentials: true });
       setUser(null);
       setOpen(false);
       navigate("/login");
@@ -106,7 +106,7 @@ const Header = () => {
       </nav>
 
       <div className="right-section" ref={rightSectionRef}>
-        { /* — only show the bell when there’s a user — */ }
+        { /* — only show the bell when there's a user — */ }
         {user && (
           <>
             <div

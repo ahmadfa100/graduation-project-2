@@ -98,7 +98,7 @@ function SignUp() {
     if (!validateForm()) return;
 
     try {
-      const res = await axios.post('http://localhost:3001/api/signup', {
+      const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/signup`, {
         ...formData,
         month: months.indexOf(formData.month) + 1
       });
@@ -316,7 +316,7 @@ export default SignUp;
 //     if (!validateForm()) return;
 
 //     try {
-//       const res = await axios.post('http://localhost:3001/api/signup', {
+//       const res = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/signup`, {
 //         ...formData,
 //         month: months.indexOf(formData.month) + 1
 //       });
@@ -496,7 +496,7 @@ export default SignUp;
 //     setError('');
 
 //     try {
-//       const response = await axios.post('http://localhost:3001/api/signup', {
+//       const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/signup`, {
 //         firstName: formData.firstName,
 //         lastName: formData.lastName,
 //         address: formData.address,

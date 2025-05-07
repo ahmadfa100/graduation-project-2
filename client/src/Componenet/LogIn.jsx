@@ -13,7 +13,7 @@ const Login = () => {
     e.preventDefault();
     setError(''); 
     try {
-      const response = await fetch('http://localhost:3001/api/login', {
+      const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/login`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
@@ -163,7 +163,7 @@ export default Login;
 //      </form>
 //       <p className="alt-action">
 //         OR<br />
-//         Don’t have an account?{' '}
+//         Don't have an account?{' '}
 //         <span className="signup-link" onClick={() => navigate('/signup')}>
 //           Create Account
 //         </span>

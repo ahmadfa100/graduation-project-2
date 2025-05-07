@@ -26,7 +26,7 @@ export default function FarmerDashboard() {
   // fetch current lands, then drop any that are expired
   useEffect(() => {
     axios
-      .get("http://localhost:3001/farmer/current-lands", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/farmer/current-lands`, { withCredentials: true })
       .then((res) => setCurrentLands(filterActive(res.data)))
       .catch(() => setCurrentLands([]));
   }, []);
@@ -34,7 +34,7 @@ export default function FarmerDashboard() {
   // fetch past lands
   useEffect(() => {
     axios
-      .get("http://localhost:3001/farmer/past-lands", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/farmer/past-lands`, { withCredentials: true })
       .then((res) => setPastLands(res.data))
       .catch(() => setPastLands([]));
   }, []);
@@ -42,7 +42,7 @@ export default function FarmerDashboard() {
   // fetch favorite offers
   useEffect(() => {
     axios
-      .get("http://localhost:3001/FavoriteOffers", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`, { withCredentials: true })
       .then((res) => setFavoriteOffers(res.data))
       .catch(() => setFavoriteOffers([]));
   }, []);
@@ -51,7 +51,7 @@ export default function FarmerDashboard() {
   const handleRemoveFavorite = async (offerId) => {
     try {
       await axios.delete(
-        "http://localhost:3001/DeleteFavoriteOffer",
+        `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
         { data: { offerID: offerId }, withCredentials: true }
       );
       setFavoriteOffers((prev) => prev.filter((o) => o.id !== offerId));

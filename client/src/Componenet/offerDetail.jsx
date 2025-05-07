@@ -30,7 +30,7 @@ const EcommerceSlider = () => {
    async function fetchoffer() {
      
      try {
-       const response = await axios.get(`http://localhost:3001/getOffer/${offerID}`);
+       const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getOffer/${offerID}`);
        
        //console.log("Full server response:", response.data);
        //console.log("here",response.data.images);
@@ -135,7 +135,7 @@ function Details(props) {
   
   async function fetchSession() {
     try {
-      const sessionResponse = await axios.get(`http://localhost:3001/sessionInfo`, {
+      const sessionResponse = await axios.get(`${process.env.REACT_APP_SERVER_URL}/sessionInfo`, {
         withCredentials: true, 
       });
       const user = sessionResponse.data.user;
@@ -157,7 +157,7 @@ function Details(props) {
 
   async function fetchFavoriteOffer(offerID) {
     try {
-      const response = await axios.get("http://localhost:3001/FavoriteOffers", {
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`, {
         params: { offerID },
         withCredentials: true,
       });
@@ -175,13 +175,13 @@ function Details(props) {
  try{   
   if (isLiked) {
   await axios.post(
-   "http://localhost:3001/AddFavoriteOffers",
+   `${process.env.REACT_APP_SERVER_URL}/AddFavoriteOffers`,
    { offerID: props.id },
    { withCredentials: true }
  );
 } else {
   await axios.delete(
-   "http://localhost:3001/DeleteFavoriteOffer",
+   `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
    {
      data: { offerID: props.id }, // ✅ wrap offerID in `data`
      withCredentials: true
@@ -201,7 +201,7 @@ console.log("Rent");
 try {
   console.log("Sending rent request:", { props});
 
-  const response = await axios.post("http://localhost:3001/rentRequest/",{ offerID :props.id,landOwner:(props.ownerid) },{ withCredentials: true });
+  const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/rentRequest/`,{ offerID :props.id,landOwner:(props.ownerid) },{ withCredentials: true });
   notifications.show('Offer reserved successfully!', { severity: 'success', autoHideDuration:3000});
   console.log('Created deal:',response.data);
 } catch (error) {

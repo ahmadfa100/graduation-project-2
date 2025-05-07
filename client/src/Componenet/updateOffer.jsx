@@ -51,7 +51,7 @@ function UpdateOffer() {
 
   async function fetchOffer() {
     try {
-      const response = await axios.get(`http://localhost:3001/getOffer/${offerID}`);
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getOffer/${offerID}`);
       console.log("here",response.data.images);
       if (response.data.error) {
         notifications.show(response.data.error, {
@@ -87,7 +87,7 @@ function UpdateOffer() {
     });
 
     try {
-      await axios.put(`http://localhost:3001/updateOffer/${offerID}`  , formData,{ withCredentials: true } );
+      await axios.put(`${process.env.REACT_APP_SERVER_URL}/updateOffer/${offerID}`, formData,{ withCredentials: true } );
       notifications.show("Offer updated successfully!", {
         severity: "success",
         autoHideDuration: 3000,

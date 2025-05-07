@@ -37,7 +37,7 @@ fetchChatsList()
 
 async function fetchChatsList() {
  try{
-  const chats = await axios.get("http://localhost:3001/getChatByUser", {
+  const chats = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getChatByUser`, {
     params: {
       offerID: paramOfferID,
       ownerID: paramReceiverID
@@ -148,7 +148,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
          sx: {
            margin: "20px",
            borderRadius: "15px",
-           height: "700px", 
+           height: "700px ",
            width: "100%",
            boxSizing: "border-box",
            position: "relative", 

@@ -32,7 +32,7 @@ db.connect((err) => {
   }
 });
 
-cron.schedule('19 20 * * *', async () => {
+cron.schedule('0 0 * * *', async () => {
   try {
     console.log('Running scheduled offer cleanup...');
     await db.query(`

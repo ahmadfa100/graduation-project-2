@@ -83,10 +83,10 @@ export default function AccountInf() {
 
   useEffect(() => {
     // Check session before fetching data
-    axios.get("http://localhost:3001/api/check-session", { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/api/check-session`, { withCredentials: true })
       .then(() => {
         // Session is valid, fetch user data
-        axios.post("http://localhost:3001/api/account", {}, { withCredentials: true })
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/api/account`, {}, { withCredentials: true })
           .then((res) => {
             const d = res.data;
             setUserData({
@@ -131,7 +131,7 @@ export default function AccountInf() {
 
       axios
         .post(
-          "http://localhost:3001/api/account/update",
+          `${process.env.REACT_APP_SERVER_URL}/api/account/update`,
           { [field]: userData[field] },
           { withCredentials: true }
         )
@@ -166,7 +166,7 @@ export default function AccountInf() {
     reader.onload = () => {
       setProfileImage(reader.result);
       axios.post(
-        "http://localhost:3001/api/account/upload-image",
+        `${process.env.REACT_APP_SERVER_URL}/api/account/upload-image`,
         { image: reader.result },
         { withCredentials: true }
       );
@@ -176,7 +176,7 @@ export default function AccountInf() {
   const onDeleteImage = () => {
     setProfileImage(null);
     axios.post(
-      "http://localhost:3001/api/account/delete-image",
+      `${process.env.REACT_APP_SERVER_URL}/api/account/delete-image`,
       {},
       { withCredentials: true }
     );

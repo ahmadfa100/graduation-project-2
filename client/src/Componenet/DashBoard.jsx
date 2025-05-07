@@ -19,7 +19,7 @@ export default function Dashboard() {
 
   // fetch “My Offers” as owner
   useEffect(() => {
-    fetch("http://localhost:3001/dashboard/offers", { credentials: "include" })
+    fetch(`${process.env.REACT_APP_SERVER_URL}/dashboard/offers`, { credentials: "include" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then(setMyOffers)
       .catch(() => setMyOffers([]));
@@ -27,7 +27,7 @@ export default function Dashboard() {
 
   // fetch “Favorite Offers”
   useEffect(() => {
-    fetch("http://localhost:3001/FavoriteOffers", { credentials: "include" })
+    fetch(`${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`, { credentials: "include" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then(setFavoriteOffers)
       .catch(() => setFavoriteOffers([]));
@@ -36,7 +36,7 @@ export default function Dashboard() {
   // fetch pending rental requests
   useEffect(() => {
     axios
-      .get("http://localhost:3001/dashboard/requests", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/dashboard/requests`, { withCredentials: true })
       .then((res) => setRequests(res.data))
       .catch(() => setRequests([]));
   }, []);
@@ -45,7 +45,7 @@ export default function Dashboard() {
   const handleRemoveFavorite = async (offerId) => {
     try {
       await axios.delete(
-        "http://localhost:3001/DeleteFavoriteOffer",
+        `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
         {
           data: { offerID: offerId },
           withCredentials: true,
@@ -61,7 +61,7 @@ export default function Dashboard() {
   const handleRequestAction = async (requestId, action) => {
     try {
       await axios.post(
-        `http://localhost:3001/dashboard/requests/${requestId}/${action}`,
+        `${process.env.REACT_APP_SERVER_URL}/dashboard/requests/${requestId}/${action}`,
         {},
         { withCredentials: true }
       );

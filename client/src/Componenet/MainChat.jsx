@@ -8,7 +8,7 @@ import "../style/chat.css";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useNavigate } from "react-router-dom";
 
-const socket = io("http://localhost:3001", { autoConnect: false });
+const socket = io(process.env.REACT_APP_SERVER_URL, { autoConnect: false });
 
 function MainChat(props) {
   const [message, setMessage] = useState(null);
@@ -111,7 +111,7 @@ function MainChat(props) {
 
   const fetchChatData = async (offerID, userID) => {
     try {
-      const response = await axios.get("http://localhost:3001/getChatData", {
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getChatData`, {
         params: { offerID, userID },
         withCredentials: true,
       });
@@ -135,7 +135,7 @@ function MainChat(props) {
 
       // console.log("Fetching chat messages...");
       const response = await axios.get(
-        `http://localhost:3001/getchatcontent/`,
+        `${process.env.REACT_APP_SERVER_URL}/getchatcontent/`,
         { params: { chatID } }
       );
 

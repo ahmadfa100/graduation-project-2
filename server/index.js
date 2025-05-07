@@ -47,7 +47,7 @@ const port = process.env.PORT || 3001;
 // CORS configuration
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: true, // This allows all origins
     credentials: true,
   })
 );
@@ -95,7 +95,7 @@ const upload = multer({ storage });
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: true, // This allows all origins
     methods: ["GET", "POST"],
     credentials: true,
   },

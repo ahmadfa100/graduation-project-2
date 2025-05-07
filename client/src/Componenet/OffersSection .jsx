@@ -32,7 +32,7 @@ useEffect(()=>{
   };
   async function fetchSession() {
     try {
-      const sessionResponse = await axios.get(`http://localhost:3001/sessionInfo`, {
+      const sessionResponse = await axios.get(`${process.env.REACT_APP_SERVER_URL}/sessionInfo`, {
         withCredentials: true, 
       });
       const user = sessionResponse.data.user;
@@ -53,7 +53,7 @@ useEffect(()=>{
   }
   async function fetchFavoriteOfferList() {
     try {
-      const response = await axios.get("http://localhost:3001/FavoriteOffers", {
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`, {
         withCredentials: true,
       });
       setFavoriteOffersList(response.data);
@@ -266,13 +266,13 @@ console.log("Outside use effect :",useID);
                   try {
                     if (!isLiked) {
                       await axios.post(
-                        "http://localhost:3001/AddFavoriteOffers",
+                        `${process.env.REACT_APP_SERVER_URL}/AddFavoriteOffers`,
                         { offerID: offer.id },
                         { withCredentials: true }
                       );
                     } else {
                       await axios.delete(
-                        "http://localhost:3001/DeleteFavoriteOffer",
+                        `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
                         {
                           data: { offerID: offer.id },
                           withCredentials: true,

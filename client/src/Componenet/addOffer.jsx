@@ -65,7 +65,7 @@ export default function AddOffer() {
 
     try {
        await axios.post(
-        "http://localhost:3001/addOffer",
+        `${process.env.REACT_APP_SERVER_URL}/addOffer`,
         formData,
         { withCredentials: true }   
       );

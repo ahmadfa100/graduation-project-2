@@ -9,7 +9,7 @@ export default function FavoriteOffersSection() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/FavoriteOffers", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`, { withCredentials: true })
       .then(res => setFavorites(res.data))
       .catch(err => {
         console.error(err);

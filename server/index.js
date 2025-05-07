@@ -41,6 +41,8 @@ import {
 } from "./Controllers/fav.js";
 import { signUp } from "./Controllers/signUP2.js";
 import { account, accountDeleteImage, accountUploadImage, getUser, updateAccount } from "./Controllers/account.js";
+import { sendMessage } from "./Controllers/contact.js";
+
 // Load environment variables
 env.config();
 const app = express();
@@ -56,6 +58,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(notificationsRouter);
+
 // Session configuration
 app.use(
   session({
@@ -69,6 +72,7 @@ app.use(
     },
   })
 );
+
 // ——————————————
 // Session‐update endpoint
 // ——————————————
@@ -109,14 +113,16 @@ app.post("/api/logout", (req, res) => {
     res.json({ message: "Logged out" });
   });
 });
+
 // account & signup2
-{app.post("/api/login", loginUser);
+app.post("/api/login", loginUser);
 app.post("/api/signup",signUp);
 app.get("/getuser",getUser);
 app.post("/api/account",account);
 app.post("/api/account/update", updateAccount);
 app.post("/api/account/upload-image",accountUploadImage);
 app.post("/api/account/delete-image", accountDeleteImage);
+
 //fav
 app.get("/FavoriteOffers", getFav);
 app.post("/AddFavoriteOffers", AddFavoriteOffers);
@@ -137,7 +143,8 @@ app.get("/getChatData", getChatData);
 app.get("/getchatcontent", getChatContent);
 app.post("/addchat", addChat);
 app.get("/getChatByUser", getChatByUser);
-initSocket(io);}
+initSocket(io);
+
 // Session info (for debugging)
 app.get("/sessionInfo", (req, res) => {
   res.json(req.session);
@@ -145,6 +152,7 @@ app.get("/sessionInfo", (req, res) => {
 
 // Dashboard "my offers"
 app.get("/dashboard/offers", getMyOffers);
+
 // Add this middleware to check session
 app.get("/api/check-session", (req, res) => {
   if (!req.session.user) {
@@ -167,6 +175,9 @@ app.get(
   },
   getCurrentLands
 );
+
+// Contact form endpoint
+app.post("/api/contact/send-message", sendMessage);
 
 // Start server
 server.listen(port, () => {

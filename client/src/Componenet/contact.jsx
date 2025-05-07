@@ -9,6 +9,7 @@ function Contact() {
     subject: "",
     message: ""
   });
+  const [status, setStatus] = useState({ type: "", message: "" });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,10 +19,30 @@ function Contact() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // This will be implemented in the backend step
-    console.log("Form submitted:", formData);
+    setStatus({ type: "loading", message: "Sending message..." });
+
+    try {
+      const response = await fetch("http://localhost:3001/api/contact/send-message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setStatus({ type: "success", message: "Message sent successfully!" });
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        setStatus({ type: "error", message: data.error || "Failed to send message" });
+      }
+    } catch (error) {
+      setStatus({ type: "error", message: "Failed to send message. Please try again." });
+    }
   };
 
   return (
@@ -42,7 +63,7 @@ function Contact() {
                   <p>greenbridgezar@gmail.com</p>
                 </div>
               </div>
-
+              
               <div className="contact-method">
                 <FaPhone className="contact-icon" />
                 <div>
@@ -50,7 +71,7 @@ function Contact() {
                   <p>+216 55 555 555</p>
                 </div>
               </div>
-
+              
               <div className="contact-method">
                 <FaWhatsapp className="contact-icon" />
                 <div>
@@ -119,6 +140,12 @@ function Contact() {
                   rows="5"
                 ></textarea>
               </div>
+
+              {status.message && (
+                <div className={`status-message ${status.type}`}>
+                  {status.message}
+                </div>
+              )}
 
               <button type="submit" className="submit-button">
                 Send Message

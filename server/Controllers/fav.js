@@ -1,48 +1,29 @@
 // server/Controllers/fav.js
 import db from "../db.js";
 
-// GET /FavoriteOffers
-export const getFav = async (req, res) => {
-  if (!req.session.user?.id) {
-    return res.status(401).json({ error: "Not authenticated" });
+// GET /FavoriteOffers , مشان الله ما تصيب الكود
+export const getFav= async (req, res) => {
+  
+  const userID = req.session?.user?.id;
+const {offerID}=req.query;
+  if (!userID) {
+    return res.status(401).json({ error: "Not logged in" });
   }
-  const userID = req.session.user.id;
+  if(!offerID){
+    const result = await db.query("SELECT * FROM FavoriteOffers WHERE farmerID=($1)",[userID]);
+   console.log("ttt");
+console.log("rows: ",result.rows);
+    return res.status(200).json(result.rows);
+  }
 
   try {
-    const result = await db.query(
-      `
-      SELECT
-        o.id,
-        o.landtitle         AS "landTitle",
-        o.landsize          AS "landSize",
-        o.landlocation      AS "landLocation",
-        o.offerdescription  AS "offerDescription",
-        o.landleaseprice    AS "landLeasePrice",
-        o.phonenumber       AS "phoneNumber",
-        COALESCE(
-          ('data:image/jpeg;base64,' || encode(lp.picture, 'base64')),
-          ''
-        ) AS "image"
-      FROM favoriteoffers f
-      JOIN offers o
-        ON f.offerid = o.id
-      LEFT JOIN LATERAL (
-        SELECT picture
-        FROM landpicture
-        WHERE landid = o.id
-        LIMIT 1
-      ) lp ON true
-      WHERE f.farmerid = $1
-      ORDER BY o.id DESC
-      `,
-      [userID]
-    );
-    return res.status(200).json(result.rows);
-  } catch (err) {
-    console.error("Error fetching favorite offers:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    const result = await db.query("SELECT * FROM FavoriteOffers WHERE offerID=($1) AND farmerID=($2)",[offerID,userID]);
+   res.json(result.rows);
+  } catch (error) {
+    console.error("Error fetching favorite offers:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
-};
+}
 
 // POST /AddFavoriteOffers
 export const AddFavoriteOffers = async (req, res) => {

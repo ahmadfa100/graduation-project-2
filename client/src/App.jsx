@@ -18,6 +18,7 @@ import AccountInf from "./Componenet/AccountInf";
 import DashBoard from "./Componenet/DashBoard";
 import OfferDetails from "./Componenet/offerDetail";
 import FarmerDashboard from "./Componenet/Farmer_Dashboard";
+import Policy from "./Componenet/policy";
 
 import "./App.css";
 
@@ -57,6 +58,7 @@ function App() {
                       }
                     />
                     <Route path="/about" element={<About />} />
+                    <Route path="/policy" element={<Policy />} />
                     <Route
                       path="/chat/:paramOfferID?/:paramReceiverID?"
                       element={<Chat/>}
@@ -78,7 +80,6 @@ function App() {
                         </NotificationsProvider>
                       }
                     />
-                  
                   </Routes>
                 </div>
                 <Footer />

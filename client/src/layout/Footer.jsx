@@ -1,5 +1,6 @@
 // src/components/Footer.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.css'; 
 
 const date = new Date();
@@ -10,9 +11,9 @@ const Footer = () => {
     <footer className="footer">
       <p>© {year} Green Bridge. All rights reserved.</p>
       <div className="footer-links">
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/terms">Terms of Service</a>
-        <a href="/contact">Contact Us</a>
+        <Link to="/policy">Privacy Policy</Link>
+        <Link to="/terms">Terms of Service</Link>
+        <Link to="/contact">Contact Us</Link>
       </div>
     </footer>
   );

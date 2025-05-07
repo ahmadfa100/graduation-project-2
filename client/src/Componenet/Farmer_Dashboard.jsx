@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import OfferCard from "./offerCard";
 import "../style/Farmer_Dasboard.css";
 
 export default function FarmerDashboard() {
@@ -26,13 +27,11 @@ export default function FarmerDashboard() {
   useEffect(() => {
     axios
       .get("http://localhost:3001/farmer/current-lands", { withCredentials: true })
-      .then((res) => {
-        setCurrentLands(filterActive(res.data));
-      })
+      .then((res) => setCurrentLands(filterActive(res.data)))
       .catch(() => setCurrentLands([]));
   }, []);
 
-  // fetch past lands (you might choose to show expired here, or leave it empty)
+  // fetch past lands
   useEffect(() => {
     axios
       .get("http://localhost:3001/farmer/past-lands", { withCredentials: true })
@@ -47,6 +46,19 @@ export default function FarmerDashboard() {
       .then((res) => setFavoriteOffers(res.data))
       .catch(() => setFavoriteOffers([]));
   }, []);
+
+  // handler to REMOVE one favorite
+  const handleRemoveFavorite = async (offerId) => {
+    try {
+      await axios.delete(
+        "http://localhost:3001/DeleteFavoriteOffer",
+        { data: { offerID: offerId }, withCredentials: true }
+      );
+      setFavoriteOffers((prev) => prev.filter((o) => o.id !== offerId));
+    } catch (err) {
+      console.error("Failed to remove favorite:", err);
+    }
+  };
 
   const renderCards = (items, emptyText, includeOwner = false, dateLabel = "Lease ends") =>
     items.length ? (
@@ -66,7 +78,7 @@ export default function FarmerDashboard() {
                 <strong>Location:</strong> {i.landLocation}
               </Typography>
               <Typography variant="body2">
-                <strong>{dateLabel}:</strong>{" "}
+                <strong>{dateLabel}:</strong> {" "}
                 {new Date(i.endDate).toLocaleDateString()}
               </Typography>
             </CardContent>
@@ -105,18 +117,14 @@ export default function FarmerDashboard() {
         </AccordionSummary>
         <AccordionDetails>
           {favoriteOffers.length ? (
-            <div className="land-cards">
-              {favoriteOffers.map((o) => (
-                <Card className="land-card" key={o.id}>
-                  <CardContent>
-                    <Typography variant="h6" className="land-title">
-                      {o.landTitle}
-                    </Typography>
-                    <Typography variant="body2">
-                      <strong>Price:</strong> {o.landLeasePrice}
-                    </Typography>
-                  </CardContent>
-                </Card>
+            <div className="offers-list">
+              {favoriteOffers.map((offer) => (
+                <OfferCard
+                  key={offer.id}
+                  offer={offer}
+                  isFavorite
+                  onToggleFavorite={() => handleRemoveFavorite(offer.id)}
+                />
               ))}
             </div>
           ) : (

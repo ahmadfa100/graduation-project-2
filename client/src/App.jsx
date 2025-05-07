@@ -19,6 +19,7 @@ import DashBoard from "./Componenet/DashBoard";
 import OfferDetails from "./Componenet/offerDetail";
 import FarmerDashboard from "./Componenet/Farmer_Dashboard";
 import Policy from "./Componenet/policy";
+import Terms from "./Componenet/terms";
 
 import "./App.css";
 
@@ -59,6 +60,7 @@ function App() {
                     />
                     <Route path="/about" element={<About />} />
                     <Route path="/policy" element={<Policy />} />
+                    <Route path="/terms" element={<Terms />} />
                     <Route
                       path="/chat/:paramOfferID?/:paramReceiverID?"
                       element={<Chat/>}

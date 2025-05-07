@@ -47,7 +47,7 @@ const port = process.env.PORT || 3001;
 // CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
     credentials: true,
   })
 );
@@ -95,7 +95,7 @@ const upload = multer({ storage });
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -142,7 +142,7 @@ app.get("/sessionInfo", (req, res) => {
   res.json(req.session);
 });
 
-// Dashboard “my offers”
+// Dashboard "my offers"
 app.get("/dashboard/offers", getMyOffers);
 // Add this middleware to check session
 app.get("/api/check-session", (req, res) => {

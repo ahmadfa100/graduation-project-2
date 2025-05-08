@@ -1,5 +1,6 @@
 import React from "react";
 import "../style/terms.css";
+import { blue } from "@mui/material/colors";
 
 function Terms() {
   return (
@@ -73,7 +74,7 @@ function Terms() {
         <section className="terms-section">
           <h2>8. Contact Information</h2>
           <div className="terms-content">
-            <p>For any questions regarding these Terms of Service, please contact us through our support channels.</p>
+            <p>For any questions regarding these Terms of Service, please contact us through our support channels or by <a href="/contact" style={{color:'blue' }}>contact us</a> page.</p>
           </div>
         </section>
       </div>

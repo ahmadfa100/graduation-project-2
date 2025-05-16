@@ -39,7 +39,7 @@ export const getProfileStats = async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const userId = req.session.user.ID;
+  const userId = req.session.user.id;
 
   try {
     const result = await db.query(
@@ -55,7 +55,7 @@ export const getProfileStats = async (req, res) => {
       completed_deals AS (
         SELECT COUNT(*) AS count
         FROM RentalDeals
-        WHERE (landownerID = $1 OR farmerID = $1) AND isAccepted = TRUE
+        WHERE (landownerID = $1 OR farmerID = $1) AND status = 'accepted'
       ),
       -- Count active offers by user (only if they're a landowner)
       active_offers AS (

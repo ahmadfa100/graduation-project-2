@@ -42,6 +42,7 @@ export async function acceptRequest(req, res) {
     await db.query(
       `UPDATE rentaldeals rd
          SET status     = 'accepted',
+         isaccepted = TRUE,
              start_date = NOW(),
              end_date   = NOW() + (o.leaseduration * INTERVAL '1 month')
        FROM offers o

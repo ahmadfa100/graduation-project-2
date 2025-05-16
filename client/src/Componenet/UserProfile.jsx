@@ -34,10 +34,20 @@ function UserProfile() {
           console.log("Rentals data:", rentalsRes.data);
           setRentals(rentalsRes.data);
         } catch (err) {
+            if (err.response && err.response.status === 401) {
+                console.log("Not authenticated! Redirecting to login...");
+                window.location.href = "/login";
+                return;
+              }
           setRentals([]); // fallback if endpoint doesn't exist
           console.log("No rentals endpoint or error fetching rentals:", err);
         }
       } catch (err) {
+        if (err.response && err.response.status === 401) {
+            console.log("Not authenticated! Redirecting to login...");
+            window.location.href = "/login";
+            return;
+          }
         // Handle error (could show a message)
         setUser(null);
         setStats(null);
@@ -72,10 +82,6 @@ function UserProfile() {
         <div className="stat-card">
           <div className="stat-value">{stats ? stats.active_offers : '-'}</div>
           <div className="stat-label">Active Offers</div>
-        </div>
-        <div className="stat-card">
-          <div className="stat-value">{stats ? stats.completed_deals : '-'} %</div>
-          <div className="stat-label">Completed Deals</div>
         </div>
         <div className="stat-card">
           <div className="stat-value">{stats ? stats.success_rate : '-'}%</div>

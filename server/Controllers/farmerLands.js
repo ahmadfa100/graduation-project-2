@@ -39,7 +39,7 @@ export async function getCurrentLands(req, res) {
         ? `data:image/jpeg;base64,${row.landPicture}`
         : null,
     }));
-    console.log("current lands",result);
+    //console.log("current lands",result);
     res.json(result);
   } catch (err) {
     console.error("Error fetching current lands:", err);

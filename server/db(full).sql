@@ -8,7 +8,9 @@ CREATE TABLE users (
     age INT,
     address VARCHAR(255),
     pfp BYTEA,
- gender VARCHAR(6) CHECK (gender IN ('male', 'female'))
+ gender VARCHAR(6) CHECK (gender IN ('male', 'female')),
+ createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ description TEXT,
 
 );
 CREATE TABLE Landowners (

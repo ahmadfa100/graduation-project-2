@@ -21,6 +21,7 @@ import FarmerDashboard from "./Componenet/Farmer_Dashboard";
 import Policy from "./Componenet/policy";
 import Terms from "./Componenet/terms";
 import Contact from "./Componenet/contact";
+import UserProfile from "./Componenet/UserProfile";
 
 import "./App.css";
 
@@ -84,6 +85,7 @@ function App() {
                         </NotificationsProvider>
                       }
                     />
+                    <Route path="/profile" element={<UserProfile />} />
                   </Routes>
                 </div>
                 <Footer />

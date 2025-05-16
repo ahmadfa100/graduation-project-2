@@ -42,6 +42,7 @@ import {
 import { signUp } from "./Controllers/signUP2.js";
 import { account, accountDeleteImage, accountUploadImage, getUser, updateAccount } from "./Controllers/account.js";
 import { sendMessage } from "./Controllers/contact.js";
+import { getProfile, getProfileStats, getRentedOffers } from "./Controllers/profile.js";
 
 // Load environment variables
 env.config();
@@ -178,6 +179,11 @@ app.get(
 
 // Contact form endpoint
 app.post("/api/contact/send-message", sendMessage);
+
+// Profile endpoints
+app.get("/getProfile", getProfile);
+app.get("/profileStats", getProfileStats);
+app.get("/rentedOffers", getRentedOffers);
 
 // Start server
 server.listen(port, () => {

@@ -17,20 +17,25 @@ function UserProfile() {
       setLoading(true);
       try {
         // Fetch user info
-        const userRes = await axios.get('/api/profile', { withCredentials: true });
+        const userRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getProfile`, { withCredentials: true });
+        console.log("User data:", userRes.data);
         setUser(userRes.data);
         // Fetch stats
-        const statsRes = await axios.get('/api/profile/stats', { withCredentials: true });
+        const statsRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/profileStats`, { withCredentials: true });
+        console.log("Stats data:", statsRes.data);
         setStats(statsRes.data);
         // Fetch offers
-        const offersRes = await axios.get('/dashboard/offers', { withCredentials: true });
+        const offersRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/dashboard/offers`, { withCredentials: true });
+        console.log("Offers data:", offersRes.data);
         setOffers(offersRes.data);
         // Fetch rentals (if endpoint exists)
         try {
-          const rentalsRes = await axios.get('/dashboard/rentals', { withCredentials: true });
+          const rentalsRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/farmer/current-lands`, { withCredentials: true });
+          console.log("Rentals data:", rentalsRes.data);
           setRentals(rentalsRes.data);
         } catch (err) {
           setRentals([]); // fallback if endpoint doesn't exist
+          console.log("No rentals endpoint or error fetching rentals:", err);
         }
       } catch (err) {
         // Handle error (could show a message)
@@ -38,6 +43,7 @@ function UserProfile() {
         setStats(null);
         setOffers([]);
         setRentals([]);
+        console.log("Error fetching profile data:", err);
       } finally {
         setLoading(false);
       }
@@ -60,21 +66,21 @@ function UserProfile() {
       </div>
       <div className="profile-stats">
         <div className="stat-card">
-          <div className="stat-value">{stats ? stats.totalDeals : '-'}</div>
+          <div className="stat-value">{stats ? stats.total_deals : '-'}</div>
           <div className="stat-label">Total Deals</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{stats ? stats.activeOffers : '-'}</div>
+          <div className="stat-value">{stats ? stats.active_offers : '-'}</div>
           <div className="stat-label">Active Offers</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{stats ? stats.completedDeals : '-'} %</div>
+          <div className="stat-value">{stats ? stats.completed_deals : '-'} %</div>
           <div className="stat-label">Completed Deals</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{stats ? stats.successRate : '-'}%</div>
+          <div className="stat-value">{stats ? stats.success_rate : '-'}%</div>
           <div className="stat-label">Success Rate</div>
-          <div className="stat-bar"><div className="stat-bar-inner" style={{width: stats ? `${stats.successRate}%` : '0%'}}></div></div>
+          <div className="stat-bar"><div className="stat-bar-inner" style={{width: stats ? `${stats.success_rate}%` : '0%'}}></div></div>
         </div>
       </div>
       <div className="profile-tabs">

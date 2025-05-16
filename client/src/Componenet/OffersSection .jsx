@@ -96,7 +96,7 @@ useEffect(()=>{
   }, []);
 
   useEffect(() => {
-    const ids = favoriteOffersList.map((fav) => fav.offerid); // Adjust if it's `fav.id` in your DB
+    const ids = favoriteOffersList.map(fav => fav.id) // Adjust if it's `fav.id` in your DB
     setLikedOffers(ids);
   }, [favoriteOffersList]);
 

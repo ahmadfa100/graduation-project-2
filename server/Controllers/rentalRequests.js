@@ -1,5 +1,4 @@
 import db from "../db.js";
-
 // GET /dashboard/requests
 export async function getRequests(req, res) {
   const ownerID = req.session.user?.id;
@@ -42,7 +41,6 @@ export async function acceptRequest(req, res) {
     await db.query(
       `UPDATE rentaldeals rd
          SET status     = 'accepted',
-         isaccepted = TRUE,
              start_date = NOW(),
              end_date   = NOW() + (o.leaseduration * INTERVAL '1 month')
        FROM offers o
@@ -104,5 +102,37 @@ console.log("values:",values);
     }
     console.error(err);
     res.status(500).json({ error: 'Internal server error.' });
+  }
+}
+
+
+// GET /dashboard/active-rentals
+export async function getActiveRentals(req, res) {
+  const ownerID = req.session.user?.id;
+  if (!ownerID) return res.status(401).json({ error: "Not authenticated" });
+
+  try {
+    const { rows } = await db.query(
+      `SELECT
+         rd.id                   AS "dealID",
+         o.id                    AS "offerID",
+         o.landtitle             AS "landTitle",
+         o.landlocation          AS "landLocation",
+         rd.start_date           AS "startDate",
+         rd.end_date             AS "endDate",
+         u.firstname             AS "farmerFirstName",
+         u.lastname              AS "farmerLastName"
+       FROM rentaldeals rd
+       JOIN offers o ON o.id = rd.offerid
+       JOIN users u  ON u.id = rd.farmerid
+       WHERE rd.landownerid = $1
+         AND rd.status      = 'accepted'
+       ORDER BY rd.start_date DESC;`,
+      [ownerID]
+    );
+    res.json(rows);
+  } catch (err) {
+    console.error("Error fetching active rentals:", err);
+    res.status(500).json({ error: "DB error" });
   }
 }

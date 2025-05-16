@@ -13,6 +13,7 @@ import {
   getRequests,
   acceptRequest,
   rejectRequest,
+  getActiveRentals,
   rentRequest
 } from "./Controllers/rentalRequests.js";
 
@@ -167,6 +168,10 @@ app.post('/rentRequest', rentRequest);
 app.get("/dashboard/requests", getRequests);
 app.post("/dashboard/requests/:id/accept", acceptRequest);
 app.post("/dashboard/requests/:id/reject", rejectRequest);
+app.get("/dashboard/active-rentals", getActiveRentals);
+
+
+
 
 app.get(
   "/farmer/current-lands",

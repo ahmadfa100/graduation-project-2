@@ -103,7 +103,7 @@ function UserProfile() {
           <div className="profile-cards">
             {rentals.length === 0 ? <div>No rentals found.</div> : rentals.map(r => (
               <div key={r.id} className="profile-offer-card">
-                <img src={r.image} alt={r.title || r.landTitle} className="profile-offer-img" />
+                <img src={r.landPicture} alt={r.title || r.landTitle} className="profile-offer-img" />
                 <div className="profile-offer-title">{r.title || r.landTitle}</div>
                 <div className={`profile-offer-status ${r.status || ''}`}>{r.status || ''}</div>
               </div>

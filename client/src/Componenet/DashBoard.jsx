@@ -15,7 +15,6 @@ export default function Dashboard() {
   const [myOffers, setMyOffers] = useState([]);
   const [favoriteOffers, setFavoriteOffers] = useState([]);
   const [requests, setRequests] = useState([]);
-  const [activeRentals, setActiveRentals] = useState([]);
   const navigate = useNavigate();
 
   // fetch “My Offers” as owner
@@ -42,20 +41,15 @@ export default function Dashboard() {
       .catch(() => setRequests([]));
   }, []);
 
-  // fetch lands currently rented out by owner
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/dashboard/active-rentals`, { withCredentials: true })
-      .then((res) => setActiveRentals(res.data))
-      .catch(() => setActiveRentals([]));
-  }, []);
-
   // handler to REMOVE one favorite
   const handleRemoveFavorite = async (offerId) => {
     try {
       await axios.delete(
         `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
-        { data: { offerID: offerId }, withCredentials: true }
+        {
+          data: { offerID: offerId },
+          withCredentials: true,
+        }
       );
       setFavoriteOffers((prev) => prev.filter((o) => o.id !== offerId));
     } catch (err) {
@@ -153,53 +147,30 @@ export default function Dashboard() {
                   <div className="request-content">
                     <h4 className="request-title">{req.landTitle}</h4>
                     <p className="request-farmer">
-                      Farmer: {req.farmerFirstName} {req.farmerLastName} (age {req.farmerAge})
+                      Farmer: {req.farmerFirstName} {req.farmerLastName}{" "}
+                      (age {req.farmerAge})
                     </p>
                   </div>
                   <div className="request-actions">
                     <Button
                       variant="contained"
                       fullWidth
-                      onClick={() => handleRequestAction(req.id, "accept")}
+                      onClick={() =>
+                        handleRequestAction(req.id, "accept")
+                      }
                     >
                       ACCEPT
                     </Button>
                     <Button
                       variant="outlined"
                       fullWidth
-                      onClick={() => handleRequestAction(req.id, "reject")}
+                      onClick={() =>
+                        handleRequestAction(req.id, "reject")
+                      }
                       className="reject-button"
                     >
                       REJECT
                     </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </AccordionDetails>
-      </Accordion>
-
-      <div className="spacer" />
-
-      {/* — Active Rentals Accordion — */}
-      <Accordion className="dashboard-section">
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          Active Rentals
-        </AccordionSummary>
-        <AccordionDetails>
-          {activeRentals.length === 0 ? (
-            <p>No lands currently rented out.</p>
-          ) : (
-            <div className="requests-list">
-              {activeRentals.map((r) => (
-                <div key={r.dealID} className="request-card">
-                  <div className="request-content">
-                    <h4 className="request-title">{r.landTitle}</h4>
-                    <p>Farmer: {r.farmerFirstName} {r.farmerLastName}</p>
-                    <p>
-                      From: {new Date(r.startDate).toLocaleDateString()} — To: {new Date(r.endDate).toLocaleDateString()}
-                    </p>
                   </div>
                 </div>
               ))}

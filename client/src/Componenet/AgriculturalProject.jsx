@@ -8,24 +8,23 @@ export default function AgriculturalProject() {
 
   return (
     <section className="agricultural-project">
-      <h2>Start an Agricultural Project in Jordan</h2>
+      <h2>Launch Your Sustainable Agricultural Venture in Jordan</h2>
       <p className="section-intro">
-        Comprehensive guidelines for planning and implementing a successful agricultural project, making use of local resources.
+        Step-by-step insights for landowners and farmers to collaborate on eco-friendly, profitable agricultural projects—leveraging local expertise, resources, and cutting-edge practices.
       </p>
 
       <div className="project-steps">
-        
-        {/* First Card */}
+        {/* Strategic Farm Planning */}
         <div className="step-item">
           <div>
-            <h4>Local Agricultural Planning</h4>
+            <h4>Strategic Farm Planning</h4>
             <p>
-              Learn how to develop an agricultural business plan that takes into account climate, soil, and modern technologies in Jordan.
+              Craft a robust agricultural plan tailored to Jordan’s climate zones and soil types—integrating crop selection, resource allocation, and tech adoption.
             </p>
             {showMore1 && (
               <div className="read-more-content">
                 <p>
-                  In this section, we review detailed planning strategies, including selecting appropriate crops, allocating resources, and controlling costs to ensure the sustainability of the project.
+                  Delve into crop-suitability analysis and seasonal scheduling to optimize yields: evaluate soil pH, nutrient profiles, and water availability. Map land-use zones, build budget forecasts, and set performance KPIs to track productivity, profitability, and sustainability over time.
                 </p>
               </div>
             )}
@@ -39,17 +38,17 @@ export default function AgriculturalProject() {
           </button>
         </div>
 
-        {/* Second Card */}
+        {/* Financing & Grants */}
         <div className="step-item">
           <div>
-            <h4>Access to Funding</h4>
+            <h4>Financing & Grants</h4>
             <p>
-              Discover local funding sources and governmental and private support to help you start your agricultural project.
+              Unlock funding avenues—government subsidies, micro-loans, and private investors—to launch and scale your farm sustainably.
             </p>
             {showMore2 && (
               <div className="read-more-content">
                 <p>
-                  This includes collaboration with local banks and small project support programs that offer facilitated loans and advisory services for the agricultural sector.
+                  Learn how to prepare strong loan applications, leverage FAO and GIZ grant programs, and partner with agricultural cooperatives. Explore crowd-farming platforms and impact investors focused on sustainable agriculture in Jordan.
                 </p>
               </div>
             )}
@@ -62,17 +61,17 @@ export default function AgriculturalProject() {
           </button>
         </div>
 
-        {/* Third Card */}
+        {/* Risk Mitigation & Sustainability */}
         <div className="step-item">
           <div>
-            <h4>Risk Management and Sustainability</h4>
+            <h4>Risk Mitigation & Sustainability</h4>
             <p>
-              Learn about ways to minimize agricultural risks by applying sustainable practices and using modern technologies.
+              Implement resilient practices—cover crops, drip irrigation, soil health monitoring—and safeguard investments against climate and market risks.
             </p>
             {showMore3 && (
               <div className="read-more-content">
                 <p>
-                  This includes the use of organic fertilizer, conservation of water resources, and insurance against natural disasters, ensuring better protection for your agricultural investments.
+                  Adopt weather-based forecasting, index insurance, and digital dashboards for real-time monitoring of soil moisture and pest incidence. Integrate agroforestry, organic amendments, and rainwater harvesting systems to enhance ecosystem services and ensure long-term viability.
                 </p>
               </div>
             )}

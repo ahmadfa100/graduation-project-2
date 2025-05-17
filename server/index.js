@@ -154,6 +154,8 @@ app.get("/sessionInfo", (req, res) => {
 
 // Dashboard "my offers"
 app.get("/dashboard/offers", getMyOffers);
+app.delete("/deleteOffer/:offerID", deleteOffer);
+
 
 // Add this middleware to check session
 app.get("/api/check-session", (req, res) => {

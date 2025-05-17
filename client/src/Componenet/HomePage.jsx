@@ -79,7 +79,6 @@ function HomePage() {
 
       <Divider />
 
-      {/* Offers Section wrapped in a div with an id */}
       <div id="offers-section">
         <OffersSection
           offers={offers}

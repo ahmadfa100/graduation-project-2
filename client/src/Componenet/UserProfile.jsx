@@ -4,7 +4,6 @@ import axios from "axios";
 import '../style/UserProfile.css';
 
 function UserProfile() {
-  // Dynamic user data
   const [user, setUser] = useState(null);
   const [stats, setStats] = useState(null);
   const [offers, setOffers] = useState([]);
@@ -39,7 +38,7 @@ function UserProfile() {
                 window.location.href = "/login";
                 return;
               }
-          setRentals([]); // fallback if endpoint doesn't exist
+          setRentals([]); 
           console.log("No rentals endpoint or error fetching rentals:", err);
         }
       } catch (err) {
@@ -48,7 +47,7 @@ function UserProfile() {
             window.location.href = "/login";
             return;
           }
-        // Handle error (could show a message)
+        // Handle error 
         setUser(null);
         setStats(null);
         setOffers([]);

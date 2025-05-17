@@ -1,30 +1,31 @@
-// backend/routes/notifications.js
+// Controllers/notifications.js
 import express from "express";
-import { getWeatherAlerts }   from "../Services/weatherAlert.js";
-import { checkSeasonAlerts }   from "../Services/seasonAlert.js";
+import { checkSeasonAlerts } from "../Services/seasonAlert.js";
+import { getWeatherAlerts } from "../Services/weatherAlert.js";
+
 const router = express.Router();
 
 router.get("/api/notifications", async (req, res) => {
   try {
-    // Build season alerts
-    const seasonAlerts = checkSeasonAlerts().map(season => ({
+    // 1. Season alerts
+    const seasonAlerts = checkSeasonAlerts(); 
+    const notifications = seasonAlerts.map((season) => ({
+      type: "season",
       message: `Season alert: ${season.crop} is in its growing window (${season.start}–${season.end}).`
     }));
 
-    // Fetch weather alert
+    // 2. Weather alert
     const weatherMsg = await getWeatherAlerts();
-    const weatherAlert = { message: weatherMsg };
-
-    // Return combined notifications array
-    res.json({
-      notifications: [
-        ...seasonAlerts,
-        weatherAlert
-      ]
+    notifications.push({
+      type: "weather",
+      message: weatherMsg
     });
-  } catch (err) {
-    console.error("Notifications error:", err);
-    res.status(500).json({ error: "Failed to get notifications." });
+
+    // 3. Return combined notifications
+    return res.json({ notifications });
+  } catch (error) {
+    console.error("Error getting notifications:", error);
+    return res.status(500).json({ error: "Failed to get notifications." });
   }
 });
 

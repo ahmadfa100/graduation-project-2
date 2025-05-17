@@ -1,4 +1,3 @@
-// src/components/OfferCard.jsx
 import React from "react";
 import {
   FaPhone,
@@ -13,12 +12,11 @@ export default function OfferCard({
   offer,
   isFavorite,
   onToggleFavorite,
-  showEdit = false,     // ← new prop
-  onEdit,               // ← new callback
+  showEdit = false,     
+  onEdit,              
 }) {
   const navigate = useNavigate();
 
-  // coerce to numbers for formatting
   const price = parseFloat(offer.landLeasePrice);
   const area  = parseFloat(offer.landSize);
 
@@ -51,7 +49,6 @@ export default function OfferCard({
 
         <div className="offer-actions">
           {showEdit ? (
-            // only show this single edit button in Dashboard
             <button
               className="action-button"
               onClick={(e) => {
@@ -62,7 +59,6 @@ export default function OfferCard({
               <FaEdit />
             </button>
           ) : (
-            // your original three icons
             <>
               <button
                 className="action-button"

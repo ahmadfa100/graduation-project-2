@@ -92,11 +92,10 @@ useEffect(()=>{
     fetchFavoriteOfferList();
     setOffset(0);
     fetchOffers(false, 0);
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    const ids = favoriteOffersList.map(fav => fav.id) // Adjust if it's `fav.id` in your DB
+    const ids = favoriteOffersList.map(fav => fav.id) 
     setLikedOffers(ids);
   }, [favoriteOffersList]);
 

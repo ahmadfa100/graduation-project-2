@@ -91,7 +91,7 @@ function MainChat(props) {
       socket.off("RecivedMessage");
       socket.disconnect();
     };
-  }, []); // ✅ Run once only
+  }, []); 
   
   useEffect(() => {
     if (!room || !chatData.currentUserID || !chatData.participantid) return;
@@ -170,7 +170,7 @@ function MainChat(props) {
   };
 });
 
-setMessages(formattedMessages); // ✅ Set once, no duplicates
+setMessages(formattedMessages); 
 
         console.log(messages);
         setChatLoading(false);
@@ -195,7 +195,7 @@ setMessages(formattedMessages); // ✅ Set once, no duplicates
       return;
     }
 
-    const messageData = { message, room, sender: chatData.currentUserID}; // gpt: Include sender ID
+    const messageData = { message, room, sender: chatData.currentUserID}; 
     socket.emit("sendMessage", messageData);
 
     setMessages((prevMessages) => [

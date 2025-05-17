@@ -6,7 +6,7 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import session from "express-session";
 import db from "./db.js";
-import notificationsRouter from "./Controllers/notifications.js";
+import notificationsRouter  from "./Controllers/notifications.js";
 import { getCurrentLands } from "./Controllers/farmerLands.js";
 
 import {
@@ -26,7 +26,6 @@ import {
   deleteOffer,
   getAllOffers,
 } from "./Controllers/offer.js";
-import { getNotifications } from "./Controllers/notification.js";
 import {
   getChatData,
   getChatContent,
@@ -137,8 +136,6 @@ app.put("/updateOffer/:offerID", upload.array("images", 10), updateOffer);
 app.delete("/deleteOffer/:offerID", deleteOffer);
 app.get("/offers", getAllOffers);
 
-// Notifications
-app.get("/api/notifications", getNotifications);
 
 // Chat (HTTP)
 app.get("/getChatData", getChatData);

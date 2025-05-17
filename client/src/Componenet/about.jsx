@@ -1,4 +1,3 @@
-// about.jsx
 import React from "react";
 import "../style/about.css";
 

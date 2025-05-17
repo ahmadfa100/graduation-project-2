@@ -1,4 +1,3 @@
-// src/components/AddOffer.jsx
 import "../style/addOffer.css";
 import { useState } from "react";
 import { FaTrash } from "react-icons/fa";
@@ -76,7 +75,7 @@ export default function AddOffer() {
       if (error.response && error.response.status === 401) {
         console.log("Not authenticated! Redirecting to login...");
         window.location.href = '/login';
-        return; // Stop here
+        return; 
       }
       console.error("Error saving offer:", error);
       notifications.show('Error saving offer. Please try again.', { severity: 'error' });
@@ -88,7 +87,6 @@ export default function AddOffer() {
       <div className="add_offer">
         <h3>Land Lease Information</h3>
         <form onSubmit={addOfferSubmit}>
-          {/* NO more hidden landOwnerID input! */}
           <div className="group-input">
           <label>Offer title</label>
             <input type="text" placeholder="Enter offer title" name="offer_title" minLength="5" maxLength="100" error="hi"/>

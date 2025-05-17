@@ -1,4 +1,3 @@
-
 import { checkSeasonAlerts } from "../Services/seasonAlert.js";
 import { getWeatherAlerts } from "../Services/weatherAlert.js";
 

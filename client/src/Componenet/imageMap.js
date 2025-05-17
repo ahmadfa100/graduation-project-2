@@ -1,0 +1,23 @@
+export const seasonalImageMap = {
+  Cauliflower: 'https://images.pexels.com/photos/6631961/pexels-photo-6631961.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load',
+  Carrots: 'https://images.pexels.com/photos/1268101/pexels-photo-1268101.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+  Tomatoes:'https://cdn.pixabay.com/photo/2020/09/12/21/12/tomatoes-5566741_1280.jpg',
+  Pepper: 'https://cdn.pixabay.com/photo/2015/10/01/00/22/paprika-966289_960_720.jpg',
+  Cucumber: 'https://cdn.pixabay.com/photo/2021/10/29/16/33/vegetables-6752345_960_720.jpg',
+  Eggplants: 'https://cdn.pixabay.com/photo/2022/08/08/19/07/eggplant-7373425_1280.jpg',
+  Blueberry: 'https://cdn.pixabay.com/photo/2020/07/18/13/01/blueberry-5417154_960_720.jpg',
+  'Beans and Peas': 'https://cdn.pixabay.com/photo/2019/01/28/04/07/vegetable-3959593_960_720.jpg',
+  Onions: 'https://cdn.pixabay.com/photo/2018/07/15/20/43/onion-3540502_960_720.jpg',
+  Okra: 'https://cdn.pixabay.com/photo/2022/08/01/04/40/okra-7357328_1280.jpg',
+  Potato: 'https://cdn.pixabay.com/photo/2018/05/25/15/40/potato-3429379_640.jpg',
+  Apricots: 'https://cdn.pixabay.com/photo/2018/05/27/16/19/apricots-3433818_960_720.jpg',
+  Plums: 'https://cdn.pixabay.com/photo/2018/07/26/13/03/plums-3563535_960_720.jpg',
+  Beans: 'https://cdn.pixabay.com/photo/2021/01/30/09/59/coffee-5963334_640.jpg',
+  Apples: 'https://cdn.pixabay.com/photo/2017/11/06/18/39/apple-2924531_1280.jpg',
+  Cucumbers: 'https://cdn.pixabay.com/photo/2021/10/29/16/33/vegetables-6752345_960_720.jpg',
+  Guava: 'https://cdn.pixabay.com/photo/2021/12/16/03/16/guava-6873684_1280.jpg',
+  Figs: 'https://cdn.pixabay.com/photo/2022/05/31/22/42/barbary-fig-7234411_1280.jpg',
+  Grapes: 'https://cdn.pixabay.com/photo/2016/10/17/09/25/vines-1747224_960_720.jpg',
+  Pomegranates: 'https://cdn.pixabay.com/photo/2021/11/11/16/05/fruits-6786607_1280.jpg',
+  Citrus: 'https://cdn.pixabay.com/photo/2014/06/21/22/07/lime-374216_960_720.jpg'
+};

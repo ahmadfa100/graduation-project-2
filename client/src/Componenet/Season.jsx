@@ -1,50 +1,63 @@
-// Season.jsx
 import React, { useState, useEffect } from 'react';
-import { seasons } from './HomePage_data'; 
-import '../style/Season.css'; 
+import { monthlySeasons }   from './HomePage_data';      
+import { seasonalImageMap } from './imageMap';
+import '../style/Season.css';
 
 function Season() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide]   = useState(0);
+  const [seasonalItems, setSeasonalItems] = useState([]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % seasons.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    const monthName = new Date().toLocaleString('default', { month: 'long' });
+    setSeasonalItems(monthlySeasons[monthName] || []);
   }, []);
 
-  const handlePrevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + seasons.length) % seasons.length);
-  };
+  useEffect(() => {
+    if (!seasonalItems.length) return;
+    const timer = setInterval(
+      () => setCurrentSlide(i => (i + 1) % seasonalItems.length),
+      5000
+    );
+    return () => clearInterval(timer);
+  }, [seasonalItems]);
 
-  const handleNextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % seasons.length);
-  };
-
+  if (!seasonalItems.length) {
+    return <div>No seasonal produce available.</div>;
+  }
 
   return (
     <div className="slideshow-container">
-      <button className="slide-arrow left-arrow" onClick={handlePrevSlide}>
+      <button
+        className="slide-arrow left-arrow"
+        onClick={() =>
+          setCurrentSlide(i =>
+            (i - 1 + seasonalItems.length) % seasonalItems.length
+          )
+        }
+      >
         &lt;
       </button>
 
-      {seasons.map((season, index) => (
-        <div
-          key={index}
-          className={`slide ${index === currentSlide ? 'active' : ''}`}
-        >
-          <img 
-            src={season.image} 
-            alt={season.name}
+      {seasonalItems.map((item, i) => (
+        <div key={i} className={`slide ${i === currentSlide ? 'active' : ''}`}>
+          <img
+            src={
+              seasonalImageMap[item] ||
+              'https://via.placeholder.com/600x400?text=No+Image+Available'
+            }
+            alt={item}
             className="slide-image"
           />
           <div className="slide-caption">
-            <h3>{season.name}</h3>
+            <h3>{item}</h3>
           </div>
         </div>
       ))}
 
-      <button className="slide-arrow right-arrow" onClick={handleNextSlide}>
+      <button
+        className="slide-arrow right-arrow"
+        onClick={() => setCurrentSlide(i => (i + 1) % seasonalItems.length)}
+      >
         &gt;
       </button>
     </div>

@@ -8,7 +8,7 @@ import {
   MdDoneOutline,
 } from "react-icons/md";
 import { Drawer, Button, Divider, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import { AccountCircle, Chat, Dashboard, ExitToApp } from "@mui/icons-material";
+import { AccountCircle, Chat, Dashboard, ExitToApp, Person } from "@mui/icons-material";
 import { FaCaretDown } from "react-icons/fa";
 import "./Header.css";
 
@@ -86,7 +86,9 @@ const Header = () => {
 
   const slidebarContent = [
     { title: "My Account",      icon: <AccountCircle />, onClick: () =>{ setOpen(false);navigate("/AccountInf")} },
-    { title: "Dashboard",       icon: <Dashboard />,      onClick: () => {setOpen(false);navigate("/DashBoard")}  },
+    { title: "My Profile",      icon: <Person />, onClick: () => { setOpen(false); navigate("/profile"); } },
+    { title: "Landowner Dashboard", icon: <Dashboard />, onClick: () => {setOpen(false);navigate("/DashBoard")}  },
+    { title: "Farmer Dashboard", icon: <Dashboard />, onClick: () => {setOpen(false);navigate("/FarmerDashboard")}  },
     { title: "My Chats",        icon: <Chat />,           onClick: () => {setOpen(false);navigate("/chat") }},
     { title: "Logout",          icon: <ExitToApp />,      onClick: handleLogout },
   ];

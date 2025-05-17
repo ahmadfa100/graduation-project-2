@@ -115,17 +115,20 @@ function UpdateOffer() {
       { isLoading? (   <ClipLoader color="green" size={50}    />):
         <form onSubmit={UpdateOfferSubmit}>
         <div className="group-input">
+          <label>Offer title</label>
           <input className="textInput" type="text" placeholder="Enter offer title" name="offer_title" defaultValue={form.landtitle} minLength="5" maxLength="100" required />
+          <label>Number of dunums</label>
           <UnitInput type="number" unit="m²" message="Enter land size" name="size" defaultValue={form.landsize} />
-
+          <label>Lease duration</label>
           <div className="detailed-input">
-           
             <input className="textInput" type="number" placeholder="Lease duration (years)" name="years" min="0" max="100"  defaultValue={form.leaseduration ? Math.floor(form.leaseduration / 12) : ""}  />
             <input className="textInput" type="number" placeholder="Lease duration (months)" name="months" min="0" max="12" defaultValue={form.leaseduration ? (form.leaseduration % 12) : ""}/>
           </div>
-
+          <label>Price</label>
           <UnitInput type="text" unit="JOD" message="Enter price" name="price" defaultValue={form.landleaseprice}  min="1" max="100000000"  />
+          <label>Location</label>
           <input className="textInput" type="text" placeholder="Enter offer location (e.g., Amman Sweileh)" name="location" defaultValue={form.landlocation}  minLength="2" maxLength="100" />
+          <label>Description</label>
           <textarea className="textInput" name="description" placeholder="Enter a detailed description" rows="5" required defaultValue={form.offerdescription} minLength="20" maxLength="500"></textarea>
 
           <div className="center">

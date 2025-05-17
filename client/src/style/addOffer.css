@@ -11,12 +11,25 @@
   margin: 50px auto;
   color: black;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  max-width: 600px; /* Prevents it from stretching too wide */
+  max-width: 600px;
+ /* Prevents it from stretching too wide */
+}
+.add_offer label {
+  font-size: 18px;
+  position: relative;
+  top: 15px;
+  margin: 0px;
+  padding: 0px;
+  color: #393939;
+}
+.add_offer :placeholder-shown {
+  font-size: 16px;
 }
 
 .add_offer h3 {
   color: #45a049;
   margin: 20px;
+  font-size: 24px;
 }
 
 .textInput {
@@ -70,6 +83,7 @@ textarea:focus {
 .file-upload {
   width: 100%;
   max-width: 400px;
+  min-height: 100px;
   position: relative;
   border: 2px dashed #4CAF50;
   border-radius: 10px;
@@ -77,7 +91,7 @@ textarea:focus {
   text-align: center;
   margin-top: 10px;
   cursor: pointer;
-  color: #4CAF50;
+  color: #4CAF50 !important;
 }
 
 .submit {

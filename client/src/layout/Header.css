@@ -207,3 +207,22 @@ body {
 .signup-button:hover {
   background-color: #45a049;
 }
+
+.MuiListItemText-primary {
+  font-size: 1.15rem !important;
+  font-weight: 500;
+  margin-bottom: 22px;
+  margin-left: 4px;
+}
+
+.MuiListItemIcon {
+  margin-right: 12px;
+}
+
+.signup-container .User-Avatar-Header h3 {
+  font-size: 1.08rem;
+}
+
+.nav-links a {
+  font-size: 1.08rem;
+}

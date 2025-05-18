@@ -3,6 +3,7 @@ import { FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 import '../style/UserProfile.css';
 import { useParams } from "react-router-dom";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function UserProfile() {
   const [user, setUser] = useState(null);
@@ -64,7 +65,7 @@ function UserProfile() {
     fetchProfileData();
   }, [userID]);
 
-  if (loading) return <div className="user-profile-page">Loading profile…</div>;
+  if (loading) return <div className="clip-loader">  <ClipLoader color="green" size={50} /></div>;
   if (!user) return <div className="user-profile-page">Failed to load profile.</div>;
 
   return (
@@ -74,7 +75,7 @@ function UserProfile() {
         <div className="profile-info">
           <h2>{user.name}</h2>
           <div className="profile-join">Member since {user.joinDate}</div>
-          <div className="profile-bio">{user.bio}</div>
+         
         </div>
       </div>
       <div className="profile-stats">

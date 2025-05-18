@@ -1,3 +1,10 @@
+.clip-loader {
+  display: flex;
+  justify-content: center; 
+  align-items: center;      
+  height: 100vh;            
+}
+
 .user-profile-page {
   max-width: 900px;
   margin: 30px auto;
@@ -40,11 +47,7 @@
   font-size: 0.95rem;
   margin-top: 4px;
 }
-.profile-bio {
-  margin-top: 10px;
-  font-size: 1.05rem;
-  color: #444;
-}
+
 .profile-stats {
   display: flex;
   gap: 32px;

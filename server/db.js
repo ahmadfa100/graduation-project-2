@@ -40,9 +40,12 @@ cron.schedule('0 0 * * *', async () => {
       WHERE offerDate < NOW() - INTERVAL '1 year' AND isReserved = false
     `);
     await db.query(`
-      DELETE FROM RentalDeals WHERE createdAt < NOW() - INTERVAL '1 year' AND isAccepted = false
+      DELETE FROM RentalDeals WHERE createdAt < NOW() - INTERVAL '1 year' AND (status <> 'accepted' OR status IS NULL)
       `);
-    console.log('Old offers AND deals deleted successfully.');
+      await db.query(`
+      DELETE FROM Chats WHERE chatDate < NOW() - INTERVAL '1 year' 
+      `);
+    console.log('Old offers,chats  AND deals deleted successfully.');
   } catch (err) {
     console.error('Error deleting old offers:', err);
   }

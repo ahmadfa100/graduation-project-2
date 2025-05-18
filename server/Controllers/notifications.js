@@ -1,7 +1,6 @@
 import express from "express";
 import { checkSeasonAlerts } from "../Services/seasonAlert.js";
-import { getWeatherAlerts } from "../Services/weatherAlert.js";
-
+import { getWeatherAlertsWB  } from "../Services/weatherAlertsWeatherbit.js";
 const router = express.Router();
 
 router.get("/api/notifications", async (req, res) => {
@@ -14,7 +13,7 @@ router.get("/api/notifications", async (req, res) => {
     }));
 
     // 2. Weather alert
-    const weatherMsg = await getWeatherAlerts();
+    const weatherMsg = await getWeatherAlertsWB();
     notifications.push({
       type: "weather",
       message: weatherMsg

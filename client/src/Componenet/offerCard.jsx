@@ -37,13 +37,13 @@ export default function OfferCard({
         <div className="offer-header">
           <h3 className="offer-title">{offer.landTitle}</h3>
           <span className="offer-price">
-            {!isNaN(price) ? price.toFixed(2) : offer.landLeasePrice}
+            {!isNaN(price) ? price.toFixed(2) : offer.landLeasePrice} JOD
           </span>
         </div>
 
         <p className="offer-subtitle">
           Land area:{" "}
-          {!isNaN(area) ? area.toFixed(2) : offer.landSize}, location:{" "}
+           {!isNaN(area) ? area.toFixed(2) : offer.landSize} m<sup>2</sup>, location:{" "}
           {offer.landLocation}
         </p>
 

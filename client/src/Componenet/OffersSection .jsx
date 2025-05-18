@@ -225,10 +225,12 @@ console.log("Outside use effect :",useID);
           <div className="offer-details">
             <div className="offer-header">
               <h3 className="offer-title">{offer.landtitle}</h3>
-              <span className="offer-price">{offer.landleaseprice}</span>
+              <span className="offer-price">
+                {parseFloat(offer.landleaseprice).toFixed(2)} JOD
+              </span>
             </div>
             <p className="offer-subtitle">
-              Land area: {offer.landsize}, location: {offer.landlocation}
+             Land area: {parseFloat(offer.landsize).toFixed(2)} m<sup>2</sup>, location: {offer.landlocation}
             </p>
           {  useID!==offer.ownerid&&  <div className="offer-actions">
               <button

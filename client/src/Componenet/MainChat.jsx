@@ -233,7 +233,7 @@ setMessages(formattedMessages);
             </div>
             <div className="chat-owner">
               {" "}
-              <h4>
+              <h4 onClick={()=>{navigate(`/profile/${chatData.participantid}`)}}>
                 {chatData.firstname || " "} {chatData.lastname || " "}
               </h4>
             </div>

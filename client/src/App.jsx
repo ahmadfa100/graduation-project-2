@@ -85,7 +85,7 @@ function App() {
                         </NotificationsProvider>
                       }
                     />
-                    <Route path="/profile" element={<UserProfile />} />
+                    <Route path="/profile/:userID?" element={<UserProfile />} />
                   </Routes>
                 </div>
                 <Footer />

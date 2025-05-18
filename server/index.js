@@ -42,7 +42,7 @@ import {
 import { signUp } from "./Controllers/signUP2.js";
 import { account, accountDeleteImage, accountUploadImage, getUser, updateAccount } from "./Controllers/account.js";
 import { sendMessage } from "./Controllers/contact.js";
-import { getProfile, getProfileStats, getRentedOffers } from "./Controllers/profile.js";
+import { getProfile, getProfileStats, getRentedOffers, getUserOffers } from "./Controllers/profile.js";
 
 // Load environment variables
 env.config();
@@ -185,9 +185,10 @@ app.get(
 app.post("/api/contact/send-message", sendMessage);
 
 // Profile endpoints
-app.get("/getProfile", getProfile);
-app.get("/profileStats", getProfileStats);
-app.get("/rentedOffers", getRentedOffers);
+app.get("/getProfile/:userID", getProfile);
+app.get("/profileStats/:userID", getProfileStats);
+app.get("/rentedOffers/:userID", getRentedOffers);
+app.get("/getUserOffers/:userID",getUserOffers)
 
 // Start server
 server.listen(port, () => {

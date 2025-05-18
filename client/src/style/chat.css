@@ -6,6 +6,11 @@
     margin: 0;
     flex-wrap: wrap;
 }
+.chat-page h4:hover {
+  color: rgb(193, 193, 193);
+  cursor: pointer;
+font-size: 1.01em;
+}
 
 .chat-page img {
     width: 200px;

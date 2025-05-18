@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 import '../style/UserProfile.css';
+import { useParams } from "react-router-dom";
 
 function UserProfile() {
   const [user, setUser] = useState(null);
@@ -10,43 +11,46 @@ function UserProfile() {
   const [rentals, setRentals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('offers');
+  const { userID } = useParams();
 
   useEffect(() => {
     async function fetchProfileData() {
       setLoading(true);
       try {
         // Fetch user info
-        const userRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getProfile`, { withCredentials: true });
+        const userRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getProfile/${userID}`, { withCredentials: true });
         console.log("User data:", userRes.data);
         setUser(userRes.data);
+        
         // Fetch stats
-        const statsRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/profileStats`, { withCredentials: true });
+        const statsRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/profileStats/${userID}`, { withCredentials: true });
         console.log("Stats data:", statsRes.data);
         setStats(statsRes.data);
+        
         // Fetch offers
-        const offersRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/dashboard/offers`, { withCredentials: true });
+        const offersRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getUserOffers/${userID}`, { withCredentials: true });
         console.log("Offers data:", offersRes.data);
         setOffers(offersRes.data);
+        
         // Fetch rentals (if endpoint exists)
         try {
-          const rentalsRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/farmer/current-lands`, { withCredentials: true });
+          const rentalsRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/rentedOffers/${userID}`, { withCredentials: true });
           console.log("Rentals data:", rentalsRes.data);
           setRentals(rentalsRes.data);
         } catch (err) {
-            if (err.response && err.response.status === 401) {
-                console.log("Not authenticated! Redirecting to login...");
-                window.location.href = "/login";
-                return;
-              }
-          setRentals([]); 
-          console.log("No rentals endpoint or error fetching rentals:", err);
-        }
-      } catch (err) {
-        if (err.response && err.response.status === 401) {
+          if (err.response && err.response.status === 401) {
             console.log("Not authenticated! Redirecting to login...");
             window.location.href = "/login";
             return;
           }
+          console.log("No rentals endpoint or error fetching rentals:", err);
+        }
+      } catch (err) {
+        if (err.response && err.response.status === 401) {
+          console.log("Not authenticated! Redirecting to login...");
+          window.location.href = "/login";
+          return;
+        }
         // Handle error 
         setUser(null);
         setStats(null);
@@ -58,7 +62,7 @@ function UserProfile() {
       }
     }
     fetchProfileData();
-  }, []);
+  }, [userID]);
 
   if (loading) return <div className="user-profile-page">Loading profile…</div>;
   if (!user) return <div className="user-profile-page">Failed to load profile.</div>;

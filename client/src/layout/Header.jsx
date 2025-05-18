@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,7 +20,7 @@ const Header = () => {
   const rightSectionRef                     = useRef(null);
   const navigate                            = useNavigate();
 
-  // 1) session check
+  //  session check
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/sessionInfo`, { withCredentials: true })
       .then(res => {
@@ -34,21 +33,21 @@ const Header = () => {
       .catch(() => setUser(null));
   }, []);
 
-  // 2) fetch notifications only after we know the user is logged in
+  //  fetch notifications only after we know the user is logged in
   useEffect(() => {
-    if (!user) return;   // <-- skip if not logged in
+    if (!user) return;  
     axios.get(`${process.env.REACT_APP_SERVER_URL}/api/notifications`, { withCredentials: true })
       .then(res => setNotifications(res.data.notifications || []))
       .catch(err => console.error("Error fetching notifications:", err));
   }, [user]);
 
-  // 3) toggle popup
+  //  toggle popup
   const handleNotificationClick = () => {
     setShowNotifications(prev => !prev);
     setIsIconActive(prev => !prev);
   };
 
-  // 4) close if outside click
+  // close if outside click
   useEffect(() => {
     const handleClickOutside = e => {
       if (rightSectionRef.current && !rightSectionRef.current.contains(e.target)) {
@@ -60,7 +59,7 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // 5) remove + auto‑close
+  //remove + auto‑close
   const handleRemoveNotification = index => {
     setNotifications(prev => {
       const next = prev.filter((_, i) => i !== index);
@@ -72,7 +71,7 @@ const Header = () => {
     });
   };
 
-  // 6) logout
+  //  logout
   const handleLogout = async () => {
     try {
       await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/logout`, {}, { withCredentials: true });

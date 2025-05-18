@@ -1,4 +1,3 @@
-// Controllers/notifications.js
 import express from "express";
 import { checkSeasonAlerts } from "../Services/seasonAlert.js";
 import { getWeatherAlerts } from "../Services/weatherAlert.js";

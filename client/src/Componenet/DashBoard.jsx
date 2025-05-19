@@ -88,7 +88,7 @@ export default function Dashboard() {
     setExpandedSection(isExpanded ? section : false);
   };
 
-  const renderLoading = () => <div className="loading-container"><CircularProgress /></div>;
+  const renderLoading = () => <div className="loading-container"><CircularProgress sx={{color:"green"}} /></div>;
   const renderEmpty = (msg) => <div className="empty-state"><p>{msg}</p></div>;
 
   const stats = {

@@ -80,15 +80,15 @@ const navigate= useNavigate();
         </div>
       </div>
       <div className="profile-stats">
-        <div className="stat-card">
+        <div className="profile-stat-card">
           <div className="stat-value">{stats ? stats.total_deals : '-'}</div>
           <div className="stat-label">Total Deals</div>
         </div>
-        <div className="stat-card">
+        <div className="profile-stat-card">
           <div className="stat-value">{stats ? stats.active_offers : '-'}</div>
           <div className="stat-label">Active Offers</div>
         </div>
-        <div className="stat-card">
+        <div className="profile-stat-card">
           <div className="stat-value">{stats ? stats.success_rate : '-'}%</div>
           <div className="stat-label">Success Rate</div>
           <div className="stat-bar"><div className="stat-bar-inner" style={{width: stats ? `${stats.success_rate}%` : '0%'}}></div></div>

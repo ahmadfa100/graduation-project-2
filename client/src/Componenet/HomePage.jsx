@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../style/HomePage.css";
+import "../style/offers-section.css";
 import Divider from "../layout/leaf";
 import { offers } from "./HomePage_data";
 import Season from "./Season";

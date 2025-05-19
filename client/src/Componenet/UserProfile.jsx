@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 import '../style/UserProfile.css';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
 
 function UserProfile() {
@@ -13,6 +13,7 @@ function UserProfile() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('offers');
   const { userID } = useParams();
+const navigate= useNavigate();
 
   useEffect(() => {
     async function fetchProfileData() {
@@ -71,7 +72,7 @@ function UserProfile() {
   return (
     <div className="user-profile-page">
       <div className="profile-header">
-        <img src={user.avatar || "../user.png"} alt="avatar" className="profile-avatar" />
+        <img src={user.avatar || "/user.png"} alt="avatar" className="profile-avatar" />
         <div className="profile-info">
           <h2>{user.name}</h2>
           <div className="profile-join">Member since {user.joinDate}</div>
@@ -101,7 +102,7 @@ function UserProfile() {
         {tab === 'offers' && (
           <div className="profile-cards">
             {offers.length === 0 ? <div>No offers found.</div> : offers.map(o => (
-              <div key={o.id} className="profile-offer-card">
+              <div key={o.id} className="profile-offer-card" onClick={()=>{ navigate(`/OfferDetails/${o.id}`)}}>
                 <img src={o.image} alt={o.title || o.landTitle} className="profile-offer-img" />
                 <div className="profile-offer-title">{o.title || o.landTitle}</div>
                 <div className={`profile-offer-status ${o.status || ''}`}>{o.status || ''}</div>
@@ -112,7 +113,7 @@ function UserProfile() {
         {tab === 'rentals' && (
           <div className="profile-cards">
             {rentals.length === 0 ? <div>No rentals found.</div> : rentals.map(r => (
-              <div key={r.id} className="profile-offer-card">
+              <div key={r.id} className="profile-offer-card"onClick={()=>{ navigate(`/OfferDetails/${r.offerID}`)}} >
                 <img src={r.landPicture} alt={r.title || r.landTitle} className="profile-offer-img" />
                 <div className="profile-offer-title">{r.title || r.landTitle}</div>
                 <div className={`profile-offer-status ${r.status || ''}`}>{r.status || ''}</div>

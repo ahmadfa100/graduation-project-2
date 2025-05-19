@@ -71,7 +71,7 @@ function UserProfile() {
   return (
     <div className="user-profile-page">
       <div className="profile-header">
-        <img src={user.avatar || "https://i.pravatar.cc/100?img=3"} alt="avatar" className="profile-avatar" />
+        <img src={user.avatar || "../user.png"} alt="avatar" className="profile-avatar" />
         <div className="profile-info">
           <h2>{user.name}</h2>
           <div className="profile-join">Member since {user.joinDate}</div>

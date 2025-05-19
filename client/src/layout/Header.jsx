@@ -101,9 +101,9 @@ const Header = () => {
 
       <nav className="nav-links">
         <Link to="/">Home</Link>
-        <Link to="/DashBoard">My offers</Link>
         <Link to="/education">Education</Link>
         <Link to="/about">About</Link>
+        <Link to="/contact">Contact</Link>
       </nav>
 
       <div className="right-section" ref={rightSectionRef}>

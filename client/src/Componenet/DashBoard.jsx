@@ -117,7 +117,7 @@ export default function Dashboard() {
       )}
 
       <div className="dashboard-header">
-        <h1>LandOwner’ Dashboard</h1>
+        <h1>LandOwner Dashboard</h1>
         <Tooltip title="Add New Offer">
           <button className="add-offer-button" onClick={() => navigate("/AddOffer")}> <FaPlus /> </button>
         </Tooltip>

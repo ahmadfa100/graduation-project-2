@@ -95,7 +95,7 @@ const Header = () => {
   return (
     <header className="header">
       <Link to="/" className="logo-container">
-        <img src="./logo.jpg" alt="Logo" className="logo"/>
+        <img src="/logo.jpg" alt="Logo" className="logo"/>
         <span className="brand-name">Green Bridge</span>
       </Link>
 
@@ -153,7 +153,7 @@ const Header = () => {
                     ? <img src={`data:${user.pfp.mime};base64,${btoa(String.fromCharCode(...user.pfp.data))}`} alt="profile" />
 
 
-                    : <img src="./user.png" alt="pfp" />}
+                    : <img src="/user.png" alt="pfp" />}
                   <h3>Hi {user.firstname}</h3>
                   <FaCaretDown style={{ position: 'relative', top: '10px', color: 'green' }}/>
                 </div>

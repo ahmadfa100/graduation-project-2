@@ -12,8 +12,18 @@
   color: black;
   box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
   max-width: 600px;
- /* Prevents it from stretching too wide */
 }
+
+.notification {
+  color: blue;
+  cursor: pointer;
+}
+
+.notification:hover {
+  color: rgb(14, 174, 223);
+  font-size: 1.05em;
+}
+
 .add_offer label {
   font-size: 18px;
   position: relative;

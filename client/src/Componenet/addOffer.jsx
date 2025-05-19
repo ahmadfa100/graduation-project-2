@@ -1,5 +1,6 @@
 import "../style/addOffer.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { useNotifications } from '@toolpad/core/useNotifications';
@@ -40,7 +41,7 @@ export default function AddOffer() {
   const notifications = useNotifications();
   const [images, setImages] = useState([]);
   const [hoveredImage, setHoveredImage] = useState(null);
-
+  const navigate = useNavigate();
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     const previews = files.map(file => ({
@@ -63,14 +64,19 @@ export default function AddOffer() {
     images.forEach(({ file }) => formData.append("images", file));
 
     try {
-       await axios.post(
+    const response=   await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/addOffer`,
         formData,
         { withCredentials: true }   
       );
      // console.log(response.data);
      
-      notifications.show('Offer saved successfully!', { severity: 'success', autoHideDuration:3000});
+     notifications.show(<>Offer saved successfully! <div className="notification" onClick={()=>{ navigate(`/OfferDetails/${response.data.offerId}`)}}>[Click here to preview it]</div></>, {
+      severity: "success",
+      autoHideDuration: 3000,
+
+      
+    });
     } catch (error) {
       if (error.response && error.response.status === 401) {
         console.log("Not authenticated! Redirecting to login...");

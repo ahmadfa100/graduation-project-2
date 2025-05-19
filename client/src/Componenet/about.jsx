@@ -48,7 +48,7 @@ function About() {
       </div>
 
       <div className="team-section">
-        <h2>Our Leadership Team</h2>
+        <h2>Our Team members</h2>
         <div className="team-grid">
           <div className="team-member">
             <div className="team-image">

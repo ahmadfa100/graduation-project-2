@@ -4,7 +4,7 @@ import { FaTrash } from "react-icons/fa";
 import axios from "axios";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import ClipLoader from "react-spinners/ClipLoader";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 function UnitInput(props) {
   return (
     <div className="unit-Input">
@@ -30,7 +30,7 @@ function UpdateOffer() {
   const notifications = useNotifications();
   const [images, setImages] = useState([]);
   const [hoveredImage, setHoveredImage] = useState(null);
-
+const navigate= useNavigate();
   function handleImageUpload(event) {
     const files = Array.from(event.target.files);
     const newImages = files.map((file) => ({
@@ -88,7 +88,7 @@ function UpdateOffer() {
 
     try {
       await axios.put(`${process.env.REACT_APP_SERVER_URL}/updateOffer/${offerID}`, formData,{ withCredentials: true } );
-      notifications.show("Offer updated successfully!", {
+      notifications.show(<>Offer updated successfully! <div className="notification" onClick={()=>{ navigate(`/OfferDetails/${offerID}`)}}>[Click here to preview it]</div></>, {
         severity: "success",
         autoHideDuration: 3000,
 

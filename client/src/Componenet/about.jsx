@@ -68,7 +68,7 @@ function About() {
           </div>
           <div className="team-member">
             <div className="team-image">
-              <img src="/user.png" alt="Team_member" />
+              <img src="/zh.jpg" alt="Team_member" />
             </div>
             <div className="team-info">
               <h3>Zaid Ghassan Hassouneh </h3>

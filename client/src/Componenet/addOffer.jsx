@@ -96,8 +96,8 @@ export default function AddOffer() {
           <div className="group-input">
           <label>Offer title</label>
             <input type="text" placeholder="Enter offer title" name="offer_title" minLength="5" maxLength="100" error="hi"/>
-            <label>Number of dunums</label>
-            <UnitInput type="number" unit="m²" message="Enter the number of dunums" name="size" />
+            <label>Land area</label>
+            <UnitInput type="number" unit="m²" message="Enter area in square meters" name="size" />
             <label>Lease duration</label>
             <div className="detailed-input">
               <Input type="number" message="Lease duration (years)" name="years" min="0" max="10" />

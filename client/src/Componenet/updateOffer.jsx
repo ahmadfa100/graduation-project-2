@@ -117,8 +117,8 @@ const navigate= useNavigate();
         <div className="group-input">
           <label>Offer title</label>
           <input className="textInput" type="text" placeholder="Enter offer title" name="offer_title" defaultValue={form.landtitle} minLength="5" maxLength="100" required />
-          <label>Number of dunums</label>
-          <UnitInput type="number" unit="m²" message="Enter land size" name="size" defaultValue={form.landsize} />
+          <label>Land area</label>
+          <UnitInput type="number" unit="m²" message="Enter area in square meters" name="size" defaultValue={form.landsize} />
           <label>Lease duration</label>
           <div className="detailed-input">
             <input className="textInput" type="number" placeholder="Lease duration (years)" name="years" min="0" max="100"  defaultValue={form.leaseduration ? Math.floor(form.leaseduration / 12) : ""}  />

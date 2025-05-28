@@ -1,227 +1,183 @@
+.page {
+  min-height: 100vh;
+
+  padding: 2rem 0;
+}
+
 .add_offer {
-  padding: 20px;
-  border-radius: 15px;
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  background-color: #fff;
-  margin: 50px auto;
-  color: black;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-}
-
-.notification {
-  color: blue;
-  cursor: pointer;
-}
-
-.notification:hover {
-  color: rgb(14, 174, 223);
-  font-size: 1.05em;
-}
-
-.add_offer label {
-  font-size: 18px;
-  position: relative;
-  top: 15px;
-  margin: 0px;
-  padding: 0px;
-  color: #393939;
-}
-.add_offer :placeholder-shown {
-  font-size: 16px;
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .add_offer h3 {
-  color: #45a049;
-  margin: 20px;
-  font-size: 24px;
-}
-
-.textInput {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
-}
-
-.unit {
-  position: relative;
-  top: 10px;
-  background-color: rgb(51, 184, 51);
-  padding: 8px 5px 8px;
-  width: 50px;
-  height: fit-content;
-  border-radius: 5px 0 0 5px;
-  color: white;
+  color: #1a4731;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
   text-align: center;
+  font-weight: 600;
 }
 
 .group-input {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.group-input label {
+  color: #2d4a3b;
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.textInput {
   width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.textInput:focus {
+  outline: none;
+  border-color: #38a169;
+  box-shadow: 0 0 0 3px rgba(56, 161, 105, 0.1);
 }
 
 .unit-Input {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  align-items: stretch;
-}
-
-.unit-Input .composite {
-  border-radius: 0px 5px 5px 0px;
-  outline: none;
-  flex: 1;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #4CAF50;
-  outline: none;
-}
-
-.file-upload {
-  width: 100%;
-  max-width: 400px;
-  min-height: 100px;
   position: relative;
-  border: 2px dashed #4CAF50;
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  margin-top: 10px;
-  cursor: pointer;
-  color: #4CAF50 !important;
-}
-
-.submit {
-  width: 100%;
-  max-width: 300px;
-  background: #4CAF50;
-  color: white;
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  font-size: 18px;
-  cursor: pointer;
-  margin-top: 15px;
-  text-align: center;
-}
-
-.submit:hover {
-  background: #45a049;
-}
-
-.page {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
+}
+
+.unit-Input .textInput {
+  flex-grow: 1;
+  padding-right: 3rem;
+}
+
+.unit {
+  position: static;
+  margin-left: -2.5rem;
+  color: #4a5568;
+  font-size: 0.9rem;
+  pointer-events: none;
 }
 
 .detailed-input {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.center {
+textarea.textInput {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.file-upload {
+  display: block;
   text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 30px;
+  padding: 1.5rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #4a5568;
+  font-size: 0.9rem;
+  background-color: #f7fafc;
+}
+
+.file-upload:hover {
+  border-color: #38a169;
+  background-color: #f0fff4;
 }
 
 .image-preview {
-  border: 1px solid rgb(204, 204, 204);
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px;
-  width: 400px;
-}
-
-.image-preview img {
-  border-radius: 20px;
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #cbd5e0;
+  border-radius: 8px;
+  background-color: #f7fafc;
 }
 
 .button-image {
   position: relative;
-  display: inline-block;
-  border-radius: 20px;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .button-image img {
-  width: 60px;
-  height: 60px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 20px;
-  transition: opacity 0.3s ease-in-out;
 }
 
 .delete-button {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 0, 0, 0.8);
-  color: white;
-  padding: 5px;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
   border: none;
   border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  color: #e53e3e;
+  transition: all 0.2s ease;
 }
 
-.button-image:hover .delete-button {
-  opacity: 1;
+.delete-button:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.submit {
+  background-color: #38a169;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.submit:hover {
+  background-color: #2f855a;
+  transform: translateY(-1px);
+}
+
+.notification {
+  color: #38a169;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-top: 0.5rem;
 }
 
 @media (max-width: 768px) {
   .add_offer {
-    width: 90%;
-    margin: 20px auto;
+    margin: 1rem;
+    padding: 1.5rem;
   }
-
-  .unit-Input,
+  
   .detailed-input {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .unit {
-    width: 100%;
-    border-radius: 5px;
-  }
-
-  .file-upload {
-    left: 0;
-    width: 100%;
-  }
-
-  .submit {
-    left: 0;
-    width: 100%;
+    grid-template-columns: 1fr;
   }
 }

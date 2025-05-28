@@ -1,14 +1,14 @@
 import "../style/addOffer.css";
 import { useState, useEffect } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaImage } from "react-icons/fa";
 import axios from "axios";
 import { useNotifications } from "@toolpad/core/useNotifications";
 import ClipLoader from "react-spinners/ClipLoader";
 import { useNavigate, useParams } from "react-router-dom";
+
 function UnitInput(props) {
   return (
     <div className="unit-Input">
-      <span className="unit">{props.unit}</span>
       <input
         className="textInput composite"
         type={props.type}
@@ -19,9 +19,12 @@ function UnitInput(props) {
         defaultValue={props.defaultValue}
         required
       />
+      <span className="unit">{props.unit}</span>
     </div>
   );
 }
+
+
 
 function UpdateOffer() {
   const {offerID}=useParams(); 
@@ -31,6 +34,7 @@ function UpdateOffer() {
   const [images, setImages] = useState([]);
   const [hoveredImage, setHoveredImage] = useState(null);
 const navigate= useNavigate();
+
   function handleImageUpload(event) {
     const files = Array.from(event.target.files);
     const newImages = files.map((file) => ({
@@ -38,6 +42,7 @@ const navigate= useNavigate();
       preview: URL.createObjectURL(file),
     }));
 
+    // Append new images to existing ones. Assuming fetched images are already in the state.
     setImages((prev) => [...prev, ...newImages]);
   }
 
@@ -58,32 +63,43 @@ const navigate= useNavigate();
           severity: "error",
           autoHideDuration: 3000,
         });
-        return;
+        return; // Stop execution if there's an error
       }
       setForm(response.data.offer);
-      console.log(form);
+      console.log(form); // This will log the initial empty state or stale state, useEffect runs async
+      // Map fetched image URLs to a similar structure as new uploads
       setImages(response.data.images.map((image) => ({
-        image: image,
-        preview: image,
+        // Assuming the fetched image is a URL string
+        image: image, // Use the URL as the 'image' property
+        preview: image, // Use the URL as the 'preview' property for consistency
       })));
-        setIsLoading(false);
+      setIsLoading(false);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         console.log("Not authenticated! Redirecting to login...");
         window.location.href = '/login';
-        return; 
+        return; // Stop execution if not authenticated
       }
       console.error("Error fetching offer:", error);
+      notifications.show('Error fetching offer. Please try again.', { severity: 'error' });
+      setIsLoading(false);
     }
-  
   }
 
   async function UpdateOfferSubmit(event) {
     event.preventDefault();
     const formData = new FormData(event.target);
 
+    // Append only the File objects, not the URLs of existing images
+    // Need to filter out image objects that are just URLs
     images.forEach(({ image }) => {
-      formData.append("images", image);
+      if (image instanceof File) {
+         formData.append("images", image);
+      } else {
+        // Handle existing images if needed (e.g., send a list of existing image URLs to keep)
+        // For now, assuming we only append new file uploads.
+        // You might need to add logic here to tell the backend which existing images to keep.
+      }
     });
 
     try {
@@ -91,14 +107,12 @@ const navigate= useNavigate();
       notifications.show(<>Offer updated successfully! <div className="notification" onClick={()=>{ navigate(`/OfferDetails/${offerID}`)}}>[Click here to preview it]</div></>, {
         severity: "success",
         autoHideDuration: 3000,
-
-        
       });
     } catch (error) {
       if (error.response && error.response.status === 401) {
         console.log("Not authenticated! Redirecting to login...");
         window.location.href = '/login';
-        return; 
+        return; // Stop execution if not authenticated
       }
       console.error("Error updating offer:", error);
       notifications.show("Error updating offer. Please try again.", {
@@ -111,30 +125,114 @@ const navigate= useNavigate();
   return (
     <div className="page">
       <div className="add_offer">
-        <h3>Land Lease Information</h3>
-      { isLoading? (   <ClipLoader color="green" size={50}    />):
+        <h3>Update Land Lease Offer</h3>
+      { isLoading? (   <ClipLoader color="green" size={50}    />): (
         <form onSubmit={UpdateOfferSubmit}>
         <div className="group-input">
-          <label>Offer title</label>
-          <input className="textInput" type="text" placeholder="Enter offer title" name="offer_title" defaultValue={form.landtitle} minLength="5" maxLength="100" required />
-          <label>Land area</label>
-          <UnitInput type="number" unit="m²" message="Enter area in square meters" name="size" defaultValue={form.landsize} />
-          <label>Lease duration</label>
-          <div className="detailed-input">
-            <input className="textInput" type="number" placeholder="Lease duration (years)" name="years" min="0" max="100"  defaultValue={form.leaseduration ? Math.floor(form.leaseduration / 12) : ""}  />
-            <input className="textInput" type="number" placeholder="Lease duration (months)" name="months" min="0" max="12" defaultValue={form.leaseduration ? (form.leaseduration % 12) : ""}/>
-          </div>
-          <label>Price</label>
-          <UnitInput type="text" unit="JOD" message="Enter price" name="price" defaultValue={form.landleaseprice}  min="1" max="100000000"  />
-          <label>Location</label>
-          <input className="textInput" type="text" placeholder="Enter offer location (e.g., Amman Sweileh)" name="location" defaultValue={form.landlocation}  minLength="2" maxLength="100" />
-          <label>Description</label>
-          <textarea className="textInput" name="description" placeholder="Enter a detailed description" rows="5" required defaultValue={form.offerdescription} minLength="20" maxLength="500"></textarea>
 
-          <div className="center">
+          <div>
+            <label>Offer title</label>
+            <input 
+            className="textInput"
+              type="text" 
+              message="Enter offer title" 
+              name="offer_title" 
+              defaultValue={form.landtitle} 
+              minLength="5" 
+              maxLength="100" 
+              required
+            />
+          </div>
+
+          <div>
+            <label>Land area</label>
+            <UnitInput 
+              type="number" 
+              unit="m²" 
+              message="Enter area in square meters" 
+              name="size" 
+              defaultValue={form.landsize} 
+              min="10" 
+              max="100000000" 
+            />
+          </div>
+
+          <div>
+            <label>Lease duration</label>
+            <div className="detailed-input">
+              <input 
+              className="textInput"
+                type="number" 
+                message="Years" 
+                name="years" 
+                min="0" 
+                max="100"  
+                defaultValue={form.leaseduration ? Math.floor(form.leaseduration / 12) : ""}  
+                required
+              />
+              <input 
+              className="textInput"
+                type="number" 
+                message="Months" 
+                name="months" 
+                min="0" 
+                max="12" 
+                defaultValue={form.leaseduration ? (form.leaseduration % 12) : ""}
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label>Price</label>
+            <UnitInput 
+              type="number" 
+              unit="JOD" 
+              message="Enter price" 
+              name="price" 
+              defaultValue={form.landleaseprice}  
+              min="0" 
+              max="100000000"  
+            />
+          </div>
+
+          <div>
+            <label>Location</label>
+            <input 
+            className="textInput"
+              type="text" 
+              message="Enter offer location (e.g., Amman Sweileh)" 
+              name="location" 
+              defaultValue={form.landlocation}  
+              minLength="2" 
+              maxLength="100" 
+              required
+            />
+          </div>
+
+          <div>
+            <label>Description</label>
+            <textarea 
+              className="textInput" 
+              name="description" 
+              placeholder="Enter a detailed description"
+              rows="5" 
+              required 
+              defaultValue={form.offerdescription} 
+              minLength="20" 
+              maxLength="500">
+            </textarea>
+          </div>
+
+          <div>
+            <label>Images</label>
             <label className="file-upload">
-              Click here to upload images (you can select multiple images)
-              <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload} />
+              <FaImage style={{ fontSize: '2rem', marginBottom: '0.5rem', color: '#38a169' }} />
+              <div>Click to select images</div>
+              <div style={{ fontSize: '0.8rem', color: '#4a5568', marginTop: '0.5rem' }}>
+                Recommended: 4 images (multiple selection allowed)
+              </div>
+              <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload} required/>
             </label>
 
             {images.length > 0 && (
@@ -156,14 +254,14 @@ const navigate= useNavigate();
                 ))}
               </div>
             )}
-
-            <button type="submit" className="submit">
-              Save and Publish
-            </button>
           </div>
+
+          <button type="submit" className="submit">
+            Update Offer
+          </button>
         </div>
       </form>
-      }
+      )}
       </div>
     </div>
   );

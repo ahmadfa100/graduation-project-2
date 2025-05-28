@@ -13,8 +13,6 @@ import "swiper/css/pagination";
 import "swiper/css/thumbs";
 import { useNotifications } from '@toolpad/core/useNotifications';
 
-const SERVER = process.env.REACT_APP_SERVER_URL;
-
 const EcommerceSlider = () => {
   const { offerID } = useParams();
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -25,7 +23,7 @@ const EcommerceSlider = () => {
   useEffect(() => {
     async function loadOffer() {
       try {
-        const response = await axios.get(`${SERVER}/getOffer/${offerID}`);
+        const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getOffer/${offerID}`);
         if (response.data && response.data.images) {
           setDetails(response.data.offer);
           setProductImages(response.data.images);
@@ -42,54 +40,66 @@ const EcommerceSlider = () => {
   }, [offerID]);
 
   if (isLoading) {
-    return <div className="loading"><ClipLoader color="green" size={50} /></div>;
+    return (
+      <div className="loading-container">
+        <ClipLoader color="#4CAF50" size={50} />
+      </div>
+    );
   }
 
   return (
-    <>
-      <div className="slider-container">
-        <Swiper
-          centeredSlides
-          spaceBetween={5}
-          slidesPerView="auto"
-          loop
-          keyboard={{ enabled: true }}
-          navigation
-          pagination={{ clickable: true }}
-          modules={[Navigation, Pagination, Thumbs, Keyboard]}
-          thumbs={{ swiper: thumbsSwiper }}
-          className="main-slider"
-          onInit={swiper => {
-            swiper.el.querySelector(".swiper-button-next").style.color = "green";
-            swiper.el.querySelector(".swiper-button-prev").style.color = "green";
-            swiper.el.querySelectorAll(".swiper-pagination-bullet").forEach(b => b.style.backgroundColor = "green");
-          }}
-        >
-          {productImages.map((img, idx) => (
-            <SwiperSlide key={idx}>
-              <img src={img} alt={`Slide ${idx + 1}`} className="main-image" />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+    <div className="offer-detail-page">
+      <div className="offer-content-container">
+        <div className="image-slider-section">
+          <div className="slider-container">
+            <Swiper
+              centeredSlides
+              spaceBetween={5}
+              slidesPerView="auto"
+              loop
+              keyboard={{ enabled: true }}
+              navigation
+              pagination={{ clickable: true }}
+              modules={[Navigation, Pagination, Thumbs, Keyboard]}
+              thumbs={{ swiper: thumbsSwiper }}
+              className="main-slider"
+              onInit={swiper => {
+                swiper.el.querySelector(".swiper-button-next").style.color = "#4CAF50";
+                swiper.el.querySelector(".swiper-button-prev").style.color = "#4CAF50";
+                swiper.el.querySelectorAll(".swiper-pagination-bullet").forEach(b => b.style.backgroundColor = "#4CAF50");
+              }}
+            >
+              {productImages.map((img, idx) => (
+                <SwiperSlide key={idx}>
+                  <div className="image-wrapper">
+                    <img src={img} alt={`Slide ${idx + 1}`} className="main-image" />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
 
-        <Swiper
-          onSwiper={setThumbsSwiper}
-          spaceBetween={5}
-          slidesPerView={3}
-          watchSlidesProgress
-          modules={[Thumbs]}
-          className="thumb-slider"
-        >
-          {productImages.map((img, idx) => (
-            <SwiperSlide key={idx}>
-              <img src={img} alt={`Thumb ${idx + 1}`} className="thumb-image" />
-            </SwiperSlide>
-          ))}
-        </Swiper>
+            <Swiper
+              onSwiper={setThumbsSwiper}
+              spaceBetween={10}
+              slidesPerView={4}
+              watchSlidesProgress
+              modules={[Thumbs]}
+              className="thumb-slider"
+            >
+              {productImages.map((img, idx) => (
+                <SwiperSlide key={idx}>
+                  <div className="thumb-wrapper">
+                    <img src={img} alt={`Thumb ${idx + 1}`} className="thumb-image" />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+
+        {details && <Details {...details} />}
       </div>
-
-      {details && <Details {...details} />}
-    </>
+    </div>
   );
 };
 
@@ -102,7 +112,7 @@ function Details(props) {
   useEffect(() => {
     async function fetchSession() {
       try {
-        const res = await axios.get(`${SERVER}/sessionInfo`, { withCredentials: true });
+        const res = await axios.get(`${process.env.REACT_APP_SERVER_URL}/sessionInfo`, { withCredentials: true });
         setUserID(res.data.user?.id);
       } catch (err) {
         console.error("Failed to fetch session:", err);
@@ -115,11 +125,10 @@ function Details(props) {
     async function checkFavorite() {
       try {
         const res = await axios.get(
-          `${SERVER}/FavoriteOffers`,
+          `${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`,
           { params: { offerID: props.id }, withCredentials: true }
         );
-        // server now returns [{ id, ... }] if favorited
-         setIsLiked(Array.isArray(res.data) && res.data.some(fav => fav.offerid === props.id));
+        setIsLiked(Array.isArray(res.data) && res.data.some(fav => fav.offerid === props.id));
       } catch (err) {
         console.error("Error fetching favorite status:", err);
       }
@@ -131,12 +140,12 @@ function Details(props) {
     try {
       if (isLiked) {
         await axios.delete(
-          `${SERVER}/DeleteFavoriteOffer`,
+          `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
           { data: { offerID: props.id }, withCredentials: true }
         );
       } else {
         await axios.post(
-          `${SERVER}/AddFavoriteOffers`,
+          `${process.env.REACT_APP_SERVER_URL}/AddFavoriteOffers`,
           { offerID: props.id },
           { withCredentials: true }
         );
@@ -154,7 +163,7 @@ function Details(props) {
   const handleRent = async () => {
     try {
       await axios.post(
-        `${SERVER}/rentRequest`,
+        `${process.env.REACT_APP_SERVER_URL}/rentRequest`,
         { offerID: props.id, landOwner: props.ownerid },
         { withCredentials: true }
       );
@@ -172,40 +181,71 @@ function Details(props) {
   };
 
   return (
-    <div className="details-container">
-      <h1>Offer Information</h1>
-      <h3>{props.landtitle}</h3>
-      <h4 id="price">{props.landleaseprice} JOD</h4>
-      <table>
-        <tbody>
-          <tr>
-            <td><strong>Size</strong></td>
-            <td>{props.landsize} m²</td>
-          </tr>
-          <tr>
-            <td><strong>Rent Duration</strong></td>
-            <td>{Math.floor(props.leaseduration/12)} yrs {(props.leaseduration%12)} mos</td>
-          </tr>
-          <tr>
-            <td><strong>Address</strong></td>
-            <td>{props.landlocation}</td>
-          </tr>
-        </tbody>
-      </table>
-      <LeafLine />
-      <p>{props.offerdescription}</p>
-      <LeafLine />
+    <div className="details-section">
+      <div className="details-header">
+        <h1 className="offer-title">{props.landtitle}</h1>
+        <div className="price-tag">
+          <span>{props.landleaseprice} JOD</span>
+        </div>
+      </div>
 
-      {userID !== props.ownerid && (
-        <>
-          <div className="button-container">
-            <Button.Call onClick={() => window.location.href = `tel:${props.PhoneNumber}`} />
-            <Button.Chat onClick={() => navigate(`/chat/${props.id}/${props.ownerid}`)} />
-            <Button.Like isLiked={isLiked} onClick={handleLikedOffer} />
+      <div className="details-card">
+        <div className="specs-grid">
+          <div className="spec-item">
+            <div className="spec-icon size-icon"></div>
+            <div>
+              <h4>Size</h4>
+              <p>{props.landsize} m²</p>
+            </div>
           </div>
-          <Button.Rent onClick={handleRent} />
-        </>
-      )}
+          
+          <div className="spec-item">
+            <div className="spec-icon duration-icon"></div>
+            <div>
+              <h4>Rent Duration</h4>
+              <p>{Math.floor(props.leaseduration/12)} yrs {(props.leaseduration%12)} mos</p>
+            </div>
+          </div>
+          
+          <div className="spec-item">
+            <div className="spec-icon location-icon"></div>
+            <div>
+              <h4>Address</h4>
+              <p>{props.landlocation}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="description-section">
+          <h3>Description</h3>
+          
+          <p className="description-text">{props.offerdescription}</p>
+        </div>
+        <LeafLine />
+        {userID !== props.ownerid && (
+          <div className="action-section">
+            <div className="quick-actions">
+              <Button.Call 
+                onClick={() => window.location.href = `tel:${props.PhoneNumber}`} 
+                className="action-btn"
+              />
+              <Button.Chat 
+                onClick={() => navigate(`/chat/${props.id}/${props.ownerid}`)} 
+                className="action-btn"
+              />
+              <Button.Like 
+                isLiked={isLiked} 
+                onClick={handleLikedOffer} 
+                className="action-btn"
+              />
+            </div>
+            <Button.Rent 
+              onClick={handleRent} 
+              className="rent-btn"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

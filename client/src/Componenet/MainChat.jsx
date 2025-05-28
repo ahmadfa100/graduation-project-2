@@ -222,14 +222,16 @@ setMessages(formattedMessages);
           <div className="chat-header">
             <div className="chat-offer-header">
                 {chatData.offerImage && (
-                  <div onClick={()=>{chatData.offerid && navigate(`/OfferDetails/${chatData.offerid}`)}}>
+                  <div className="chat-clickable" onClick={()=>{chatData.offerid && navigate(`/OfferDetails/${chatData.offerid}`)}}>
                   <img
                     src={`data:image/jpeg;base64,${chatData.offerImage}`}
                     alt="land"
                   />
                   </div>
                 )}
-              <h3>{chatData.landtitle || ""}</h3>
+             <div className="chat-clickable" onClick={()=>{chatData.offerid && navigate(`/OfferDetails/${chatData.offerid}`)}}>
+             <h3>{chatData.landtitle || ""}</h3>
+             </div>
             </div>
             <div className="chat-owner">
               {" "}

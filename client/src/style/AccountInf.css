@@ -1,199 +1,234 @@
-
-
 /* AccountInf.css */
 
 .account-inf-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f4f4f4; /* Light background */
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  padding: 2rem 1rem;
+}
+
+.account-inf-card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  width: 90%;
+  max-width: 800px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.profile-picture-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.profile-image:hover {
+  transform: scale(1.05);
+}
+
+.profile-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e9ecef 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  color: #8fa3bf;
+  transition: all 0.3s ease;
+}
+
+.profile-placeholder:hover {
+  transform: scale(1.05);
+  color: #6b84a8;
+}
+
+.picture-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.upload-btn,
+.delete-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.upload-btn {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+}
+
+.upload-btn:hover {
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.delete-btn {
+  background: linear-gradient(135deg, #ff4d4d 0%, #f44336 100%);
+  color: white;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
+}
+
+.delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.input-with-button {
+  margin-bottom: 1.5rem;
+  background: white;
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.input-with-button:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.input-with-button label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 0.95rem;
+}
+
+.input-container {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.full-width-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+  color: #2c3e50;
+}
+
+.full-width-input:focus {
+  border-color: #2196f3;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+  outline: none;
+}
+
+.full-width-input:disabled {
+  background: #f8fafc;
+  color: #6c757d;
+  cursor: not-allowed;
+}
+
+.full-width-input.input-error {
+  border-color: #ff4d4d;
+  background: #fff5f5;
+}
+
+.edit-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.edit-btn:not(.save) {
+  background: linear-gradient(135deg, #2196f3 0%, #1e88e5 100%);
+  color: white;
+}
+
+.edit-btn:not(.save):hover {
+  background: linear-gradient(135deg, #1e88e5 0%, #1976d2 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+}
+
+.edit-btn.save {
+  background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+  color: white;
+}
+
+.edit-btn.save:hover {
+  background: linear-gradient(135deg, #45a049 0%, #3d8b40 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.5rem;
+  color: #ff4d4d;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
   .account-inf-card {
-    background-color: white;
-    padding: 30px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    width: 80%;
-    max-width: 800px;
+    width: 100%;
+    padding: 1.5rem;
   }
-  
-  .profile-picture-section {
-    display: flex;
+
+  .input-container {
     flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
   }
-  
-  .profile-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 10px;
+
+  .full-width-input {
+    margin-bottom: 0.75rem;
   }
-  
-  .profile-placeholder {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background-color: #e0e0e0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
+
+  .edit-btn {
+    width: 100%;
   }
-  
+
   .picture-buttons {
-    display: flex;
-    gap: 10px;
+    flex-direction: column;
+    width: 100%;
   }
-  
+
   .upload-btn,
   .delete-btn {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .upload-btn {
-    background-color: #4caf50; /* Green */
-    color: white;
-  }
-  
-  .delete-btn {
-    background-color: #f44336; /* Red */
-    color: white;
-  }
-  
-  /* --- UPDATED FORM STYLES --- */
-  .input-with-button {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
     width: 100%;
   }
-  
-  .input-with-button label {
-    margin-bottom: 5px;
-    font-weight: bold;
-  }
-  
-  .input-container {
-    display: flex;
-    width: 100%;
-  }
-  
-  .full-width-input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    margin-right: 10px;
-  }
-  
-  .full-width-input.input-error {
-    border-color: #f44336;
-  }
-  
-  .edit-btn {
-    padding: 8px 15px;
-    border: none;
-    border-radius: 4px;
-    background-color: #2196f3; /* Blue */
-    color: white;
-    cursor: pointer;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  
-  .edit-btn.save {
-    background-color: #4caf50; /* Green when saving */
-  }
-  
-  .field-error {
-    margin: 4px 0 0 0;
-    color: #f44336;
-    font-size: 0.9em;
-  }
-  
-  /* Responsive adjustments */
-  @media (max-width: 480px) {
-    .account-inf-card {
-      width: 90%;
-      padding: 20px;
-    }
-  
-    .input-container {
-      flex-direction: column;
-    }
-  
-    .full-width-input {
-      margin-right: 0;
-      margin-bottom: 8px;
-    }
-  
-    .edit-btn {
-      align-self: flex-end;
-    }
-  }
-  
-  
-
-
-
-
-
-/* 
-.AccountInf-location{
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f8f8f8;
 }
-.AccountInf {
-    width: 1000px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-.Submit-btn{
-    width: 10%;
-    padding: 10px;
-    background: linear-gradient(to right, #a4c639, #8ebf45);
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-.AccountInf img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    margin-bottom: 15px;
-    border-style: solid;
-    border-color: green;
-}
-.AccountInf input {
-    padding: 8px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 99%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background: #f1f1f1;
-}
-.AccountInf label {
-    font-weight: bold;
-    text-align: left;
-    display: block;
-    margin-top: 10px;
-} */

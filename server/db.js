@@ -45,7 +45,7 @@ cron.schedule('0 0 * * *', async () => {
       await db.query(`
       DELETE FROM Chats WHERE chatDate < NOW() - INTERVAL '1 year' 
       `);
-    await db.query(` DELETE FROM sessions WHERE createdAt < NOW() - INTERVAL '2 weeks' `);
+    await db.query(` DELETE FROM sessions WHERE expire < NOW()`);
     console.log('Old offers, chats, sessions, and deals deleted successfully.');
     
   } catch (err) {

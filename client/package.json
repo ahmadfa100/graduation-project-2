@@ -50,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^14.4.0",
     "react-app-rewired": "^2.2.1"
   }
 }

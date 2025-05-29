@@ -44,6 +44,9 @@ import { account, accountDeleteImage, accountUploadImage, getUser, updateAccount
 import { sendMessage } from "./Controllers/contact.js";
 import { getProfile, getProfileStats, getRentedOffers, getUserOffers } from "./Controllers/profile.js";
 
+// Import connect-pg-simple
+import pgSession from 'connect-pg-simple';
+
 // Load environment variables
 env.config();
 const app = express();
@@ -60,9 +63,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(notificationsRouter);
 
+// Create a new PgStore instance
+const sessionStore = new (pgSession(session))({
+  pool: db, // Use your existing pg pool
+  tableName: 'sessions', // Specify the table name
+});
+
 // Session configuration
 app.use(
   session({
+    store: sessionStore, // Use the new session store
     secret: process.env.SESSION_SECRET || "your-secret-key",
     resave: false,
     saveUninitialized: false,
@@ -194,3 +204,10 @@ app.get("/getUserOffers/:userID",getUserOffers)
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+// Socket.io connection setup
+io.on("connection", (socket) => {
+// ... existing code ...
+});
+
+export default app;

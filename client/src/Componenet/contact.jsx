@@ -68,7 +68,7 @@ function Contact() {
                 <FaPhone className="contact-icon" />
                 <div>
                   <h3>Phone</h3>
-                  <p>+216 55 555 555</p>
+                  <p>+962 79 955 421</p>
                 </div>
               </div>
               
@@ -76,7 +76,7 @@ function Contact() {
                 <FaWhatsapp className="contact-icon" />
                 <div>
                   <h3>WhatsApp</h3>
-                  <p>+216 55 555 555</p>
+                  <p>+962 79 955 421</p>
                 </div>
               </div>
 

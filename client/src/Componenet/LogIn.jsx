@@ -56,7 +56,6 @@ const Login = () => {
           />
         </label>
         
-        {/* Error message display */}
         {error && (
           <div className="error-message" style={{ 
             color: 'red', 

@@ -1,6 +1,5 @@
 import db from "../db.js";
 
-//Complex query will returnon initial data about chat such as the offer title and its image  Other participant and chatID
 export async function getChatData(req, res) {
   const { offerID, userID } = req.query;
   if (!req.session.user?.id) {
@@ -44,7 +43,6 @@ export async function getChatData(req, res) {
       return res.status(404).json({error:'Not Found'});
     }
 
-    // Convert image to base64 string if it exists
     const chatInfo = result.rows[0];
     if (chatInfo.offerimage) {
       chatInfo.offerImage = chatInfo.offerimage.toString('base64');
@@ -81,16 +79,13 @@ export async function getChatByUser(req, res) {
 
     if (chats.rowCount > 0) {
       for (const item of chats.rows) {
-        // Get offer info with one image
         const offer = await db.query(
           "SELECT o.id AS offerID, o.landTitle, lp.picture FROM offers o JOIN landPicture lp ON lp.landID = o.id WHERE o.id = $1 LIMIT 1",
           [item.offerid]
         );
 
-        // Fallback if no offer/image is found
         const offerData = offer.rows[0] || { landtitle: null, picture: null };
 //console.log("offerData : ",offerData.offerid);
-        // Get other participant
         const otherParticipantID =
           userID === item.senderid ? item.receiverid : item.senderid;
 
@@ -195,7 +190,6 @@ export async function getChatContent(req, res) {
   }
 }
 
-// POST /addchat - Create a new chat.
 export async function addChat(req, res) {
   try {
     console.log("add chat in addChat");

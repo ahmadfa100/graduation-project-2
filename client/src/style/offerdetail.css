@@ -1,4 +1,3 @@
-/* Base Styles */
 .offer-detail-page {
   max-width: 1400px;
   margin: 0 auto;
@@ -23,7 +22,6 @@
   }
 }
 
-/* Loading State */
 .loading-container {
   display: flex;
   justify-content: center;
@@ -31,7 +29,6 @@
   height: 100vh;
 }
 
-/* Image Slider Section */
 .image-slider-section {
   flex: 5;
   min-width: 0;
@@ -132,7 +129,6 @@
   margin-right: 0px !important;
 }
 
-/* Details Section */
 .details-section {
   flex: 7;
   padding: 0 15px;
@@ -269,7 +265,6 @@
   font-size: 16px;
 }
 
-/* Action Section */
 .action-section {
   margin-top: 30px;
 }
@@ -320,7 +315,6 @@
   box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
   .main-slider {
     height: 300px;
@@ -347,35 +341,35 @@
   margin: 1rem auto;
   max-width: 700px; 
   width: 90%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); /* Clean shadow */
-  font-family: 'Roboto', sans-serif; /* A clean, widely available font */
-  color: #333; /* Dark text for readability */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08); 
+  font-family: 'Roboto', sans-serif; 
+  color: #333; 
   display: flex;
   flex-direction: column;
-  gap: 1.8rem; /* Space between main sections */
+  gap: 1.8rem;
 }
 
 .details-container h1 {
-  color: #555; /* Medium gray title */
+  color: #555; 
   font-size: 1.8rem;
   margin-bottom: 1.5rem;
   text-align: center;
   font-weight: 700;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #eee; /* Light gray separator */
+  border-bottom: 1px solid #eee; 
 }
 
 .offer-header-section {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Align header text to the left */
-  gap: 0.4rem; /* Reduced gap */
-  padding-bottom: 1.2rem; /* Reduced padding */
-  border-bottom: 1px dashed #cccccc; /* Lighter dashed separator */
+  align-items: flex-start; 
+  gap: 0.4rem;
+  padding-bottom: 1.2rem; 
+  border-bottom: 1px dashed #cccccc; 
 }
 
 .offer-header-section h3 {
-  color: #333; /* Dark text for title */
+  color: #333; 
   font-size: 1.6rem;
   margin: 0;
   font-weight: 600;
@@ -383,28 +377,28 @@
 
 #price {
   display: inline-block;
-  background: #f0f0f0; /* Light gray background */
-  color: #333; /* Dark text */
+  background: #f0f0f0; 
+  color: #333;
   padding: 0.3rem 0.8rem;
-  border-radius: 4px; /* Square corners */
-  font-weight: 600; /* Medium bold */
+  border-radius: 4px; 
+  font-weight: 600; 
   font-size: 0.9rem;
-  border: 1px solid #ccc; /* Subtle border */
+  border: 1px solid #ccc;
 }
 
 .offer-details-section,
 .offer-description-section {
-  padding: 1.5rem 0; /* Padding top and bottom */
-  border-top: 1px solid #eee; /* Separator above section */
+  padding: 1.5rem 0;
+  border-top: 1px solid #eee; 
 }
 
 .offer-description-section {
-    border-bottom: 1px solid #eee; /* Separator below description */
+    border-bottom: 1px solid #eee; 
 }
 
 .offer-details-section h3,
 .offer-description-section h3 {
-    color: #555; /* Medium gray for section titles */
+    color: #555; 
     font-size: 1.2rem;
     margin-top: 0;
     margin-bottom: 1rem;
@@ -414,11 +408,11 @@
 .offer-details-section table {
   width: 100%;
   border-collapse: collapse;
-  margin: 1rem 0; /* Add space above and below table */
+  margin: 1rem 0; 
 }
 
 .offer-details-section tr {
-  border-bottom: 1px solid #f8f8f8; /* Very light row border */
+  border-bottom: 1px solid #f8f8f8;
 }
 
 .offer-details-section tr:last-child {
@@ -434,7 +428,7 @@
 
 .offer-details-section td:first-child {
   font-weight: 600;
-  width: 140px; /* Adjusted label width */
+  width: 140px; 
   color: #333;
 }
 
@@ -443,17 +437,16 @@
   color: #555;
   font-size: 1rem;
   text-align: justify;
-  margin: 0.8rem 0 0 0; /* Space above paragraph */
+  margin: 0.8rem 0 0 0; 
 }
 
 .details-container .LeafLine {
-    margin: 1.5rem 0; /* Space around separator */
-    border: none; /* Remove default LeafLine border */
-    height: 1px; /* Visual line height */
-    background-color: #e0e0e0; /* Light gray line */
+    margin: 1.5rem 0;
+    border: none; 
+    height: 1px; 
+    background-color: #e0e0e0;
 }
 
-/* Style for the button container */
 .button-container {
   display: flex;
   gap: 1rem;
@@ -462,7 +455,6 @@
   flex-wrap: wrap;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .details-container {
     padding: 1.5rem;
@@ -490,7 +482,7 @@
   
   .offer-details-section,
   .offer-description-section {
-    padding: 1rem 0; /* Adjusted padding */
+    padding: 1rem 0; 
   }
 
   .offer-details-section h3,

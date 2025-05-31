@@ -17,7 +17,6 @@ import {
   rentRequest
 } from "./Controllers/rentalRequests.js";
 
-// Controllers
 import { loginUser } from "./Controllers/login.js";
 import {
   getOffer,
@@ -44,49 +43,40 @@ import { account, accountDeleteImage, accountUploadImage, getUser, updateAccount
 import { sendMessage } from "./Controllers/contact.js";
 import { getProfile, getProfileStats, getRentedOffers, getUserOffers } from "./Controllers/profile.js";
 
-// Import connect-pg-simple
 import pgSession from 'connect-pg-simple';
 
-// Load environment variables
 env.config();
 const app = express();
 const port = process.env.PORT || 3001;
-// CORS configuration
 app.use(
   cors({
-    origin: true, // This allows all origins
+    origin: true, 
     credentials: true,
   })
 );
-// Body parsers
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(notificationsRouter);
 
-// Create a new PgStore instance
 const sessionStore = new (pgSession(session))({
-  pool: db, // Use your existing pg pool
-  tableName: 'sessions', // Specify the table name
+  pool: db, 
+  tableName: 'sessions',
 });
 
-// Session configuration
 app.use(
   session({
-    store: sessionStore, // Use the new session store
+    store: sessionStore, 
     secret: process.env.SESSION_SECRET || "your-secret-key",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false, // set true in production with HTTPS
-      httpOnly: false, // allow JS to read cookie (dev only)
+      secure: false, 
+      httpOnly: false, 
       sameSite: "lax",
     },
   })
 );
 
-// ——————————————
-// Session‐update endpoint
-// ——————————————
 app.post("/api/addObjectSession", (req, res) => {
   const { key, value } = req.body;
 
@@ -104,14 +94,13 @@ app.post("/api/addObjectSession", (req, res) => {
   });
 });
 
-// Multer setup for file uploads
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 const server = createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: true, // This allows all origins
+    origin: true, 
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -125,7 +114,6 @@ app.post("/api/logout", (req, res) => {
   });
 });
 
-// account & signup2
 app.post("/api/login", loginUser);
 app.post("/api/signup",signUp);
 app.get("/getuser",getUser);
@@ -134,12 +122,10 @@ app.post("/api/account/update", updateAccount);
 app.post("/api/account/upload-image",accountUploadImage);
 app.post("/api/account/delete-image", accountDeleteImage);
 
-//fav
 app.get("/FavoriteOffers", getFav);
 app.post("/AddFavoriteOffers", AddFavoriteOffers);
 app.delete("/DeleteFavoriteOffer", DeleteFavoriteOffer);
 
-// Offers endpoints
 app.get("/getOffer/:offerID", getOffer);
 app.post("/addOffer", upload.array("images", 10), addOffer);
 app.put("/updateOffer/:offerID", upload.array("images", 10), updateOffer);
@@ -147,24 +133,20 @@ app.delete("/deleteOffer/:offerID", deleteOffer);
 app.get("/offers", getAllOffers);
 
 
-// Chat (HTTP)
 app.get("/getChatData", getChatData);
 app.get("/getchatcontent", getChatContent);
 app.post("/addchat", addChat);
 app.get("/getChatByUser", getChatByUser);
 initSocket(io);
 
-// Session info (for debugging)
 app.get("/sessionInfo", (req, res) => {
   res.json(req.session);
 });
 
-// Dashboard "my offers"
 app.get("/dashboard/offers", getMyOffers);
 app.delete("/deleteOffer/:offerID", deleteOffer);
 
 
-// Add this middleware to check session
 app.get("/api/check-session", (req, res) => {
   if (!req.session.user) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -191,23 +173,18 @@ app.get(
   getCurrentLands
 );
 
-// Contact form endpoint
 app.post("/api/contact/send-message", sendMessage);
 
-// Profile endpoints
 app.get("/getProfile/:userID", getProfile);
 app.get("/profileStats/:userID", getProfileStats);
 app.get("/rentedOffers/:userID", getRentedOffers);
 app.get("/getUserOffers/:userID",getUserOffers)
 
-// Start server
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// Socket.io connection setup
 io.on("connection", (socket) => {
-// ... existing code ...
 });
 
 export default app;

@@ -30,7 +30,7 @@
   padding: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;   /* ← align title & subtitle at top */
+  justify-content: flex-start;  
 }
 
 .offer-header {
@@ -56,7 +56,7 @@
 }
 
 .offer-actions {
-  margin-top: auto;  /* push the buttons to the bottom if you like */
+  margin-top: auto;  
   display: flex;
   gap: 0.5rem;
 }

@@ -19,8 +19,8 @@ export const sendMessage = async (req, res) => {
 
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER, // You receive the contact message
-      replyTo: email, // So you can reply directly to the user
+      to: process.env.EMAIL_USER, 
+      replyTo: email, 
       subject: `Contact Form: ${subject}`,
       html: `
         <h2>New Contact Form Submission</h2>

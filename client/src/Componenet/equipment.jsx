@@ -11,7 +11,6 @@ function JordanFarmingEquipment() {
       </p>
 
       <div className="equipment-grid">
-        {/* Card 1 */}
         <div className="equipment-card">
           <img
             src="./Helpful Websites/logo_back.png"
@@ -31,7 +30,6 @@ function JordanFarmingEquipment() {
           </a>
         </div>
 
-        {/* Card 2 */}
         <div className="equipment-card">
           <img
             src="./Helpful Websites/Rama.png"
@@ -51,7 +49,6 @@ function JordanFarmingEquipment() {
           </a>
         </div>
 
-        {/* Card 3 */}
         <div className="equipment-card">
           <img
             src="./Helpful Websites/Micdadi.png"

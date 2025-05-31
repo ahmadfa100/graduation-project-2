@@ -16,7 +16,6 @@ export const signUp= async (req, res) => {
       confirmPassword,
     } = req.body;
   
-    // Validation functions
     const isValidName = (name) => /^[a-zA-Z]{2,30}$/.test(name);
     const isValidPhone = (phone) => /^\d{10}$/.test(phone);
     const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -25,7 +24,6 @@ export const signUp= async (req, res) => {
         pw.length >= 8 &&
         /[A-Z]/.test(pw) &&
         /[0-9]/.test(pw) &&
-        // include dash, underscore, equals, plus, brackets, slash, semicolon, `~ etc.
         /[!@#$%^&*(),.?":{}|<>\-_=+\[\]\\/;'`~]/.test(pw)
       );
     };
@@ -36,12 +34,10 @@ export const signUp= async (req, res) => {
       );
     };
   
-    // Safely parse date parts
     const d = parseInt(day),
       m = parseInt(month),
       y = parseInt(year);
   
-    // Field validations
     if (!firstName || !isValidName(firstName)) {
       return res
         .status(400)
@@ -83,7 +79,6 @@ export const signUp= async (req, res) => {
       return res.status(400).json({ error: "Passwords do not match" });
     }
   
-    // Age validation (minimum 13 years)
     const birthDate = new Date(y, m - 1, d);
     const ageDiff = Date.now() - birthDate.getTime();
     const ageDate = new Date(ageDiff);

@@ -128,7 +128,6 @@ function SignUp() {
           <h2>Create a new account</h2>
           
 
-          {/* First & Last Name */}
           <div className="input-group">
             <label htmlFor="firstName">First name</label>
             <Input type="text" name="firstName" value={formData.firstName}
@@ -140,14 +139,12 @@ function SignUp() {
                    onChange={handleChange} error={errors.lastName} />
           </div>
 
-          {/* Address */}
           <div className="input-group">
             <label htmlFor="address">Address</label>
             <Input type="text" name="address" value={formData.address}
                    onChange={handleChange} error={errors.address} />
           </div>
 
-          {/* Date of Birth */}
           <div className="input-group">
             <label>Date of birth</label>
             <div className="dob-row">
@@ -163,7 +160,6 @@ function SignUp() {
             </div>
           </div>
 
-          {/* Gender */}
           <div className="input-group">
             <label>Gender</label>
             <div className="gender-options">
@@ -179,7 +175,6 @@ function SignUp() {
             </div>
           </div>
 
-          {/* Contact */}
           <div className="input-group">
             <label htmlFor="mobileNumber">Mobile number</label>
             <Input type="tel" name="mobileNumber" value={formData.mobileNumber}
@@ -190,7 +185,6 @@ function SignUp() {
                    onChange={handleChange} error={errors.email} />
           </div>
 
-          {/* Password */}
           <div className="input-group">
             <label htmlFor="password">New password</label>
             <Input type="password" name="password" value={formData.password}

@@ -19,22 +19,18 @@ const navigate= useNavigate();
     async function fetchProfileData() {
       setLoading(true);
       try {
-        // Fetch user info
         const userRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getProfile/${userID}`, { withCredentials: true });
         console.log("User data:", userRes.data);
         setUser(userRes.data);
         
-        // Fetch stats
         const statsRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/profileStats/${userID}`, { withCredentials: true });
         console.log("Stats data:", statsRes.data);
         setStats(statsRes.data);
         
-        // Fetch offers
         const offersRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/getUserOffers/${userID}`, { withCredentials: true });
         console.log("Offers data:", offersRes.data);
         setOffers(offersRes.data);
         
-        // Fetch rentals (if endpoint exists)
         try {
           const rentalsRes = await axios.get(`${process.env.REACT_APP_SERVER_URL}/rentedOffers/${userID}`, { withCredentials: true });
           console.log("Rentals data:", rentalsRes.data);
@@ -53,7 +49,6 @@ const navigate= useNavigate();
           window.location.href = "/login";
           return;
         }
-        // Handle error 
         setUser(null);
         setStats(null);
         setOffers([]);

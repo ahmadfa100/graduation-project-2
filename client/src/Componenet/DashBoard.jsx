@@ -25,7 +25,6 @@ export default function Dashboard() {
   const [expandedSection, setExpandedSection] = useState('offers');
   const navigate = useNavigate();
 
-  // fetch "My Offers"
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/dashboard/offers`, { withCredentials: true })
       .then(res => setMyOffers(res.data))
@@ -33,7 +32,6 @@ export default function Dashboard() {
       .finally(() => setLoading(prev => ({ ...prev, offers: false })));
   }, []);
 
-  // fetch "Favorite Offers"
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`, { withCredentials: true })
       .then(res => setFavoriteOffers(res.data))
@@ -41,7 +39,6 @@ export default function Dashboard() {
       .finally(() => setLoading(prev => ({ ...prev, favorites: false })));
   }, []);
 
-  // fetch pending rental requests
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/dashboard/requests`, { withCredentials: true })
       .then(res => setRequests(res.data))
@@ -49,7 +46,6 @@ export default function Dashboard() {
       .finally(() => setLoading(prev => ({ ...prev, requests: false })));
   }, []);
 
-  // fetch lands currently rented out
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}/dashboard/active-rentals`, { withCredentials: true })
       .then(res => setActiveRentals(res.data))
@@ -132,7 +128,6 @@ export default function Dashboard() {
 
       <div className="spacer" />
 
-      {/* My Offers */}
       <Accordion expanded={expandedSection === 'offers'} onChange={handleAccordionChange('offers')} className="dashboard-section">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Badge badgeContent={stats.totalOffers} color="primary">My Offers</Badge>
@@ -146,7 +141,6 @@ export default function Dashboard() {
 
       <div className="spacer" />
 
-      {/* Favorites */}
       <Accordion expanded={expandedSection === 'favorites'} onChange={handleAccordionChange('favorites')} className="dashboard-section">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Badge badgeContent={stats.totalFavorites} color="secondary">Favorite Offers</Badge>
@@ -160,7 +154,6 @@ export default function Dashboard() {
 
       <div className="spacer" />
 
-      {/* Requests */}
       <Accordion expanded={expandedSection === 'requests'} onChange={handleAccordionChange('requests')} className="dashboard-section">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Badge badgeContent={stats.pendingRequests} color="warning">Requested Lands</Badge>
@@ -185,7 +178,6 @@ export default function Dashboard() {
 
       <div className="spacer" />
 
-      {/* Active Rentals */}
       <Accordion expanded={expandedSection === 'rentals'} onChange={handleAccordionChange('rentals')} className="dashboard-section">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Badge badgeContent={stats.activeRentals} color="info">Active Rentals</Badge>

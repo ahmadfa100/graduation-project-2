@@ -194,7 +194,6 @@ select {
   -webkit-text-fill-color: #357a38;
 }
 
-/* Responsive adjustments */
 @media (max-width: 480px) {
   .signup-cont {
     padding: 1.5rem;

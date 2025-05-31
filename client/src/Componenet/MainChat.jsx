@@ -133,7 +133,6 @@ function MainChat(props) {
   async function fetchChat(chatID) {
     try {
 
-      // console.log("Fetching chat messages...");
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}/getchatcontent/`,
         { params: { chatID } }
@@ -147,7 +146,6 @@ function MainChat(props) {
         setChatLoading(false);
       } else {
         const oldMessages = response.data;
-        //  console.log(Array.isArray(oldMessages)); // Should print true
         console.log("messages:", oldMessages);
         const formattedMessages = oldMessages.map((element) => {
   const isCurrentUser = element.senderid === chatDataRef.current.currentUserID;
@@ -156,7 +154,7 @@ function MainChat(props) {
     ? element.contenttext
     : new Uint8Array(element.contentfile?.data || []);
     const date = new Date(element.sent_at);
-    date.setHours(date.getHours() + 3); // Add 3 hours
+    date.setHours(date.getHours() + 3); 
     
     const time = date.toLocaleTimeString([], {
       hour: "2-digit",

@@ -32,7 +32,7 @@ export const getProfile = async (req, res) => {
       age: user.age,
       avatar: user.profileimage ? `data:image/png;base64,${user.profileimage}` : null,
       joinDate: user.created_at ? new Date(user.created_at).toLocaleDateString() : '',
-      bio: '', // You can add a bio field if you have it
+      bio: '', 
     });
   } catch (err) {
     console.error(err);
@@ -40,7 +40,6 @@ export const getProfile = async (req, res) => {
   }
 };
 
-// GET /api/profile/stats - user stats
 export const getProfileStats = async (req, res) => {
   let userID = parseInt(req.params.userID);
  
@@ -131,14 +130,12 @@ export const getRentedOffers = async (req, res) => {
       [userID]
     );
 
-    // Add data URI prefix for images
     const result = rows.map(row => ({
       ...row,
       landPicture: row.landPicture
         ? `data:image/jpeg;base64,${row.landPicture}`
         : null,
     }));
-    //console.log("current lands",result);
     res.json(result);
   } catch (err) {
     console.error("Error fetching current lands:", err);
@@ -187,7 +184,6 @@ export const getUserOffers = async (req, res) => {
       [userID]
     );
 
-    // now each row has { id, landTitle, landSize, landLocation, …, image }
     res.json(result.rows);
   } catch (err) {
     console.error("Error fetching user offers:", err);

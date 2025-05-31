@@ -11,7 +11,6 @@ export async function loginUser(req, res) {
   }
 
   try {
-    // Find user by email or phone
     const query = `SELECT * FROM users WHERE email = $1 OR phonenumber = $1`;
     const result = await db.query(query, [emailOrPhone]);
 
@@ -31,12 +30,10 @@ export async function loginUser(req, res) {
       });
     }
 
-    // Strip password and create session
     const { password: _, ...userData } = user;
     req.session.user = userData;
     console.log('Session established. Session ID:', req.sessionID);
 
-    // Return sessionID so front-end can capture it
     res.status(200).json({
       message: 'Login successful',
       user: userData,

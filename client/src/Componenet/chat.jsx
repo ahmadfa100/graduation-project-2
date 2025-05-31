@@ -46,7 +46,6 @@ async function fetchChatsList() {
   });
   
   setChatList(chats.data);
-  //console.log("chatList att: ",chats.data);
   setIsChatListReady(false)
  }catch(err){
   if (err.response && err.response.status === 401) {

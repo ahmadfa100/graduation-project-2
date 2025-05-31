@@ -71,14 +71,13 @@
     right: 10px;
   }
   
-  /* ===== Rent/Offer Section ===== */
   .action-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     padding: 2rem;
     background-image: url("../../public/Lands/green-tea-bud-leaves-green-tea-plantations-morning.jpg");
-    background-size: cover; /* Ensures it covers the div */
+    background-size: cover; 
     background-position: bottom;
     background-color: rgba(255, 255, 255, 0.5); 
     background-blend-mode: lighten;
@@ -137,10 +136,10 @@
   }
 
   .card_home {
-    background-color: #4CAF50; /* Default background */
+    background-color: #4CAF50; 
     transition: background-color 0.3s ease;
   }
   
   .card_home:hover {
-    background-color: #88ee8b; /* Hover background */
+    background-color: #88ee8b; 
   }

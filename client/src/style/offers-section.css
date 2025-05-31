@@ -106,7 +106,6 @@
     object-fit: cover;
   }
   
-  /* Right side details */
   .offer-details {
     flex: 1;
     padding: 1rem;
@@ -195,7 +194,6 @@
     margin: 0.3rem 0;
   }
   
-  /* Buttons row */
   .offer-actions {
     margin-top: 1rem;
     display: flex;

@@ -115,7 +115,6 @@ console.log("Outside use effect :",useID);
     <div className="offers-section">
       <h2 className="section-title">Available Offers</h2>
 
-      {/* Search Bar */}
       <div className="search-container">
         <input
           type="text"
@@ -132,7 +131,6 @@ console.log("Outside use effect :",useID);
         </button>
       </div>
 
-      {/* Filters */}
       <div className="filters-container">
         <div className="filter-group">
           <label htmlFor="cityFilter" className="filter-label">City</label>
@@ -189,7 +187,7 @@ console.log("Outside use effect :",useID);
           <input
             type="text"
             id="spaceFilter"
-            placeholder="e.g. 5 Dunums"
+            placeholder="e.g. 500m²"
             className="filter-input"
             value={space}
             onChange={(e) => setSpace(e.target.value)}
@@ -210,7 +208,6 @@ console.log("Outside use effect :",useID);
         </button>
       </div>
 
-      {/* Offers List */}
       <div className="offers-list">
         {offers.map((offer) => (
           !offer.isreserved&&
@@ -299,7 +296,6 @@ console.log("Outside use effect :",useID);
         ))}
       </div>
 
-      {/* More Button */}
       <div className="more-button-container">
         <button className="more-button" onClick={handleMore}>
           More

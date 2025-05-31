@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 
 
 
-// Reusable Card component for articles
 const ArticleCard = ({ image, alt, title, description, link }) => (
   <div className="card">
     <img src={image} alt={alt} className="card-image" />
@@ -22,7 +21,6 @@ const ArticleCard = ({ image, alt, title, description, link }) => (
   </div>
 );
 
-// Reusable VideoCard component
 const VideoCard = ({ src, title }) => (
   <div className="video-card">
     <div className="video-placeholder">

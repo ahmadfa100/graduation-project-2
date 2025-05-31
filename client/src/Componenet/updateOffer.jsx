@@ -42,7 +42,6 @@ const navigate= useNavigate();
       preview: URL.createObjectURL(file),
     }));
 
-    // Append new images to existing ones. Assuming fetched images are already in the state.
     setImages((prev) => [...prev, ...newImages]);
   }
 
@@ -63,22 +62,20 @@ const navigate= useNavigate();
           severity: "error",
           autoHideDuration: 3000,
         });
-        return; // Stop execution if there's an error
+        return; 
       }
       setForm(response.data.offer);
-      console.log(form); // This will log the initial empty state or stale state, useEffect runs async
-      // Map fetched image URLs to a similar structure as new uploads
+      console.log(form); 
       setImages(response.data.images.map((image) => ({
-        // Assuming the fetched image is a URL string
-        image: image, // Use the URL as the 'image' property
-        preview: image, // Use the URL as the 'preview' property for consistency
+        image: image, 
+        preview: image, 
       })));
       setIsLoading(false);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         console.log("Not authenticated! Redirecting to login...");
         window.location.href = '/login';
-        return; // Stop execution if not authenticated
+        return; 
       }
       console.error("Error fetching offer:", error);
       notifications.show('Error fetching offer. Please try again.', { severity: 'error' });
@@ -90,15 +87,12 @@ const navigate= useNavigate();
     event.preventDefault();
     const formData = new FormData(event.target);
 
-    // Append only the File objects, not the URLs of existing images
-    // Need to filter out image objects that are just URLs
+  
     images.forEach(({ image }) => {
       if (image instanceof File) {
          formData.append("images", image);
       } else {
-        // Handle existing images if needed (e.g., send a list of existing image URLs to keep)
-        // For now, assuming we only append new file uploads.
-        // You might need to add logic here to tell the backend which existing images to keep.
+       
       }
     });
 
@@ -112,7 +106,7 @@ const navigate= useNavigate();
       if (error.response && error.response.status === 401) {
         console.log("Not authenticated! Redirecting to login...");
         window.location.href = '/login';
-        return; // Stop execution if not authenticated
+        return; 
       }
       console.error("Error updating offer:", error);
       notifications.show("Error updating offer. Please try again.", {

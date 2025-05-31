@@ -38,7 +38,6 @@ export const getMyOffers = async (req, res) => {
       [ownerID]
     );
 
-    // now each row has { id, landTitle, landSize, landLocation, …, image }
     res.json(result.rows);
   } catch (err) {
     console.error("Error fetching user offers:", err);

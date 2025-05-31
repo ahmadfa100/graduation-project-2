@@ -38,7 +38,6 @@
     margin-top: 100px; 
   }
   
-  /* Responsive adjustments */
   @media (max-width: 600px) {
     .content-section {
       margin: 30px auto;

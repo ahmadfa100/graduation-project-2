@@ -1,7 +1,5 @@
-// server/Controllers/fav.js
 import db from "../db.js";
 
-// GET /FavoriteOffers
 export const getFav = async (req, res) => {
   const userID = req.session?.user?.id;
   const { offerID } = req.query;
@@ -12,7 +10,6 @@ export const getFav = async (req, res) => {
 
   try {
     if (offerID) {
-      // Check if a specific offer is favorited by the user
       const result = await db.query(
         `SELECT *
          FROM FavoriteOffers
@@ -22,7 +19,6 @@ export const getFav = async (req, res) => {
       );
       return res.status(200).json(result.rows);
     } else {
-      // Return detailed list of all favorite offers
       const result = await db.query(
         `
         SELECT
@@ -59,7 +55,6 @@ export const getFav = async (req, res) => {
   }
 };
 
-// POST /AddFavoriteOffers
 export const AddFavoriteOffers = async (req, res) => {
   if (!req.session.user?.id) {
     return res.status(401).json({ error: "Not authenticated" });
@@ -84,7 +79,6 @@ export const AddFavoriteOffers = async (req, res) => {
   }
 };
 
-// DELETE /DeleteFavoriteOffer
 export const DeleteFavoriteOffer = async (req, res) => {
   if (!req.session.user?.id) {
     return res.status(401).json({ error: "Not authenticated" });

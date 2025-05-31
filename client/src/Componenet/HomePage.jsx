@@ -33,7 +33,6 @@ function HomePage() {
 
       <Season />
 
-      {/* Action Cards */}
       <motion.div
         className="p-6 bg-blue-500 text-white text-center rounded-lg shadow-lg"
         initial={{ scale: 0.8, opacity: 0 }}

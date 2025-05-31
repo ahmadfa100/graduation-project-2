@@ -118,7 +118,6 @@ body {
   line-height: 1.6;
 }
 
-/* Responsive adjustments */
 @media (max-width: 480px) {
   .login-container {
     margin: 2rem auto;

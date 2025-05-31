@@ -24,13 +24,11 @@ export default function FarmerDashboard() {
   const [error, setError] = useState(null);
   const [expandedSection, setExpandedSection] = useState('current');
 
-  // helper to strip out expired leases
   const filterActive = (lands) => {
     const now = Date.now();
     return lands.filter((l) => new Date(l.endDate).getTime() > now);
   };
 
-  // fetch current lands, then drop any that are expired
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/farmer/current-lands`, { withCredentials: true })
@@ -39,7 +37,6 @@ export default function FarmerDashboard() {
       .finally(() => setLoading(prev => ({ ...prev, current: false })));
   }, []);
 
-  // fetch past lands
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/farmer/past-lands`, { withCredentials: true })
@@ -48,7 +45,6 @@ export default function FarmerDashboard() {
       .finally(() => setLoading(prev => ({ ...prev, past: false })));
   }, []);
 
-  // fetch favorite offers
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`, { withCredentials: true })
@@ -57,7 +53,6 @@ export default function FarmerDashboard() {
       .finally(() => setLoading(prev => ({ ...prev, favorites: false })));
   }, []);
 
-  // handler to REMOVE one favorite
   const handleRemoveFavorite = async (offerId) => {
     try {
       await axios.delete(
@@ -114,7 +109,6 @@ export default function FarmerDashboard() {
 
       <div className="spacer" />
 
-      {/* Current Lands */}
       <Accordion expanded={expandedSection === 'current'} onChange={handleAccordionChange('current')} className="dashboard-section">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Badge badgeContent={stats.currentLands} color="primary">Current Lands</Badge>
@@ -147,7 +141,6 @@ export default function FarmerDashboard() {
 
       <div className="spacer" />
 
-      {/* Past Lands */}
       <Accordion expanded={expandedSection === 'past'} onChange={handleAccordionChange('past')} className="dashboard-section">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Badge badgeContent={stats.pastLands} color="secondary">Past Lands</Badge>
@@ -177,7 +170,6 @@ export default function FarmerDashboard() {
 
       <div className="spacer" />
 
-      {/* Favorite Offers */}
       <Accordion expanded={expandedSection === 'favorites'} onChange={handleAccordionChange('favorites')} className="dashboard-section">
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Badge badgeContent={stats.favoriteOffers} color="info">Favorite Offers</Badge>

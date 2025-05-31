@@ -63,7 +63,6 @@ export const updateAccount = async (req, res) => {
   if (!req.session.user.id)
     return res.status(400).json({ error: "Missing userId" });
 
-  // same validators as signup
   const isValidName = (n) => /^[a-zA-Z\s]{2,30}$/.test(n);
   const isValidEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
   const isValidPhone = (p) => /^\d{10}$/.test(p);

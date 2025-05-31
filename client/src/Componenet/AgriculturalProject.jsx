@@ -14,7 +14,6 @@ export default function AgriculturalProject() {
       </p>
 
       <div className="project-steps">
-        {/* Strategic Farm Planning */}
         <div className="step-item">
           <div>
             <h4>Strategic Farm Planning</h4>
@@ -38,7 +37,6 @@ export default function AgriculturalProject() {
           </button>
         </div>
 
-        {/* Financing & Grants */}
         <div className="step-item">
           <div>
             <h4>Financing & Grants</h4>
@@ -61,7 +59,6 @@ export default function AgriculturalProject() {
           </button>
         </div>
 
-        {/* Risk Mitigation & Sustainability */}
         <div className="step-item">
           <div>
             <h4>Risk Mitigation & Sustainability</h4>

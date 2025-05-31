@@ -1,10 +1,8 @@
 import db from "../db.js";
 
-// GET /getOffer/:offerID
 export const getOffer = async (req, res) => {
   try {
     const offerID = req.params.offerID;
-   // console.log("offerID :",offerID);
     const offerinfo = await db.query("SELECT * FROM offers WHERE id = $1", [offerID]);
     if (offerinfo.rowCount === 0) {
       return res.status(404).json({ error: "Offer not found" });
@@ -33,7 +31,6 @@ export const addOffer = async (req, res) => {
     const landOwnerID = req.session.user.id;
     const phoneNumber = req.session.user.phonenumber;
     const { offer_title, size, years, months, price, location, description } = req.body;
-    //console.log(phoneNumber);
     if (
       !phoneNumber||
       !offer_title ||
@@ -111,7 +108,6 @@ export const updateOffer = async (req, res) => {
       return res.status(404).json({ error: "Offer not found" });
     }
     
-    // Remove old images and add the new ones
     await db.query("DELETE FROM landPicture WHERE landID = $1", [offerID]);
     for (const file of req.files) {
       await db.query("INSERT INTO landPicture (landID, picture) VALUES ($1, $2)", [offerID, file.buffer]);
@@ -124,7 +120,6 @@ export const updateOffer = async (req, res) => {
   }
 };
 
-// DELETE /deleteOffer/:offerID
 export const deleteOffer = async (req, res) => {
   try {
     const { offerID } = req.params;
@@ -143,7 +138,6 @@ export const deleteOffer = async (req, res) => {
   }
 };
 
-// GET /offers (filtering offers)
 export const getAllOffers = async (req, res) => {
   try {
     const { search, city, period, space } = req.query;
@@ -173,7 +167,6 @@ export const getAllOffers = async (req, res) => {
       paramIndex++;
     }
 
-    // Filtering by period: assume "monthly" means leaseDuration less than 12, and "yearly" means 12 or more.
     if (period) {
       if (period.toLowerCase() === "monthly") {
         baseQuery += ` AND o.leaseDuration < $${paramIndex}`;

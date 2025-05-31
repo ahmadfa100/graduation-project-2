@@ -1,5 +1,4 @@
 import db from "../db.js";
-// GET /dashboard/requests
 export async function getRequests(req, res) {
   const ownerID = req.session.user?.id;
   if (!ownerID) return res.status(401).json({ error: "Not authenticated" });
@@ -31,7 +30,6 @@ export async function getRequests(req, res) {
   }
 }
 
-// POST /dashboard/requests/:id/accept
 export async function acceptRequest(req, res) {
   const ownerID = req.session.user?.id;
   if (!ownerID) return res.status(401).json({ error: "Not authenticated" });
@@ -106,7 +104,6 @@ console.log("values:",values);
 }
 
 
-// GET /dashboard/active-rentals
 export async function getActiveRentals(req, res) {
   const ownerID = req.session.user?.id;
   if (!ownerID) return res.status(401).json({ error: "Not authenticated" });

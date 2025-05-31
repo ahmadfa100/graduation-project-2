@@ -124,7 +124,6 @@ export default function AccountInf() {
 
   const toggleEdit = (field) => {
     if (isEditing[field]) {
-      // Special handling for password change
       if (field === "password") {
         const pwError = validatePassword(userData.password);
         const cpError = userData.confirmPassword !== userData.password 
@@ -183,7 +182,6 @@ export default function AccountInf() {
     if (errors[field]) {
       setErrors((e) => ({ ...e, [field]: "" }));
     }
-    // Clear confirm password error when either field changes
     if (field === "password" || field === "confirmPassword") {
       setErrors((e) => ({ ...e, confirmPassword: "" }));
     }
@@ -287,7 +285,6 @@ export default function AccountInf() {
         {renderField("Age", "age", "number")}
         {renderField("New Password", "password", "password")}
         
-        {/* Confirm Password Field */}
         <div className="input-with-button">
           <label>Confirm Password:</label>
           <div className="input-container">

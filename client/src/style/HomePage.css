@@ -19,7 +19,6 @@ body {
   background-color: #fff;
 }
 
-/* ===== Search Bar ===== */
 .search-container {
   display: flex;
   justify-content: center;
@@ -53,7 +52,6 @@ body {
   background-color: #45a049;
 }
 
-/* ===== Offers Section ===== */
 
 .more-button-container {
   text-align: center;
@@ -79,7 +77,6 @@ body {
   color: white;
 }
 
-/* ===== Filters Container ===== */
 .filters-container {
   display: flex;
   justify-content: center;

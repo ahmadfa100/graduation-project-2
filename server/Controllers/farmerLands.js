@@ -1,4 +1,3 @@
-// Controllers/farmerLands.js
 import db from "../db.js";
 
 export async function getCurrentLands(req, res) {
@@ -32,7 +31,6 @@ export async function getCurrentLands(req, res) {
       [farmerID]
     );
 
-    // Add data URI prefix for images
     const result = rows.map(row => ({
       ...row,
       landPicture: row.landPicture

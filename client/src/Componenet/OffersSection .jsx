@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaPhone, FaComments, FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { motion } from "framer-motion";
 
 function OffersSection({ favoriteOffers, toggleFavorite }) {
   const navigate = useNavigate();
@@ -209,90 +210,90 @@ console.log("Outside use effect :",useID);
       </div>
 
       <div className="offers-list">
-        {offers.map((offer) => (
-          !offer.isreserved&&
-          <div
-          key={offer.id}
-          className="offer-item"
-          onClick={() => navigate(`/OfferDetails/${offer.id}`)}
-        >
-          <div className="offer-image-container">
-            <img src={offer.image} alt={offer.name} className="offer-image" />
-          </div>
-          <div className="offer-details">
-            <div className="offer-header">
-              <h3 className="offer-title">{offer.landtitle}</h3>
-              <span className="offer-price">
-                {parseFloat(offer.landleaseprice).toFixed(2)} JOD
-              </span>
+        {offers.map((offer, idx) => (
+          !offer.isreserved &&
+          <motion.div
+            key={offer.id}
+            className="offer-item"
+            onClick={() => navigate(`/OfferDetails/${offer.id}`)}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: idx * 0.12, ease: "easeOut" }}
+          >
+            <div className="offer-image-container">
+              <img src={offer.image} alt={offer.name} className="offer-image" />
             </div>
-            <p className="offer-subtitle">
-             Land area: {parseFloat(offer.landsize).toFixed(2)} m<sup>2</sup>, location: {offer.landlocation}
-            </p>
-          {  useID!==offer.ownerid&&  <div className="offer-actions">
-              <button
-                className="action-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  window.location.href = `tel:${offer.PhoneNumber}`;
-                }}
-              >
-                <FaPhone />
-              </button>
-              <button
-                className="action-button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/chat/${offer.id}/${offer.ownerid}`);
-                }}
-              >
-                <FaComments />
-              </button>
-              <button
-                className="action-button favorite-button"
-                onClick={async (e) => {
-                  e.stopPropagation();
-
-                  const isLiked = likedOffers.includes(offer.id);
-
-                  setLikedOffers((prev) =>
-                    isLiked
-                      ? prev.filter((id) => id !== offer.id)
-                      : [...prev, offer.id]
-                  );
-
-                  try {
-                    if (!isLiked) {
-                      await axios.post(
-                        `${process.env.REACT_APP_SERVER_URL}/AddFavoriteOffers`,
-                        { offerID: offer.id },
-                        { withCredentials: true }
+            <div className="offer-details">
+              <div className="offer-header">
+                <h3 className="offer-title">{offer.landtitle}</h3>
+                <span className="offer-price">
+                  {parseFloat(offer.landleaseprice).toFixed(2)} JOD
+                </span>
+              </div>
+              <p className="offer-subtitle">
+                Land area: {parseFloat(offer.landsize).toFixed(2)} m<sup>2</sup>, location: {offer.landlocation}
+              </p>
+              {useID !== offer.ownerid && (
+                <div className="offer-actions">
+                  <button
+                    className="action-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.location.href = `tel:${offer.PhoneNumber}`;
+                    }}
+                  >
+                    <FaPhone />
+                  </button>
+                  <button
+                    className="action-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/chat/${offer.id}/${offer.ownerid}`);
+                    }}
+                  >
+                    <FaComments />
+                  </button>
+                  <button
+                    className="action-button favorite-button"
+                    onClick={async (e) => {
+                      e.stopPropagation();
+                      const isLiked = likedOffers.includes(offer.id);
+                      setLikedOffers((prev) =>
+                        isLiked
+                          ? prev.filter((id) => id !== offer.id)
+                          : [...prev, offer.id]
                       );
-                    } else {
-                      await axios.delete(
-                        `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
-                        {
-                          data: { offerID: offer.id },
-                          withCredentials: true,
+                      try {
+                        if (!isLiked) {
+                          await axios.post(
+                            `${process.env.REACT_APP_SERVER_URL}/AddFavoriteOffers`,
+                            { offerID: offer.id },
+                            { withCredentials: true }
+                          );
+                        } else {
+                          await axios.delete(
+                            `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
+                            {
+                              data: { offerID: offer.id },
+                              withCredentials: true,
+                            }
+                          );
                         }
-                      );
-                    }
-                  } catch (err) {
-                    if (err.status === 401) {
-                     
-                      window.location.href = '/login';
-                    }
-                    console.error("Favorite toggle error:", err);
-                  }
-
-                  if (toggleFavorite) toggleFavorite(offer.id);
-                }}
-              >
-                {likedOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
-              </button>
-            </div>}
-          </div>
-        </div>
+                      } catch (err) {
+                        if (err.status === 401) {
+                          window.location.href = '/login';
+                        }
+                        console.error("Favorite toggle error:", err);
+                      }
+                      if (toggleFavorite) toggleFavorite(offer.id);
+                    }}
+                  >
+                    {likedOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
+                  </button>
+                </div>
+              )}
+            </div>
+          </motion.div>
         ))}
       </div>
 

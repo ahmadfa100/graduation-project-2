@@ -1,145 +1,372 @@
 .slideshow-container {
-    position: relative;
-    width: 100%;
-    height: 400px;
-    overflow: hidden;
-    margin-bottom: 2rem;
-    background-color: #ccc; 
-    margin-block:50px;
-  }
-  
-  .slide {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .slide.active {
-    opacity: 1;
-  }
-  
-  .slide-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .slide-caption {
-    position: absolute;
-    bottom: 20px;
-    left: 40px;
-    background-color: rgba(0,0,0,0.5);
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-  }
-  
-  .slide-caption h3 {
-    color: #fff;
-    margin: 0;
-  }
-  
-  .slide-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0,0,0,0.4);
-    color: #fff;
-    border: none;
-    padding: 1rem;
-    cursor: pointer;
-    font-size: 1.2rem;
-    z-index: 10;
-    transition: background-color 0.3s ease;
-  }
-  
-  .slide-arrow:hover {
-    background-color: rgba(0,0,0,0.6);
-  }
-  
-  .left-arrow {
-    left: 10px;
-  }
-  
-  .right-arrow {
-    right: 10px;
-  }
-  
+  position: relative;
+  width: 90%;
+  max-width: 1200px;
+  height: 450px;
+  overflow: hidden;
+  margin: 2rem auto;
+  background-color: var(--background-light);
+  box-shadow: var(--shadow-lg);
+  border-radius: 20px;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.85);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide.active .slide-image {
+  transform: scale(1.05);
+}
+
+.slide-caption {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1.2rem 2rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transform: translateY(30px);
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 80%;
+}
+
+.slide.active .slide-caption {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.slide-caption h3 {
+  color: var(--white);
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.slide-caption h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), transparent);
+  transition: var(--transition);
+}
+
+.slide.active .slide-caption h3::after {
+  width: 100%;
+}
+
+.slide-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--white);
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.8rem;
+  z-index: 10;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slide-arrow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  opacity: 0;
+  transition: var(--transition);
+  border-radius: 50%;
+}
+
+.slide-arrow:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.slide-arrow:hover::before {
+  opacity: 0.2;
+}
+
+.left-arrow {
+  left: 30px;
+}
+
+.right-arrow {
+  right: 30px;
+}
+
+.action-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  padding: 4rem 2rem;
+  background: 
+    linear-gradient(135deg, 
+      rgba(0, 40, 20, 0.85) 0%, 
+      rgba(0, 60, 30, 0.75) 50%,
+      rgba(0, 40, 20, 0.85) 100%),
+    url("../../public/Lands/green-tea-bud-leaves-green-tea-plantations-morning.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  margin-top: -20px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.action-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, 
+    transparent 40%, 
+    rgba(0, 40, 20, 0.8) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.action-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  background: var(--white);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  height: 300px;
+}
+
+.action-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, 
+    rgba(76, 175, 80, 0.1) 0%, 
+    rgba(139, 195, 74, 0.05) 100%);
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.3);
+}
+
+.action-card:hover::before {
+  opacity: 1;
+}
+
+.action-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-origin: center center;
+  filter: brightness(0.95);
+}
+
+.action-card:hover .action-image {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
+.action-content {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(to top, 
+    rgba(0, 20, 10, 0.95) 0%, 
+    rgba(0, 20, 10, 0.7) 50%,
+    transparent 100%);
+  color: var(--white);
+  padding: 2rem 1.5rem 1.5rem;
+  transform: translateY(0);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: blur(0px);
+  z-index: 3;
+}
+
+.action-card:hover .action-content {
+  transform: translateY(-10px);
+}
+
+.action-content h2 {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  padding-bottom: 0.8rem;
+}
+
+.action-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    var(--primary-color), 
+    rgba(255, 255, 255, 0.5));
+  transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  border-radius: 2px;
+}
+
+.action-card:hover .action-content h2::after {
+  width: 100px;
+}
+
+.action-button {
+  background: linear-gradient(135deg, 
+    rgba(255, 255, 255, 0.2), 
+    rgba(255, 255, 255, 0.1));
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+
+.action-button:hover {
+  background: linear-gradient(135deg, 
+    var(--primary-color), 
+    var(--primary-dark));
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.8; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(1deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.action-card:nth-child(1) {
+  animation: float 10s ease-in-out infinite;
+}
+
+.action-card:nth-child(2) {
+  animation: float 10s ease-in-out infinite 1.5s;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1100px) {
   .action-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 2rem;
-    padding: 2rem;
-    background-image: url("../../public/Lands/green-tea-bud-leaves-green-tea-plantations-morning.jpg");
-    background-size: cover; 
-    background-position: bottom;
-    background-color: rgba(255, 255, 255, 0.5); 
-    background-blend-mode: lighten;
-    margin-top: -60px;
+    padding: 3rem 1.5rem;
   }
   
   .action-card {
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .action-container {
+    padding: 2rem 1rem;
+    margin-top: -15px;
   }
   
-  .action-image {
-    width: 100%;
+  .action-card {
     height: 250px;
-    object-fit: cover;
-    display: block;
   }
   
   .action-content {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background-color: rgba(0,0,0,0.3);
-    color: #fff;
-    text-align: center;
-    padding: 1rem;
+    padding: 1.5rem 1.2rem 1.2rem;
   }
   
   .action-content h2 {
-    margin-bottom: 1rem;
     font-size: 1.5rem;
   }
   
   .action-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 20px;
-    padding: 0.6rem 1.2rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    padding: 0.7rem 1.5rem;
+    font-size: 0.9rem;
   }
-  
-  .action-button:hover {
-    background-color: #64afff;
-  }
-  
-  .favorite-button {
-    font-size: 1.1rem;
-  }
+}
 
-  .card_home:hover {
-    background-color: #88ee8b;
+@media (max-width: 900px) {
+  .action-container {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    padding: 2rem 0.5rem;
   }
-
-  .card_home {
-    background-color: #4CAF50; 
-    transition: background-color 0.3s ease;
+  .action-card {
+    max-width: 95vw;
+    min-width: 0;
   }
-  
-  .card_home:hover {
-    background-color: #88ee8b; 
-  }
+}

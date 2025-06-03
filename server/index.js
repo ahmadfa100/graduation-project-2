@@ -22,7 +22,7 @@ import {
   getOffer,
   addOffer,
   updateOffer,
-  deleteOffer,
+  deleteOffer,  
   getAllOffers,
 } from "./Controllers/offer.js";
 import {

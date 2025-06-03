@@ -121,16 +121,25 @@ export const updateOffer = async (req, res) => {
 };
 
 export const deleteOffer = async (req, res) => {
+  if (!req.session.user?.id) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  
   try {
     const { offerID } = req.params;
+    const ownerID = req.session.user.id;
+
     await db.query("DELETE FROM landPicture WHERE landID = $1", [offerID]);
+    
     const deleteRes = await db.query(
-      "DELETE FROM offers WHERE id = $1 RETURNING landTitle",
-      [offerID]
+      "DELETE FROM offers WHERE id = $1 AND ownerID = $2 RETURNING landTitle",
+      [offerID, ownerID]
     );
+    
     if (deleteRes.rowCount === 0) {
-      return res.status(404).json({ error: "Offer not found" });
+      return res.status(404).json({ error: "Offer not found or you don't have permission" });
     }
+    
     res.json({ message: "Offer deleted successfully", landTitle: deleteRes.rows[0].landTitle });
   } catch (error) {
     console.error("Error deleting offer:", error);

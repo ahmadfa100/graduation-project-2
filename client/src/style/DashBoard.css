@@ -174,3 +174,19 @@
     gap: 16px;
   }
 }
+
+.offer-card-with-actions {
+  position: relative;
+  margin-bottom: 20px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.offer-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #eee;
+}

@@ -5,6 +5,7 @@ import {
   FaHeart,
   FaRegHeart,
   FaEdit,
+  FaTrash
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -12,8 +13,9 @@ export default function OfferCard({
   offer,
   isFavorite,
   onToggleFavorite,
-  showEdit = false,     
-  onEdit,              
+  showEdit = false,
+  onEdit,
+  onDelete
 }) {
   const navigate = useNavigate();
 
@@ -49,15 +51,29 @@ export default function OfferCard({
 
         <div className="offer-actions">
           {showEdit ? (
-            <button
-              className="action-button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onEdit(offer.id);
-              }}
-            >
-              <FaEdit />
-            </button>
+            <>
+              <button
+                className="action-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(offer.id);
+                }}
+              >
+                <FaEdit />
+              </button>
+              
+              <button
+                className="action-button delete-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (onDelete && typeof onDelete === 'function') {
+                    onDelete(offer.id);
+                  }
+                }}
+              >
+                <FaTrash />
+              </button>
+            </>
           ) : (
             <>
               <button

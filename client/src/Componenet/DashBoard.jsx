@@ -11,6 +11,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 import Tooltip from "@mui/material/Tooltip";
 import Badge from "@mui/material/Badge";
+import DeleteIcon from '@mui/icons-material/Delete';
+
 import "../style/DashBoard.css";
 
 import OfferCard from "./offerCard";
@@ -104,6 +106,21 @@ export default function Dashboard() {
     </div>
   );
 
+  const handleDeleteOffer = async (offerId) => {
+    if (window.confirm("Are you sure you want to delete this offer? This action cannot be undone.")) {
+      try {
+        await axios.delete(
+          `${process.env.REACT_APP_SERVER_URL}/deleteOffer/${offerId}`,
+          { withCredentials: true }
+        );
+        setMyOffers(prev => prev.filter(offer => offer.id !== offerId));
+      } catch (err) {
+        setError("Failed to delete offer. Please try again.");
+        console.error(err);
+      }
+    }
+  };
+
   return (
     <div className="dashboard">
       {error && (
@@ -134,7 +151,17 @@ export default function Dashboard() {
         </AccordionSummary>
         <AccordionDetails>
           {loading.offers ? renderLoading() : myOffers.length === 0 ? renderEmpty("No offers found.") : (
-            <div className="offers-list">{myOffers.map(o => <OfferCard key={o.id} offer={o} showEdit onEdit={id => navigate(`/updateOffer/${id}`)} />)}</div>
+            <div className="offers-list">
+              {myOffers.map(o => (
+                <OfferCard 
+                  key={o.id} 
+                  offer={o} 
+                  showEdit 
+                  onEdit={id => navigate(`/updateOffer/${id}`)}
+                  onDelete={handleDeleteOffer}  
+                />
+              ))}
+            </div>
           )}
         </AccordionDetails>
       </Accordion>

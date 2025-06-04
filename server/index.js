@@ -8,6 +8,7 @@ import session from "express-session";
 import db from "./db.js";
 import notificationsRouter  from "./Controllers/notifications.js";
 import { getCurrentLands } from "./Controllers/farmerLands.js";
+import { getPastLands } from "./Controllers/landownerLands.js"; 
 
 import {
   getRequests,
@@ -179,6 +180,10 @@ app.get("/getProfile/:userID", getProfile);
 app.get("/profileStats/:userID", getProfileStats);
 app.get("/rentedOffers/:userID", getRentedOffers);
 app.get("/getUserOffers/:userID",getUserOffers)
+
+
+app.get("/dashboard/past-lands", getPastLands);
+
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);

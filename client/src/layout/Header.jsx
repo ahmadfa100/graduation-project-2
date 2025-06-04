@@ -6,24 +6,42 @@ import {
   MdNotifications,
   MdDoneOutline,
 } from "react-icons/md";
-import { Drawer, Button, Divider, List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import { AccountCircle, Chat, Dashboard, ExitToApp, Person } from "@mui/icons-material";
+import {
+  Drawer,
+  Button,
+  Divider,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
+import {
+  AccountCircle,
+  Chat,
+  Dashboard,
+  ExitToApp,
+  Person,
+} from "@mui/icons-material";
 import { FaCaretDown } from "react-icons/fa";
 import "./Header.css";
 
 const Header = () => {
-  const [user, setUser]                     = useState(null);
+  const [user, setUser] = useState(null);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [isIconActive, setIsIconActive]     = useState(false);
-  const [notifications, setNotifications]   = useState([]);
-  const [open, setOpen]                     = useState(false);
-  const rightSectionRef                     = useRef(null);
-  const navigate                            = useNavigate();
+  const [isIconActive, setIsIconActive] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [markedRead, setMarkedRead] = useState(false);
 
-  //  session check
+  const [open, setOpen] = useState(false);
+  const rightSectionRef = useRef(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/sessionInfo`, { withCredentials: true })
-      .then(res => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/sessionInfo`, {
+        withCredentials: true,
+      })
+      .then((res) => {
         if (res.data && res.data.user) {
           setUser(res.data.user);
         } else {
@@ -33,24 +51,32 @@ const Header = () => {
       .catch(() => setUser(null));
   }, []);
 
-  //  fetch notifications only after we know the user is logged in
   useEffect(() => {
-    if (!user) return;  
-    axios.get(`${process.env.REACT_APP_SERVER_URL}/api/notifications`, { withCredentials: true })
-      .then(res => setNotifications(res.data.notifications || []))
-      .catch(err => console.error("Error fetching notifications:", err));
+    if (!user) return;
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/api/notifications`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setNotifications(res.data.notifications || []);
+      })
+      .catch((err) => console.error("Error fetching notifications:", err));
   }, [user]);
 
-  //  toggle popup
   const handleNotificationClick = () => {
-    setShowNotifications(prev => !prev);
-    setIsIconActive(prev => !prev);
+    if (notifications.length > 0) {
+      setMarkedRead(true);
+    }
+    setShowNotifications((prev) => !prev);
+    setIsIconActive((prev) => !prev);
   };
 
-  // close if outside click
   useEffect(() => {
-    const handleClickOutside = e => {
-      if (rightSectionRef.current && !rightSectionRef.current.contains(e.target)) {
+    const handleClickOutside = (e) => {
+      if (
+        rightSectionRef.current &&
+        !rightSectionRef.current.contains(e.target)
+      ) {
         setShowNotifications(false);
         setIsIconActive(false);
       }
@@ -59,9 +85,8 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  //remove + auto‑close
-  const handleRemoveNotification = index => {
-    setNotifications(prev => {
+  const handleRemoveNotification = (index) => {
+    setNotifications((prev) => {
       const next = prev.filter((_, i) => i !== index);
       if (next.length === 0) {
         setShowNotifications(false);
@@ -71,10 +96,13 @@ const Header = () => {
     });
   };
 
-  //  logout
   const handleLogout = async () => {
     try {
-      await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/logout`, {}, { withCredentials: true });
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/api/logout`,
+        {},
+        { withCredentials: true }
+      );
       setUser(null);
       setOpen(false);
       navigate("/login");
@@ -84,18 +112,53 @@ const Header = () => {
   };
 
   const slidebarContent = [
-    { title: "My Account",      icon: <AccountCircle />, onClick: () =>{ setOpen(false);navigate("/AccountInf")} },
-    { title: "My Profile",      icon: <Person />, onClick: () => { setOpen(false); navigate("/profile"); } },
-    { title: "Landowner Dashboard", icon: <Dashboard />, onClick: () => {setOpen(false);navigate("/DashBoard")}  },
-    { title: "Farmer Dashboard", icon: <Dashboard />, onClick: () => {setOpen(false);navigate("/FarmerDashboard")}  },
-    { title: "My Chats",        icon: <Chat />,           onClick: () => {setOpen(false);navigate("/chat") }},
-    { title: "Logout",          icon: <ExitToApp />,      onClick: handleLogout },
+    {
+      title: "My Account",
+      icon: <AccountCircle />,
+      onClick: () => {
+        setOpen(false);
+        navigate("/AccountInf");
+      },
+    },
+    {
+      title: "My Profile",
+      icon: <Person />,
+      onClick: () => {
+        setOpen(false);
+        navigate("/profile");
+      },
+    },
+    {
+      title: "Landowner Dashboard",
+      icon: <Dashboard />,
+      onClick: () => {
+        setOpen(false);
+        navigate("/DashBoard");
+      },
+    },
+    {
+      title: "Farmer Dashboard",
+      icon: <Dashboard />,
+      onClick: () => {
+        setOpen(false);
+        navigate("/FarmerDashboard");
+      },
+    },
+    {
+      title: "My Chats",
+      icon: <Chat />,
+      onClick: () => {
+        setOpen(false);
+        navigate("/chat");
+      },
+    },
+    { title: "Logout", icon: <ExitToApp />, onClick: handleLogout },
   ];
 
   return (
     <header className="header">
       <Link to="/" className="logo-container">
-        <img src="/logo.jpg" alt="Logo" className="logo"/>
+        <img src="/logo.jpg" alt="Logo" className="logo" />
         <span className="brand-name">Green Bridge</span>
       </Link>
 
@@ -107,38 +170,49 @@ const Header = () => {
       </nav>
 
       <div className="right-section" ref={rightSectionRef}>
-        { /* — only show the bell when there's a user — */ }
         {user && (
           <>
             <div
-              className={`notification-icon ${isIconActive ? "active" : ""}`}
+              className={`notification-icon ${
+                isIconActive ? "active" : ""
+              }`}
               onClick={handleNotificationClick}
             >
-              {isIconActive
-                ? <MdNotifications size={24}/>
-                : <MdNotificationsNone size={24}/>
-              }
-              {notifications.length > 0 && (
+              {isIconActive ? (
+                <MdNotifications size={24} />
+              ) : (
+                <MdNotificationsNone size={24} />
+              )}
+
+             
+              {notifications.length > 0 && !markedRead && (
                 <span className="notification-badge">
                   {notifications.length}
                 </span>
               )}
             </div>
 
-            {showNotifications && notifications.length > 0 && (
+            {showNotifications && (
               <div className="notification-popup">
-                <p>You have {notifications.length} new notifications.</p>
-                <hr />
-                {notifications.map((notif, idx) => (
-                  <div key={idx} className="notification-item">
-                    <span>{notif.message}</span>
-                    <MdDoneOutline
-                      size={24}
-                      className="check-icon"
-                      onClick={() => handleRemoveNotification(idx)}
-                    />
-                  </div>
-                ))}
+                
+                {notifications.length > 0 ? (
+                  <>
+                    <p>You have {notifications.length} new notifications.</p>
+                    <hr />
+                    {notifications.map((notif, idx) => (
+                      <div key={idx} className="notification-item">
+                        <span>{notif.message}</span>
+                        <MdDoneOutline
+                          size={24}
+                          className="check-icon"
+                          onClick={() => handleRemoveNotification(idx)}
+                        />
+                      </div>
+                    ))}
+                  </>
+                ) : (
+                  <p>No new notifications.</p>
+                )}
               </div>
             )}
           </>
@@ -149,13 +223,20 @@ const Header = () => {
             <>
               <Button onClick={() => setOpen(true)}>
                 <div className="User-Avatar-Header">
-                  {user.pfp
-                    ? <img src={`data:${user.pfp.mime};base64,${btoa(String.fromCharCode(...user.pfp.data))}`} alt="profile" />
-
-
-                    : <img src="/user.png" alt="pfp" />}
+                  {user.pfp ? (
+                    <img
+                      src={`data:${user.pfp.mime};base64,${btoa(
+                        String.fromCharCode(...user.pfp.data)
+                      )}`}
+                      alt="profile"
+                    />
+                  ) : (
+                    <img src="/user.png" alt="pfp" />
+                  )}
                   <h3>Hi {user.firstname}</h3>
-                  <FaCaretDown style={{ position: 'relative', top: '10px', color: 'green' }}/>
+                  <FaCaretDown
+                    style={{ position: "relative", top: "10px", color: "green" }}
+                  />
                 </div>
               </Button>
               <Drawer
@@ -167,18 +248,20 @@ const Header = () => {
                 <List>
                   {slidebarContent.map((item, i) => (
                     <React.Fragment key={i}>
-                     
-                        <ListItem button onClick={item.onClick} sx={{ 
-    cursor: "pointer", 
-    "&:hover": { backgroundColor: "#f0f0f0" } 
-  }}>
-                          <ListItemIcon sx={{ color: "#57b676", fontSize: "2rem" }}>
-                            {item.icon}
-                          </ListItemIcon>
-                          <ListItemText primary={item.title}/>
-                        </ListItem>
-                        <Divider/>
-                     
+                      <ListItem
+                        button
+                        onClick={item.onClick}
+                        sx={{
+                          cursor: "pointer",
+                          "&:hover": { backgroundColor: "#f0f0f0" },
+                        }}
+                      >
+                        <ListItemIcon sx={{ color: "#57b676", fontSize: "2rem" }}>
+                          {item.icon}
+                        </ListItemIcon>
+                        <ListItemText primary={item.title} />
+                      </ListItem>
+                      <Divider />
                     </React.Fragment>
                   ))}
                 </List>

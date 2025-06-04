@@ -107,7 +107,6 @@ export default function Dashboard() {
   );
 
   const handleDeleteOffer = async (offerId) => {
-    if (window.confirm("Are you sure you want to delete this offer? This action cannot be undone.")) {
       try {
         await axios.delete(
           `${process.env.REACT_APP_SERVER_URL}/deleteOffer/${offerId}`,
@@ -118,7 +117,7 @@ export default function Dashboard() {
         setError("Failed to delete offer. Please try again.");
         console.error(err);
       }
-    }
+    
   };
 
   return (

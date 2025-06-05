@@ -1,6 +1,6 @@
 import React from "react";
 import "../style/terms.css";
-import { blue } from "@mui/material/colors";
+
 
 function Terms() {
   return (

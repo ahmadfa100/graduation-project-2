@@ -24,8 +24,6 @@ function UnitInput(props) {
   );
 }
 
-
-
 function UpdateOffer() {
   const {offerID}=useParams(); 
   const [isLoading, setIsLoading] = useState(true);
@@ -47,6 +45,23 @@ const navigate= useNavigate();
 
   function deleteImage(index) {
     setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+  }
+
+  function base64ToFile(base64String, filename) {
+    const base64Data = base64String.split(',')[1];
+    const byteCharacters = atob(base64Data);
+    const byteArrays = [];
+    for (let offset = 0; offset < byteCharacters.length; offset += 512) {
+      const slice = byteCharacters.slice(offset, offset + 512);
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+    const blob = new Blob(byteArrays, { type: 'image/jpeg' });
+    return new File([blob], filename, { type: 'image/jpeg' });
   }
 
   useEffect(() => {
@@ -87,12 +102,13 @@ const navigate= useNavigate();
     event.preventDefault();
     const formData = new FormData(event.target);
 
-  
     images.forEach(({ image }) => {
       if (image instanceof File) {
-         formData.append("images", image);
-      } else {
-       
+        formData.append("images", image);
+      } else if (typeof image === 'string' && image.startsWith('data:image')) {
+        // Convert base64 to File and append
+        const file = base64ToFile(image, `image_${Date.now()}.jpg`);
+        formData.append("images", file);
       }
     });
 
@@ -226,7 +242,7 @@ const navigate= useNavigate();
               <div style={{ fontSize: '0.8rem', color: '#4a5568', marginTop: '0.5rem' }}>
                 Recommended: 4 images (multiple selection allowed)
               </div>
-              <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload} required/>
+              <input type="file" multiple hidden accept="image/*" onChange={handleImageUpload} />
             </label>
 
             {images.length > 0 && (

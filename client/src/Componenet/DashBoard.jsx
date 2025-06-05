@@ -240,33 +240,68 @@ export default function Dashboard() {
             : requests.length === 0
             ? renderEmpty("No pending requests.")
             : (
-                <div className="requests-list">
+                <div className="rentals-list">
                   {requests.map((r) => (
-                    <div key={r.id} className="request-card">
-                      <div className="request-content">
-                        <h4 className="request-title">{r.landTitle}</h4>
-                        <p className="request-farmer">
-                          Farmer: {r.farmerFirstName} {r.farmerLastName} (age{" "}
-                          {r.farmerAge})
-                        </p>
+                    <div key={r.id} className="rental-card">
+                      <div className="rental-images">
+                        {r.landImage ? (
+                          <img 
+                            src={r.landImage} 
+                            alt="Land" 
+                            className="rental-image land-image"
+                          />
+                        ) : (
+                          <div className="image-placeholder">
+                            <FaChartLine className="placeholder-icon" />
+                            <span>Land Image</span>
+                          </div>
+                        )}
+                        {r.farmerImage ? (
+                          <img 
+                            src={r.farmerImage} 
+                            alt="Farmer" 
+                            className="rental-image farmer-image"
+                          />
+                        ) : (
+                          <div className="image-placeholder">
+                            <FaHandshake className="placeholder-icon" />
+                            <span>Farmer Image</span>
+                          </div>
+                        )}
                       </div>
-                      <div className="request-actions">
-                        <Button
-                          variant="contained"
-                          fullWidth
-                          startIcon={<FaHandshake />}
-                          onClick={() => handleRequestAction(r.id, "accept")}
-                        >
-                          Accept
-                        </Button>
-                        <Button
-                          variant="outlined"
-                          fullWidth
-                          className="reject-button"
-                          onClick={() => handleRequestAction(r.id, "reject")}
-                        >
-                          Reject
-                        </Button>
+                      <div className="rental-content">
+                        <h4 className="rental-title">{r.landTitle}</h4>
+                        <div className="rental-info">
+                          <div className="rental-info-item">
+                            <FaHandshake className="rental-icon" />
+                            <div>
+                              <span className="rental-label">Farmer</span>
+                              <p>{r.farmerFirstName} {r.farmerLastName} (age {r.farmerAge})</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="rental-status">
+                          <span className="status-badge pending">Pending</span>
+                        </div>
+                        <div className="request-actions">
+                          <Button
+                            variant="contained"
+                            fullWidth
+                            startIcon={<FaHandshake />}
+                            onClick={() => handleRequestAction(r.id, "accept")}
+                            className="accept-button"
+                          >
+                            Accept
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            fullWidth
+                            onClick={() => handleRequestAction(r.id, "reject")}
+                            className="reject-button"
+                          >
+                            Reject
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -277,41 +312,81 @@ export default function Dashboard() {
 
       <div className="spacer" />
 
-      <Accordion
-        expanded={expandedSection === "rentals"}
-        onChange={handleAccordionChange("rentals")}
-        className="dashboard-section"
-      >
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Badge badgeContent={stats.activeRentals} color="info">
-            Active Rentals
-          </Badge>
-        </AccordionSummary>
-        <AccordionDetails>
-          {loading.rentals
-            ? renderLoading()
-            : activeRentals.length === 0
-            ? renderEmpty("No active rentals.")
-            : (
-                <div className="requests-list">
-                  {activeRentals.map((r) => (
-                    <div key={r.dealID} className="request-card">
-                      <div className="request-content">
-                        <h4 className="request-title">{r.landTitle}</h4>
+<Accordion
+  expanded={expandedSection === "rentals"}
+  onChange={handleAccordionChange("rentals")}
+  className="dashboard-section"
+>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Badge badgeContent={stats.activeRentals} color="info">
+      Active Rentals
+    </Badge>
+  </AccordionSummary>
+  <AccordionDetails>
+    {loading.rentals
+      ? renderLoading()
+      : activeRentals.length === 0
+      ? renderEmpty("No active rentals.")
+      : (
+          <div className="rentals-list">
+            {activeRentals.map((r) => (
+              <div key={r.dealID} className="rental-card">
+                <div className="rental-images">
+                  {r.landImage ? (
+                    <img 
+                      src={r.landImage} 
+                      alt="Land" 
+                      className="rental-image land-image"
+                    />
+                  ) : (
+                    <div className="image-placeholder">
+                      <FaChartLine className="placeholder-icon" />
+                      <span>Land Image</span>
+                    </div>
+                  )}
+                  {r.farmerImage ? (
+                    <img 
+                      src={r.farmerImage} 
+                      alt="Farmer" 
+                      className="rental-image farmer-image"
+                    />
+                  ) : (
+                    <div className="image-placeholder">
+                      <FaHandshake className="placeholder-icon" />
+                      <span>Farmer Image</span>
+                    </div>
+                  )}
+                </div>
+                <div className="rental-content">
+                  <h4 className="rental-title">{r.landTitle}</h4>
+                  <div className="rental-info">
+                    <div className="rental-info-item">
+                      <FaHandshake className="rental-icon" />
+                      <div>
+                        <span className="rental-label">Farmer</span>
+                        <p>{r.farmerFirstName} {r.farmerLastName}</p>
+                      </div>
+                    </div>
+                    <div className="rental-info-item">
+                      <FaCalendarCheck className="rental-icon" />
+                      <div>
+                        <span className="rental-label">Duration</span>
                         <p>
-                          Farmer: {r.farmerFirstName} {r.farmerLastName}
-                        </p>
-                        <p>
-                          From: {new Date(r.startDate).toLocaleDateString()} — To:{" "}
-                          {new Date(r.endDate).toLocaleDateString()}
+                          {new Date(r.startDate).toLocaleDateString()} — {new Date(r.endDate).toLocaleDateString()}
                         </p>
                       </div>
                     </div>
-                  ))}
+                  </div>
+                  <div className="rental-status">
+                    <span className="status-badge active">Active</span>
+                  </div>
                 </div>
-              )}
-        </AccordionDetails>
-      </Accordion>
+              </div>
+            ))}
+          </div>
+        )}
+  </AccordionDetails>
+</Accordion>
     </div>
   );
 }

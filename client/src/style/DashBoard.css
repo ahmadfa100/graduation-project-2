@@ -184,14 +184,14 @@
 }
 
 .rental-images {
-  display: flex;
-  height: 200px;
+  height: 240px;
   border-bottom: 1px solid #eee;
   position: relative;
 }
 
 .rental-image {
-  flex: 1;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   transition: all 0.3s ease;
 }
@@ -201,8 +201,7 @@
 }
 
 .rental-image:hover {
-  flex: 1.2;
-  filter: brightness(1.05);
+  transform: scale(1.02);
 }
 
 .image-placeholder {
@@ -326,7 +325,6 @@
   transform: translateY(-2px);
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .rentals-list {
     grid-template-columns: 1fr;
@@ -378,6 +376,138 @@
   padding: 10px;
   background-color: #f9f9f9;
   border-top: 1px solid #eee;
+}
+
+.farmer-profile {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.farmer-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #4caf50;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.farmer-avatar-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #4caf50;
+}
+
+.farmer-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.farmer-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.farmer-label {
+  font-size: 12px;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.rental-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+  background: #e9ecef;
+  transform: translateY(-2px);
+}
+
+.detail-icon {
+  font-size: 20px;
+  color: #4caf50;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.detail-label {
+  font-size: 12px;
+  color: #6c757d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.detail-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.chat-button {
+  margin-top: 20px !important;
+  border-color: #4caf50 !important;
+  color: #4caf50 !important;
+  text-transform: none !important;
+  font-weight: 500 !important;
+  padding: 10px 20px !important;
+  transition: all 0.3s ease !important;
+}
+
+.chat-button:hover {
+  background-color: #4caf50 !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+@media (max-width: 768px) {
+  .rental-details-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .farmer-profile {
+    padding: 12px;
+  }
+  
+  .farmer-avatar,
+  .farmer-avatar-placeholder {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .farmer-name {
+    font-size: 14px;
+  }
 }
 
 

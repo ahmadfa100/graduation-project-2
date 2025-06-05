@@ -5,7 +5,14 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
-import { FaPlus, FaChartLine, FaHistory, FaHandshake, FaCalendarCheck } from "react-icons/fa";
+import {
+  FaPlus,
+  FaChartLine,
+  FaHistory,
+  FaHandshake,
+  FaCalendarCheck,
+  FaComments
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
@@ -62,8 +69,6 @@ export default function Dashboard() {
       .catch(() => setActiveRentals([]))
       .finally(() => setLoading((prev) => ({ ...prev, rentals: false })));
   }, []);
-
-  
 
   const handleRequestAction = async (requestId, action) => {
     try {
@@ -160,23 +165,23 @@ export default function Dashboard() {
           </Badge>
         </AccordionSummary>
         <AccordionDetails>
-          {loading.offers
-            ? renderLoading()
-            : myOffers.length === 0
-            ? renderEmpty("No offers found.")
-            : (
-                <div className="offers-list">
-                  {myOffers.map((o) => (
-                    <OfferCard
-                      key={o.id}
-                      offer={o}
-                      showEdit
-                      onEdit={(id) => navigate(`/updateOffer/${id}`)}
-                      onDelete={handleDeleteOffer}
-                    />
-                  ))}
-                </div>
-              )}
+          {loading.offers ? (
+            renderLoading()
+          ) : myOffers.length === 0 ? (
+            renderEmpty("No offers found.")
+          ) : (
+            <div className="offers-list">
+              {myOffers.map((o) => (
+                <OfferCard
+                  key={o.id}
+                  offer={o}
+                  showEdit
+                  onEdit={(id) => navigate(`/updateOffer/${id}`)}
+                  onDelete={handleDeleteOffer}
+                />
+              ))}
+            </div>
+          )}
         </AccordionDetails>
       </Accordion>
 
@@ -193,32 +198,32 @@ export default function Dashboard() {
           </Badge>
         </AccordionSummary>
         <AccordionDetails>
-          {loading.past
-            ? renderLoading()
-            : pastLands.length === 0
-            ? renderEmpty("No past lands.")
-            : (
-                <div className="offers-list">
-                  {pastLands.map((land) => (
-                    <div key={land.dealID} className="request-card">
-                      <div className="request-content">
-                        <h4 className="request-title">{land.landTitle}</h4>
-                        <p>
-                          <strong>Location:</strong> {land.landLocation}
-                        </p>
-                        <p>
-                          <strong>Worked on until:</strong>{" "}
-                          {new Date(land.endDate).toLocaleDateString()}
-                        </p>
-                        <p>
-                          <strong>Farmer:</strong> {land.farmerFirstName}{" "}
-                          {land.farmerLastName}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
+          {loading.past ? (
+            renderLoading()
+          ) : pastLands.length === 0 ? (
+            renderEmpty("No past lands.")
+          ) : (
+            <div className="offers-list">
+              {pastLands.map((land) => (
+                <div key={land.dealID} className="request-card">
+                  <div className="request-content">
+                    <h4 className="request-title">{land.landTitle}</h4>
+                    <p>
+                      <strong>Location:</strong> {land.landLocation}
+                    </p>
+                    <p>
+                      <strong>Worked on until:</strong>{" "}
+                      {new Date(land.endDate).toLocaleDateString()}
+                    </p>
+                    <p>
+                      <strong>Farmer:</strong> {land.farmerFirstName}{" "}
+                      {land.farmerLastName}
+                    </p>
+                  </div>
                 </div>
-              )}
+              ))}
+            </div>
+          )}
         </AccordionDetails>
       </Accordion>
 
@@ -235,158 +240,202 @@ export default function Dashboard() {
           </Badge>
         </AccordionSummary>
         <AccordionDetails>
-          {loading.requests
-            ? renderLoading()
-            : requests.length === 0
-            ? renderEmpty("No pending requests.")
-            : (
-                <div className="rentals-list">
-                  {requests.map((r) => (
-                    <div key={r.id} className="rental-card">
-                      <div className="rental-images">
-                        {r.landImage ? (
-                          <img 
-                            src={r.landImage} 
-                            alt="Land" 
-                            className="rental-image land-image"
-                          />
-                        ) : (
-                          <div className="image-placeholder">
-                            <FaChartLine className="placeholder-icon" />
-                            <span>Land Image</span>
-                          </div>
-                        )}
-                        {r.farmerImage ? (
-                          <img 
-                            src={r.farmerImage} 
-                            alt="Farmer" 
-                            className="rental-image farmer-image"
-                          />
-                        ) : (
-                          <div className="image-placeholder">
-                            <FaHandshake className="placeholder-icon" />
-                            <span>Farmer Image</span>
-                          </div>
-                        )}
+          {loading.requests ? (
+            renderLoading()
+          ) : requests.length === 0 ? (
+            renderEmpty("No pending requests.")
+          ) : (
+            <div className="rentals-list">
+              {requests.map((r) => (
+                <div key={r.id} className="rental-card">
+                  <div className="rental-images">
+                    {r.landImage ? (
+                      <img
+                        src={r.landImage}
+                        alt="Land"
+                        className="rental-image land-image"
+                      />
+                    ) : (
+                      <div className="image-placeholder">
+                        <FaChartLine className="placeholder-icon" />
+                        <span>Land Image</span>
                       </div>
-                      <div className="rental-content">
-                        <h4 className="rental-title">{r.landTitle}</h4>
-                        <div className="rental-info">
-                          <div className="rental-info-item">
-                            <FaHandshake className="rental-icon" />
-                            <div>
-                              <span className="rental-label">Farmer</span>
-                              <p>{r.farmerFirstName} {r.farmerLastName} (age {r.farmerAge})</p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="rental-status">
-                          <span className="status-badge pending">Pending</span>
-                        </div>
-                        <div className="request-actions">
-                          <Button
-                            variant="contained"
-                            fullWidth
-                            startIcon={<FaHandshake />}
-                            onClick={() => handleRequestAction(r.id, "accept")}
-                            className="accept-button"
-                          >
-                            Accept
-                          </Button>
-                          <Button
-                            variant="outlined"
-                            fullWidth
-                            onClick={() => handleRequestAction(r.id, "reject")}
-                            className="reject-button"
-                          >
-                            Reject
-                          </Button>
+                    )}
+                    {r.farmerImage ? (
+                      <img
+                        src={r.farmerImage}
+                        alt="Farmer"
+                        className="rental-image farmer-image"
+                      />
+                    ) : (
+                      <div className="image-placeholder">
+                        <FaHandshake className="placeholder-icon" />
+                        <span>Farmer Image</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="rental-content">
+                    <h4 className="rental-title">{r.landTitle}</h4>
+                    <div className="rental-info">
+                      <div className="rental-info-item">
+                        <FaHandshake className="rental-icon" />
+                        <div>
+                          <span className="rental-label">Farmer</span>
+                          <p>
+                            {r.farmerFirstName} {r.farmerLastName} (age{" "}
+                            {r.farmerAge})
+                          </p>
                         </div>
                       </div>
                     </div>
-                  ))}
+                    <div className="rental-status">
+                      <span className="status-badge pending">Pending</span>
+                    </div>
+                    <div className="request-actions">
+                      <Button
+                        variant="contained"
+                        fullWidth
+                        startIcon={<FaHandshake />}
+                        onClick={() => handleRequestAction(r.id, "accept")}
+                        className="accept-button"
+                      >
+                        Accept
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        fullWidth
+                        onClick={() => handleRequestAction(r.id, "reject")}
+                        className="reject-button"
+                      >
+                        Reject
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              )}
+              ))}
+            </div>
+          )}
         </AccordionDetails>
       </Accordion>
 
       <div className="spacer" />
 
-<Accordion
-  expanded={expandedSection === "rentals"}
-  onChange={handleAccordionChange("rentals")}
-  className="dashboard-section"
->
-  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-    <Badge badgeContent={stats.activeRentals} color="info">
-      Active Rentals
-    </Badge>
-  </AccordionSummary>
-  <AccordionDetails>
-    {loading.rentals
-      ? renderLoading()
-      : activeRentals.length === 0
-      ? renderEmpty("No active rentals.")
-      : (
-          <div className="rentals-list">
-            {activeRentals.map((r) => (
-              <div key={r.dealID} className="rental-card">
-                <div className="rental-images">
-                  {r.landImage ? (
-                    <img 
-                      src={r.landImage} 
-                      alt="Land" 
-                      className="rental-image land-image"
-                    />
-                  ) : (
-                    <div className="image-placeholder">
-                      <FaChartLine className="placeholder-icon" />
-                      <span>Land Image</span>
-                    </div>
-                  )}
-                  {r.farmerImage ? (
-                    <img 
-                      src={r.farmerImage} 
-                      alt="Farmer" 
-                      className="rental-image farmer-image"
-                    />
-                  ) : (
-                    <div className="image-placeholder">
-                      <FaHandshake className="placeholder-icon" />
-                      <span>Farmer Image</span>
-                    </div>
-                  )}
-                </div>
-                <div className="rental-content">
-                  <h4 className="rental-title">{r.landTitle}</h4>
-                  <div className="rental-info">
-                    <div className="rental-info-item">
-                      <FaHandshake className="rental-icon" />
-                      <div>
-                        <span className="rental-label">Farmer</span>
-                        <p>{r.farmerFirstName} {r.farmerLastName}</p>
+      <Accordion
+        expanded={expandedSection === "rentals"}
+        onChange={handleAccordionChange("rentals")}
+        className="dashboard-section"
+      >
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Badge badgeContent={stats.activeRentals} color="info">
+            Active Rentals
+          </Badge>
+        </AccordionSummary>
+
+        <AccordionDetails>
+          {loading.rentals ? (
+            renderLoading()
+          ) : activeRentals.length === 0 ? (
+            renderEmpty("No active rentals.")
+          ) : (
+            <div className="rentals-list">
+              {activeRentals.map((r) => (
+                <div key={r.dealID} className="rental-card">
+                  <div className="rental-images">
+                    {r.landImage ? (
+                      <img
+                        src={r.landImage}
+                        alt="Land"
+                        className="rental-image land-image"
+                      />
+                    ) : (
+                      <div className="image-placeholder">
+                        <FaChartLine className="placeholder-icon" />
+                        <span>Land Image</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="rental-content">
+                    <h4 className="rental-title">{r.landTitle}</h4>
+
+                    <div className="rental-info">
+                      <div className="farmer-profile">
+                        {r.farmerImage ? (
+                          <img
+                            src={r.farmerImage}
+                            alt="Farmer"
+                            className="farmer-avatar"
+                          />
+                        ) : (
+                          <div className="farmer-avatar-placeholder">
+                            <FaHandshake className="placeholder-icon" />
+                          </div>
+                        )}
+                        <div className="farmer-details">
+                          <span className="farmer-name">
+                            {r.farmerFirstName} {r.farmerLastName}
+                          </span>
+                          <span className="farmer-label">Current Farmer</span>
+                        </div>
+                      </div>
+
+                      {/* Duration */}
+                      <div className="rental-info-item">
+                        <FaCalendarCheck className="rental-icon" />
+                        <div>
+                          <span className="rental-label">Duration</span>
+                          <p>
+                            {new Date(r.startDate).toLocaleDateString()} —{" "}
+                            {new Date(r.endDate).toLocaleDateString()}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <div className="rental-info-item">
-                      <FaCalendarCheck className="rental-icon" />
-                      <div>
-                        <span className="rental-label">Duration</span>
-                        <p>
-                          {new Date(r.startDate).toLocaleDateString()} — {new Date(r.endDate).toLocaleDateString()}
-                        </p>
+
+                    <div className="rental-details-grid">
+                      <div className="detail-item location">
+                        <span className="detail-icon">📍</span>
+                        <div className="detail-content">
+                          <span className="detail-label">Location</span>
+                          <span className="detail-value">{r.landLocation}</span>
+                        </div>
+                      </div>
+                      <div className="detail-item price">
+                        <span className="detail-icon">💰</span>
+                        <div className="detail-content">
+                          <span className="detail-label">Price</span>
+                          <span className="detail-value">
+                            {isNaN(parseFloat(r.landLeasePrice))
+                              ? r.landLeasePrice
+                              : parseFloat(r.landLeasePrice).toFixed(2)}{" "}
+                            JOD
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="rental-status">
-                    <span className="status-badge active">Active</span>
+
+                    <div className="rental-status">
+                      <span className="status-badge active">Active</span>
+                    </div>
+
+                    <div className="rental-actions">
+                      <Button
+                        variant="outlined"
+                        fullWidth
+                        startIcon={<FaComments />}
+                        onClick={() => navigate(`/chat/${r.farmerID}`)}
+                        className="chat-button"
+                      >
+                        Chat with Farmer
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
-  </AccordionDetails>
-</Accordion>
+              ))}
+            </div>
+          )}
+        </AccordionDetails>
+      </Accordion>
     </div>
   );
 }

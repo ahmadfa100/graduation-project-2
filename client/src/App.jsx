@@ -1,9 +1,9 @@
-import React from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { NotificationsProvider } from "@toolpad/core/useNotifications";
 
 import HomePage from "./Componenet/HomePage";
-import Offferdetail from "./Componenet/offerDetail";
+
 import Educational from "./Componenet/Educational";
 import ArticleDetail from "./Componenet/ArticleDetail";
 import About from "./Componenet/about";

@@ -79,6 +79,12 @@ textarea.textInput {
   resize: vertical;
   min-height: 120px;
 }
+.addOffer-loader{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
 
 .file-upload {
   display: block;

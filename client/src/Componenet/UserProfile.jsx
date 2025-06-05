@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { FaCheckCircle } from "react-icons/fa";
 import axios from "axios";
 import '../style/UserProfile.css';
 import { useNavigate, useParams } from "react-router-dom";

@@ -5,24 +5,49 @@ export async function getRequests(req, res) {
 
   try {
     const result = await db.query(
-      `SELECT 
-         rd.id,
-         rd.offerid      AS "offerID",
-         rd.farmerid     AS "farmerID",
-         rd.status,
-         o.landtitle     AS "landTitle",
-         u.firstname     AS "farmerFirstName",
-         u.lastname      AS "farmerLastName",
-         u.age           AS "farmerAge",
-         u.phonenumber   AS "farmerPhone"
-       FROM rentaldeals rd
-       JOIN offers o ON o.id = rd.offerid
-       JOIN users u  ON u.id = rd.farmerid
-       WHERE rd.landownerid = $1
-         AND rd.status = 'pending'
-       ORDER BY rd.id DESC`,
+      `
+      SELECT 
+        rd.id                            AS "id",
+        rd.offerid                       AS "offerID",
+        rd.farmerid                      AS "farmerID",
+        rd.status,
+        o.landtitle                      AS "landTitle",
+        u.firstname                      AS "farmerFirstName",
+        u.lastname                       AS "farmerLastName",
+        u.age                            AS "farmerAge",
+        u.phonenumber                    AS "farmerPhone",
+
+        -- Pull in one land image (base64), if it exists
+        COALESCE(
+          ('data:image/jpeg;base64,' || encode(lp.picture, 'base64')),
+          ''
+        )                                AS "landImage",
+
+        -- Pull in farmer’s profile picture (u.pfp), if it exists
+        COALESCE(
+          ('data:image/jpeg;base64,' || encode(u.pfp, 'base64')),
+          ''
+        )                                AS "farmerImage"
+
+      FROM rentaldeals rd
+      JOIN offers o ON o.id = rd.offerid
+      JOIN users u ON u.id = rd.farmerid
+
+      -- LEFT JOIN into a lateral subquery to grab exactly one landpicture row
+      LEFT JOIN LATERAL (
+        SELECT picture
+        FROM landpicture
+        WHERE landid = o.id
+        LIMIT 1
+      ) lp ON true
+
+      WHERE rd.landownerid = $1
+        AND rd.status = 'pending'
+      ORDER BY rd.id DESC;
+      `,
       [ownerID]
     );
+
     res.json(result.rows);
   } catch (err) {
     console.error("Error fetching requests:", err);
@@ -54,7 +79,6 @@ export async function acceptRequest(req, res) {
   }
 }
 
-// POST /dashboard/requests/:id/reject
 export async function rejectRequest(req, res) {
   const ownerID = req.session.user?.id;
   if (!ownerID) return res.status(401).json({ error: "Not authenticated" });
@@ -104,6 +128,7 @@ console.log("values:",values);
 }
 
 
+// Update getActiveRentals function
 export async function getActiveRentals(req, res) {
   const ownerID = req.session.user?.id;
   if (!ownerID) return res.status(401).json({ error: "Not authenticated" });
@@ -118,10 +143,26 @@ export async function getActiveRentals(req, res) {
          rd.start_date           AS "startDate",
          rd.end_date             AS "endDate",
          u.firstname             AS "farmerFirstName",
-         u.lastname              AS "farmerLastName"
+         u.lastname              AS "farmerLastName",
+         -- Land image
+         COALESCE(
+           ('data:image/jpeg;base64,' || encode(lp.picture, 'base64')),
+           ''
+         ) AS "landImage",
+         -- CORRECTED: Changed u.profilepicture to u.pfp
+         COALESCE(
+           ('data:image/jpeg;base64,' || encode(u.pfp, 'base64')),
+           ''
+         ) AS "farmerImage"
        FROM rentaldeals rd
        JOIN offers o ON o.id = rd.offerid
        JOIN users u  ON u.id = rd.farmerid
+       LEFT JOIN LATERAL (
+         SELECT picture
+         FROM landpicture
+         WHERE landid = o.id
+         LIMIT 1
+       ) lp ON true
        WHERE rd.landownerid = $1
          AND rd.status      = 'accepted'
        ORDER BY rd.start_date DESC;`,

@@ -10,7 +10,6 @@ CREATE TABLE users (
     pfp BYTEA,
  gender VARCHAR(6) CHECK (gender IN ('male', 'female')),
  createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
- description TEXT,
 
 );
 CREATE TABLE Landowners (

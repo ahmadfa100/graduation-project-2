@@ -63,7 +63,10 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/policy" element={<Policy />} />
                     <Route path="/terms" element={<Terms />} />
-                    <Route path="/contact" element={<Contact />} />
+                    
+                    <Route path="/contact" element={
+                      <NotificationsProvider> <Contact /></NotificationsProvider>
+                     } />
                     <Route
                       path="/chat/:paramOfferID?/:paramReceiverID?"
                       element={<Chat/>}

@@ -10,7 +10,8 @@ const transporter = nodemailer.createTransport({
 
 export const sendMessage = async (req, res) => {
   try {
-    console.log(process.env.EMAIL_USER, process.env.EMAIL_PASS);
+    
+    console.log("env contact",process.env.EMAIL_USER, process.env.EMAIL_PASS);
     const { name, email, subject, message } = req.body;
 
     if (!name || !email || !subject || !message) {

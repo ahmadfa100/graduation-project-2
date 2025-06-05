@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { FaEnvelope, FaPhone, FaWhatsapp, FaMapMarkerAlt } from "react-icons/fa";
 import "../style/contact.css";
+import { useNotifications } from '@toolpad/core/useNotifications';
+import axios from "axios";
 
 function Contact() {
+   const notifications = useNotifications();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: ""
   });
-  const [status, setStatus] = useState({ type: "", message: "" });
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,27 +24,32 @@ function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus({ type: "loading", message: "Sending message..." });
-
     try {
-      const response = await fetch("http://localhost:3001/api/contact/send-message", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await axios.post(`${process.env.REACT_APP_SERVER_URL}/api/contact/send-message`, 
+      formData,
+    {  withCredentials: true}
+      );
 
-      const data = await response.json();
 
-      if (response.ok) {
-        setStatus({ type: "success", message: "Message sent successfully!" });
+      if (response.status === 200) {
+       notifications.show("Message sent successfully!", {
+        severity: "success",
+        autoHideDuration: 3000,
+       });
         setFormData({ name: "", email: "", subject: "", message: "" });
       } else {
-        setStatus({ type: "error", message: data.error || "Failed to send message" });
+        notifications.show("Failed to send message. Please try again.", {
+          severity: "error",
+          autoHideDuration: 3000,
+        });
       }
     } catch (error) {
-      setStatus({ type: "error", message: "Failed to send message. Please try again." });
+
+      console.error("Error sending message:", error);
+      notifications.show("An error occurred while sending your message.", {
+        severity: "error",
+        autoHideDuration: 3000,
+      });
     }
   };
 
@@ -140,12 +148,6 @@ function Contact() {
                   rows="5"
                 ></textarea>
               </div>
-
-              {status.message && (
-                <div className={`status-message ${status.type}`}>
-                  {status.message}
-                </div>
-              )}
 
               <button type="submit" className="submit-button">
                 Send Message

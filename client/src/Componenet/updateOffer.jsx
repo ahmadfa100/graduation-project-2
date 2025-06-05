@@ -120,7 +120,7 @@ const navigate= useNavigate();
     <div className="page">
       <div className="add_offer">
         <h3>Update Land Lease Offer</h3>
-      { isLoading? (   <ClipLoader color="green" size={50}    />): (
+      { isLoading? (  <div className="addOffer-loader"> <ClipLoader color="green" size={50}    /></div>): (
         <form onSubmit={UpdateOfferSubmit}>
         <div className="group-input">
 

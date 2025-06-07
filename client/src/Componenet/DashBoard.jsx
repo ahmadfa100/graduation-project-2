@@ -422,7 +422,7 @@ export default function Dashboard() {
                         variant="outlined"
                         fullWidth
                         startIcon={<FaComments />}
-                        onClick={() => navigate(`/chat/${r.farmerID}/${r.offerID}`)}
+                        onClick={() => navigate(`/chat/${r.offerID}/${r.farmerID}`)}
                         className="chat-button"
                       >
                         Chat with Farmer

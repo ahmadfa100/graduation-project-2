@@ -269,7 +269,7 @@ export default function AccountInf() {
 
   return (
     <div className="account-inf-container">
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={5000} />
       <div className="account-inf-card">
         <div className="profile-picture-section">
           {profileImage ? (

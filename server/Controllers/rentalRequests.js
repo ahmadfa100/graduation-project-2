@@ -17,6 +17,7 @@ export async function getRequests(req, res) {
         u.lastname                       AS "farmerLastName",
         u.age                            AS "farmerAge",
         u.phonenumber                    AS "farmerPhone",
+        u.address                        AS "farmerAddress",  -- added address
 
         COALESCE(
           ('data:image/jpeg;base64,' || encode(lp.picture, 'base64')),

@@ -5,6 +5,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Button from "@mui/material/Button";
+import UserAvatar from '../layout/userAvatar';
 import {
   FaPlus,
   FaChartLine,
@@ -21,7 +22,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Badge from "@mui/material/Badge";
 
 import "../style/DashBoard.css";
-
 import OfferCard from "./offerCard";
 
 export default function Dashboard() {
@@ -140,7 +140,7 @@ export default function Dashboard() {
       <div className="dashboard-header">
         <h1>LandOwner Dashboard</h1>
         <Tooltip title="Add New Offer">
-          <button className="add-offer-button" onClick={() => navigate("/AddOffer")}>
+          <button className="add-offer-button" onClick={() => navigate("/AddOffer")}> 
             <FaPlus />
           </button>
         </Tooltip>
@@ -213,12 +213,10 @@ export default function Dashboard() {
                       <strong>Location:</strong> {land.landLocation}
                     </p>
                     <p>
-                      <strong>Worked on until:</strong>{" "}
-                      {new Date(land.endDate).toLocaleDateString()}
+                      <strong>Worked on until:</strong> {new Date(land.endDate).toLocaleDateString()}
                     </p>
                     <p>
-                      <strong>Farmer:</strong> {land.farmerFirstName}{" "}
-                      {land.farmerLastName}
+                      <strong>Farmer:</strong> {land.farmerFirstName} {land.farmerLastName}
                     </p>
                   </div>
                 </div>
@@ -246,7 +244,7 @@ export default function Dashboard() {
           ) : requests.length === 0 ? (
             renderEmpty("No pending requests.")
           ) : (
-            <div className="rentals-list">
+            <div className="rentals-list"> 
               {requests.map((r) => (
                 <div key={r.id} className="rental-card">
                   <div className="rental-images">
@@ -262,18 +260,14 @@ export default function Dashboard() {
                         <span>Land Image</span>
                       </div>
                     )}
-                    {r.farmerImage ? (
-                      <img
-                        src={r.farmerImage}
-                        alt="Farmer"
-                        className="rental-image farmer-image"
+                    <div className="farmer-avatar-container">
+                      <UserAvatar
+                        firstName={r.farmerFirstName}
+                        lastName={r.farmerLastName}
+                        imageUrl={r.farmerImage}
+                        size={64}
                       />
-                    ) : (
-                      <div className="image-placeholder">
-                        <FaHandshake className="placeholder-icon" />
-                        <span>Farmer Image</span>
-                      </div>
-                    )}
+                    </div>
                   </div>
                   <div className="rental-content">
                     <h4 className="rental-title">{r.landTitle}</h4>
@@ -283,8 +277,7 @@ export default function Dashboard() {
                         <div>
                           <span className="rental-label">Farmer</span>
                           <p>
-                            {r.farmerFirstName} {r.farmerLastName} (age{" "}
-                            {r.farmerAge})
+                            {r.farmerFirstName} {r.farmerLastName} (age {r.farmerAge})
                           </p>
                         </div>
                       </div>
@@ -299,7 +292,7 @@ export default function Dashboard() {
                     <div className="rental-status">
                       <span className="status-badge pending">Pending</span>
                     </div>
-                    <div className="request-actions">
+                    <div className="request-actions"> 
                       <Button
                         variant="contained"
                         fullWidth
@@ -368,17 +361,13 @@ export default function Dashboard() {
 
                     <div className="rental-info">
                       <div className="farmer-profile">
-                        {r.farmerImage ? (
-                          <img
-                            src={r.farmerImage}
-                            alt="Farmer"
-                            className="farmer-avatar"
-                          />
-                        ) : (
-                          <div className="farmer-avatar-placeholder">
-                            <FaHandshake className="placeholder-icon" />
-                          </div>
-                        )}
+                        <UserAvatar
+                          firstName={r.farmerFirstName}
+                          lastName={r.farmerLastName}
+                          imageUrl={r.farmerImage}
+                          size={64}
+                          className="farmer-avatar"
+                        />
                         <div className="farmer-details">
                           <span className="farmer-name">
                             {r.farmerFirstName} {r.farmerLastName}
@@ -392,8 +381,7 @@ export default function Dashboard() {
                         <div>
                           <span className="rental-label">Duration</span>
                           <p>
-                            {new Date(r.startDate).toLocaleDateString()} —{" "}
-                            {new Date(r.endDate).toLocaleDateString()}
+                            {new Date(r.startDate).toLocaleDateString()} — {new Date(r.endDate).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
@@ -412,10 +400,7 @@ export default function Dashboard() {
                         <div className="detail-content">
                           <span className="detail-label">Price</span>
                           <span className="detail-value">
-                            {isNaN(parseFloat(r.landLeasePrice))
-                              ? r.landLeasePrice
-                              : parseFloat(r.landLeasePrice).toFixed(2)}{" "}
-                            JOD
+                            {isNaN(parseFloat(r.landLeasePrice)) ? r.landLeasePrice : parseFloat(r.landLeasePrice).toFixed(2)} JOD
                           </span>
                         </div>
                       </div>

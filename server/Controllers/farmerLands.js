@@ -6,14 +6,18 @@ export async function getCurrentLands(req, res) {
 
   try {
     const { rows } = await db.query(
-      `SELECT
+      `
+      SELECT
         o.id                 AS "offerID",
         o.landtitle          AS "landTitle",
         o.landlocation       AS "landLocation",
         rd.end_date          AS "endDate",
         u.firstname          AS "landownerFirstName",
         u.lastname           AS "landownerLastName",
-        encode(lp.picture, 'base64') AS "landPicture"
+        -- land picture (first one)
+        encode(lp.picture, 'base64')       AS "landPicture",
+        -- landowner profile picture
+        encode(u.pfp, 'base64')            AS "landownerPfp"
       FROM rentaldeals rd
       JOIN offers o
         ON o.id = rd.offerid
@@ -32,15 +36,23 @@ export async function getCurrentLands(req, res) {
     );
 
     const result = rows.map(row => ({
-      ...row,
-      landPicture: row.landPicture
+      offerID:            row.offerID,
+      landTitle:          row.landTitle,
+      landLocation:       row.landLocation,
+      endDate:            row.endDate,
+      landownerFirstName: row.landownerFirstName,
+      landownerLastName:  row.landownerLastName,
+      landImage: row.landPicture
         ? `data:image/jpeg;base64,${row.landPicture}`
         : null,
+      landownerImage: row.landownerPfp
+        ? `data:image/jpeg;base64,${row.landownerPfp}`
+        : null,
     }));
-    //console.log("current lands",result);
+
     res.json(result);
   } catch (err) {
     console.error("Error fetching current lands:", err);
     res.status(500).json({ error: "DB error" });
   }
-}
+}  

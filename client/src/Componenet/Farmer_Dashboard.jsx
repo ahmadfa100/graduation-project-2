@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Accordion,
@@ -17,12 +18,13 @@ import OfferCard from "./offerCard";
 import "../style/Farmer_Dasboard.css";
 
 export default function FarmerDashboard() {
+  const navigate = useNavigate();
   const [currentLands, setCurrentLands] = useState([]);
   const [pastLands, setPastLands] = useState([]);
   const [favoriteOffers, setFavoriteOffers] = useState([]);
   const [loading, setLoading] = useState({ current: true, past: true, favorites: true });
   const [error, setError] = useState(null);
-  const [expandedSection, setExpandedSection] = useState('current');
+  const [expandedSection, setExpandedSection] = useState("current");
 
   const filterActive = (lands) => {
     const now = Date.now();
@@ -34,7 +36,7 @@ export default function FarmerDashboard() {
       .get(`${process.env.REACT_APP_SERVER_URL}/farmer/current-lands`, { withCredentials: true })
       .then((res) => setCurrentLands(filterActive(res.data)))
       .catch(() => setCurrentLands([]))
-      .finally(() => setLoading(prev => ({ ...prev, current: false })));
+      .finally(() => setLoading((prev) => ({ ...prev, current: false })));
   }, []);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export default function FarmerDashboard() {
       .get(`${process.env.REACT_APP_SERVER_URL}/farmer/past-lands`, { withCredentials: true })
       .then((res) => setPastLands(res.data))
       .catch(() => setPastLands([]))
-      .finally(() => setLoading(prev => ({ ...prev, past: false })));
+      .finally(() => setLoading((prev) => ({ ...prev, past: false })));
   }, []);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function FarmerDashboard() {
       .get(`${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`, { withCredentials: true })
       .then((res) => setFavoriteOffers(res.data))
       .catch(() => setFavoriteOffers([]))
-      .finally(() => setLoading(prev => ({ ...prev, favorites: false })));
+      .finally(() => setLoading((prev) => ({ ...prev, favorites: false })));
   }, []);
 
   const handleRemoveFavorite = async (offerId) => {
@@ -70,13 +72,21 @@ export default function FarmerDashboard() {
     setExpandedSection(isExpanded ? section : false);
   };
 
-  const renderLoading = () => <div className="loading-container"><CircularProgress /></div>;
-  const renderEmpty = (msg) => <div className="empty-state"><p>{msg}</p></div>;
+  const renderLoading = () => (
+    <div className="loading-container">
+      <CircularProgress />
+    </div>
+  );
+  const renderEmpty = (msg) => (
+    <div className="empty-state">
+      <p>{msg}</p>
+    </div>
+  );
 
   const stats = {
     currentLands: currentLands.length,
     pastLands: pastLands.length,
-    favoriteOffers: favoriteOffers.length
+    favoriteOffers: favoriteOffers.length,
   };
 
   const StatCard = ({ icon: Icon, title, value }) => (
@@ -109,84 +119,168 @@ export default function FarmerDashboard() {
 
       <div className="spacer" />
 
-      <Accordion expanded={expandedSection === 'current'} onChange={handleAccordionChange('current')} className="dashboard-section">
+      <Accordion
+        expanded={expandedSection === "current"}
+        onChange={handleAccordionChange("current")}
+        className="dashboard-section"
+      >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Badge badgeContent={stats.currentLands} color="primary">Current Lands</Badge>
+          <Badge badgeContent={stats.currentLands} color="primary">
+            Current Lands
+          </Badge>
         </AccordionSummary>
         <AccordionDetails>
-          {loading.current ? renderLoading() : currentLands.length === 0 ? renderEmpty("No current lands.") : (
-            <div className="land-cards">
-              {currentLands.map((land) => (
-                <Card className="land-card" key={land.id}>
-                  <CardContent>
-                    <Typography variant="h6" className="land-title">
-                      {land.landTitle}
-                    </Typography>
-                    <Typography variant="body2">
-                      <strong>Owner:</strong> {land.landownerFirstName} {land.landownerLastName}
-                    </Typography>
-                    <Typography variant="body2">
-                      <strong>Location:</strong> {land.landLocation}
-                    </Typography>
-                    <Typography variant="body2">
-                      <strong>Lease ends:</strong> {new Date(land.endDate).toLocaleDateString()}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+          {loading.current
+            ? renderLoading()
+            : currentLands.length === 0
+            ? renderEmpty("No current lands.")
+            : (
+              <div className="land-cards">
+                {currentLands.map((land) => (
+                  <Card className="land-card" key={land.offerID}>
+                    <div className="land-image-container">
+                      <img
+                        src={
+                          land.landImage ||
+                          "https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                        }
+                        alt={land.landTitle}
+                        className="land-image"
+                      />
+                      <div className="landowner-badge">
+                        <img
+                          src={
+                            land.landownerImage ||
+                            `https://ui-avatars.com/api/?name=${land.landownerFirstName}+${land.landownerLastName}`
+                          }
+                          alt={`${land.landownerFirstName} ${land.landownerLastName}`}
+                          className="landowner-image"
+                        />
+                        <div className="landowner-status">
+                          <i className="fas fa-crown"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <CardContent>
+                      <div className="land-card-header">
+                        <Typography variant="h6" className="land-title">
+                          {land.landTitle}
+                        </Typography>
+                        <div className="land-status active">Active</div>
+                      </div>
+                      <div className="land-details">
+                        <div className="land-detail-item">
+                          <div className="detail-icon">
+                            <i className="fas fa-user"></i>
+                          </div>
+                          <div className="detail-content">
+                            <span className="detail-label">Owner</span>
+                            <span className="detail-value">{land.landownerFirstName} {land.landownerLastName}</span>
+                          </div>
+                        </div>
+                        <div className="land-detail-item">
+                          <div className="detail-icon">
+                            <i className="fas fa-map-marker-alt"></i>
+                          </div>
+                          <div className="detail-content">
+                            <span className="detail-label">Location</span>
+                            <span className="detail-value">{land.landLocation}</span>
+                          </div>
+                        </div>
+                        <div className="land-detail-item">
+                          <div className="detail-icon">
+                            <i className="fas fa-calendar-alt"></i>
+                          </div>
+                          <div className="detail-content">
+                            <span className="detail-label">Lease ends</span>
+                            <span className="detail-value">{new Date(land.endDate).toLocaleDateString()}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="land-card-footer">
+                        <button
+                          className="view-details-btn"
+                          onClick={() => navigate(`/OfferDetails/${land.offerID}`)}
+                        >
+                          View Details
+                        </button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
         </AccordionDetails>
       </Accordion>
 
       <div className="spacer" />
 
-      <Accordion expanded={expandedSection === 'past'} onChange={handleAccordionChange('past')} className="dashboard-section">
+      <Accordion
+        expanded={expandedSection === "past"}
+        onChange={handleAccordionChange("past")}
+        className="dashboard-section"
+      >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Badge badgeContent={stats.pastLands} color="secondary">Past Lands</Badge>
+          <Badge badgeContent={stats.pastLands} color="secondary">
+            Past Lands
+          </Badge>
         </AccordionSummary>
         <AccordionDetails>
-          {loading.past ? renderLoading() : pastLands.length === 0 ? renderEmpty("No past lands.") : (
-            <div className="land-cards">
-              {pastLands.map((land) => (
-                <Card className="land-card" key={land.id}>
-                  <CardContent>
-                    <Typography variant="h6" className="land-title">
-                      {land.landTitle}
-                    </Typography>
-                    <Typography variant="body2">
-                      <strong>Location:</strong> {land.landLocation}
-                    </Typography>
-                    <Typography variant="body2">
-                      <strong>Worked on until:</strong> {new Date(land.endDate).toLocaleDateString()}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
+          {loading.past
+            ? renderLoading()
+            : pastLands.length === 0
+            ? renderEmpty("No past lands.")
+            : (
+              <div className="land-cards">
+                {pastLands.map((land) => (
+                  <Card className="land-card" key={land.offerID}>
+                    <CardContent>
+                      <Typography variant="h6" className="land-title">
+                        {land.landTitle}
+                      </Typography>
+                      <Typography variant="body2">
+                        <strong>Location:</strong> {land.landLocation}
+                      </Typography>
+                      <Typography variant="body2">
+                        <strong>Worked on until:</strong> {new Date(land.endDate).toLocaleDateString()}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
         </AccordionDetails>
       </Accordion>
 
       <div className="spacer" />
 
-      <Accordion expanded={expandedSection === 'favorites'} onChange={handleAccordionChange('favorites')} className="dashboard-section">
+      <Accordion
+        expanded={expandedSection === "favorites"}
+        onChange={handleAccordionChange("favorites")}
+        className="dashboard-section"
+      >
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Badge badgeContent={stats.favoriteOffers} color="info">Favorite Offers</Badge>
+          <Badge badgeContent={stats.favoriteOffers} color="info">
+            Favorite Offers
+          </Badge>
         </AccordionSummary>
         <AccordionDetails>
-          {loading.favorites ? renderLoading() : favoriteOffers.length === 0 ? renderEmpty("No favorite offers.") : (
-            <div className="offers-list">
-              {favoriteOffers.map((offer) => (
-                <OfferCard
-                  key={offer.id}
-                  offer={offer}
-                  isFavorite
-                  onToggleFavorite={() => handleRemoveFavorite(offer.id)}
-                />
-              ))}
-            </div>
-          )}
+          {loading.favorites
+            ? renderLoading()
+            : favoriteOffers.length === 0
+            ? renderEmpty("No favorite offers.")
+            : (
+              <div className="offers-list">
+                {favoriteOffers.map((offer) => (
+                  <OfferCard
+                    key={offer.id}
+                    offer={offer}
+                    isFavorite
+                    onToggleFavorite={() => handleRemoveFavorite(offer.id)}
+                  />
+                ))}
+              </div>
+            )}
         </AccordionDetails>
       </Accordion>
     </div>

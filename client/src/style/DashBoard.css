@@ -184,14 +184,14 @@
 }
 
 .rental-images {
-  height: 240px;
+  display: flex;
+  height: 200px;
   border-bottom: 1px solid #eee;
   position: relative;
 }
 
 .rental-image {
-  width: 100%;
-  height: 100%;
+  flex: 1;
   object-fit: cover;
   transition: all 0.3s ease;
 }
@@ -201,7 +201,8 @@
 }
 
 .rental-image:hover {
-  transform: scale(1.02);
+  flex: 1.2;
+  filter: brightness(1.05);
 }
 
 .image-placeholder {
@@ -350,6 +351,30 @@
 }
 
 @media (max-width: 768px) {
+  .rentals-list {
+    grid-template-columns: 1fr;
+    padding: 16px;
+  }
+  
+  .rental-images {
+    height: 160px;
+  }
+
+  .rental-content {
+    padding: 16px;
+  }
+
+  .rental-title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .request-actions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
   .dashboard {
     padding: 16px;
   }
@@ -362,7 +387,7 @@
   }
 }
 
-.offer-card-with-actions {
+.dashboard .offer-card-with-actions {
   position: relative;
   margin-bottom: 20px;
   border: 1px solid #eee;
@@ -370,7 +395,7 @@
   overflow: hidden;
 }
 
-.offer-actions {
+.dashboard .offer-actions {
   display: flex;
   justify-content: flex-end;
   padding: 10px;
@@ -378,7 +403,7 @@
   border-top: 1px solid #eee;
 }
 
-.farmer-profile {
+.dashboard .farmer-profile {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -388,7 +413,7 @@
   margin-bottom: 20px;
 }
 
-.farmer-avatar {
+.dashboard .farmer-avatar {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -397,7 +422,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.farmer-avatar-placeholder {
+.dashboard .farmer-avatar-placeholder {
   width: 60px;
   height: 60px;
   border-radius: 50%;
@@ -408,33 +433,33 @@
   border: 3px solid #4caf50;
 }
 
-.farmer-details {
+.dashboard .farmer-details {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.farmer-name {
+.dashboard .farmer-name {
   font-size: 16px;
   font-weight: 600;
   color: #2c3e50;
 }
 
-.farmer-label {
+.dashboard .farmer-label {
   font-size: 12px;
   color: #6c757d;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.rental-details-grid {
+.dashboard .rental-details-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin: 20px 0;
 }
 
-.detail-item {
+.dashboard .detail-item {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -444,30 +469,30 @@
   transition: all 0.3s ease;
 }
 
-.detail-item:hover {
+.dashboard .detail-item:hover {
   background: #e9ecef;
   transform: translateY(-2px);
 }
 
-.detail-icon {
+.dashboard .detail-icon {
   font-size: 20px;
   color: #4caf50;
 }
 
-.detail-content {
+.dashboard .detail-content {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
 
-.detail-label {
+.dashboard .detail-label {
   font-size: 12px;
   color: #6c757d;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.detail-value {
+.dashboard .detail-value {
   font-size: 15px;
   font-weight: 500;
   color: #2c3e50;

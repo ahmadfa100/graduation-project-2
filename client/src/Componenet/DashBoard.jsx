@@ -11,7 +11,8 @@ import {
   FaHistory,
   FaHandshake,
   FaCalendarCheck,
-  FaComments
+  FaComments,
+  FaMapMarkerAlt
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -285,6 +286,13 @@ export default function Dashboard() {
                             {r.farmerFirstName} {r.farmerLastName} (age{" "}
                             {r.farmerAge})
                           </p>
+                        </div>
+                      </div>
+                      <div className="rental-info-item">
+                        <FaMapMarkerAlt className="rental-icon" />
+                        <div>
+                          <span className="rental-label">Address</span>
+                          <p>{r.farmerAddress}</p>
                         </div>
                       </div>
                     </div>

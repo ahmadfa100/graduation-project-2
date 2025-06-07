@@ -7,7 +7,7 @@ import { Server } from "socket.io";
 import session from "express-session";
 import db from "./db.js";
 import notificationsRouter  from "./Controllers/notifications.js";
-import { getCurrentLands } from "./Controllers/farmerLands.js";
+import { getCurrentLands, getFarmerRequests } from "./Controllers/farmerLands.js";
 import { getPastLands } from "./Controllers/landownerLands.js"; 
 
 import {
@@ -186,6 +186,14 @@ app.get("/getUserOffers/:userID",getUserOffers)
 
 app.get("/dashboard/past-lands", getPastLands);
 
+app.get(
+  "/farmer/requests",
+  (req, res, next) => {
+    if (!req.session.user?.id) return res.status(401).json({ error: "Unauthorized" });
+    next();
+  },
+  getFarmerRequests
+);
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);

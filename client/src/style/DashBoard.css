@@ -351,30 +351,6 @@
 }
 
 @media (max-width: 768px) {
-  .rentals-list {
-    grid-template-columns: 1fr;
-    padding: 16px;
-  }
-  
-  .rental-images {
-    height: 160px;
-  }
-
-  .rental-content {
-    padding: 16px;
-  }
-
-  .rental-title {
-    font-size: 18px;
-    margin-bottom: 12px;
-  }
-
-  .request-actions {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
   .dashboard {
     padding: 16px;
   }
@@ -387,7 +363,7 @@
   }
 }
 
-.dashboard .offer-card-with-actions {
+.offer-card-with-actions {
   position: relative;
   margin-bottom: 20px;
   border: 1px solid #eee;
@@ -395,7 +371,7 @@
   overflow: hidden;
 }
 
-.dashboard .offer-actions {
+.offer-actions {
   display: flex;
   justify-content: flex-end;
   padding: 10px;
@@ -403,7 +379,22 @@
   border-top: 1px solid #eee;
 }
 
-.dashboard .farmer-profile {
+.farmer-avatar-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.farmer-avatar-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.farmer-profile {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -413,126 +404,79 @@
   margin-bottom: 20px;
 }
 
-.dashboard .farmer-avatar {
-  width: 60px;
-  height: 60px;
+.farmer-avatar {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #4caf50;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.dashboard .farmer-avatar-placeholder {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: #e9ecef;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid #4caf50;
-}
-
-.dashboard .farmer-details {
+.farmer-details {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.dashboard .farmer-name {
-  font-size: 16px;
+.farmer-name {
   font-weight: 600;
   color: #2c3e50;
+  font-size: 16px;
 }
 
-.dashboard .farmer-label {
-  font-size: 12px;
+.farmer-label {
+  font-size: 13px;
   color: #6c757d;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.dashboard .rental-details-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin: 20px 0;
+.rental-images {
+  position: relative;
 }
 
-.dashboard .detail-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+.farmer-avatar-container {
+  position: absolute;
+  bottom: -40px;
+  right: 20px;
+  z-index: 1;
 }
 
-.dashboard .detail-item:hover {
-  background: #e9ecef;
-  transform: translateY(-2px);
-}
-
-.dashboard .detail-icon {
-  font-size: 20px;
-  color: #4caf50;
-}
-
-.dashboard .detail-content {
+.rental-details-grid {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 16px;
+  margin-top: 16px;
 }
 
-.dashboard .detail-label {
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.detail-icon {
+  font-size: 18px;
+  color: #4caf50;
+  margin-top: 2px;
+}
+
+.detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-label {
   font-size: 12px;
   color: #6c757d;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
-.dashboard .detail-value {
-  font-size: 15px;
-  font-weight: 500;
+.detail-value {
   color: #2c3e50;
+  font-size: 15px;
 }
-
-.chat-button {
-  margin-top: 20px !important;
-  border-color: #4caf50 !important;
-  color: #4caf50 !important;
-  text-transform: none !important;
-  font-weight: 500 !important;
-  padding: 10px 20px !important;
-  transition: all 0.3s ease !important;
-}
-
-.chat-button:hover {
-  background-color: #4caf50 !important;
-  color: white !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
-}
-
-@media (max-width: 768px) {
-  .rental-details-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .farmer-profile {
-    padding: 12px;
-  }
-  
-  .farmer-avatar,
-  .farmer-avatar-placeholder {
-    width: 50px;
-    height: 50px;
-  }
-  
-  .farmer-name {
-    font-size: 14px;
-  }
-}
-
 

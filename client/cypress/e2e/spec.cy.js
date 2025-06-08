@@ -214,7 +214,7 @@ describe('template spec', () => {
   /* ==== End Cypress Studio ==== */
 
   /* ==== Test Created with Cypress Studio ==== */
-  it('Dashboard ', function() {
+  it.only('Dashboard ', function() {
     /* ==== Generated with Cypress Studio ==== */
     cy.visit('http://localhost:3000/login');
     cy.get(':nth-child(1) > input').clear('te');

@@ -138,14 +138,14 @@ export default function AccountInf() {
             password: pwError,
             confirmPassword: cpError
           });
-          toast.error(`Failed to update ${field}: ${pwError || cpError}`);
+        //toast.error(`Failed to update ${field}: ${pwError || cpError}`);
           return;
         }
       } else {
         const err = validators[field](userData[field]);
         if (err) {
           setErrors((e) => ({ ...e, [field]: err }));
-          toast.error(`Failed to update ${field}: ${err}`);
+        //toast.error(`Failed to update ${field}: ${err}`);
           return;
         }
       }
@@ -177,7 +177,7 @@ export default function AccountInf() {
               ...errState,
               [field]: errorMessage,
             }));
-            toast.error(`Failed to update ${field}: ${errorMessage}`);
+          toast.error(`Failed to update ${field}: ${errorMessage}`);
           }
         });
     }
@@ -210,7 +210,7 @@ export default function AccountInf() {
         toast.success('Profile picture updated successfully');
       })
       .catch((err) => {
-        toast.error('Failed to update profile picture');
+      toast.error('Failed to update profile picture');
         console.error(err);
       });
     };
@@ -227,7 +227,7 @@ export default function AccountInf() {
       toast.success('Profile picture deleted successfully');
     })
     .catch((err) => {
-      toast.error('Failed to delete profile picture');
+    toast.error('Failed to delete profile picture');
       console.error(err);
     });
   };
@@ -269,7 +269,7 @@ export default function AccountInf() {
 
   return (
     <div className="account-inf-container">
-      <ToastContainer position="top-right" autoClose={5000} />
+      <ToastContainer position="bottom-left" autoClose={3000} />
       <div className="account-inf-card">
         <div className="profile-picture-section">
           {profileImage ? (

@@ -3,10 +3,12 @@ import { FaPhone, FaComments, FaHeart, FaRegHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
+import Box from "@mui/material/Box";
+import ClipLoader from "react-spinners/ClipLoader";
 
 function OffersSection({ favoriteOffers, toggleFavorite }) {
   const navigate = useNavigate();
-
+  const [isLoading, setIsLoading] = useState(false);
   const [offers, setOffers] = useState([]);
   const [offset, setOffset] = useState(0);
   const limit = 3;
@@ -18,53 +20,50 @@ function OffersSection({ favoriteOffers, toggleFavorite }) {
 
   const [favoriteOffersList, setFavoriteOffersList] = useState([]);
   const [likedOffers, setLikedOffers] = useState([]);
-const [useID,setUserID]=useState();
+  const [useID, setUserID] = useState();
 
-useEffect(()=>{
-  fetchSession();
-},[]);
+  useEffect(() => {
+    fetchSession();
+  }, []);
 
-  const handleClear = () => {
-    setCity("");
-    setPeriod("");
-    setSpace("");
-    setOffset(0);
-    fetchOffers(false, 0);
-  };
   async function fetchSession() {
     try {
-      const sessionResponse = await axios.get(`${process.env.REACT_APP_SERVER_URL}/sessionInfo`, {
-        withCredentials: true, 
-      });
+      const sessionResponse = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/sessionInfo`,
+        { withCredentials: true }
+      );
       const user = sessionResponse.data.user;
-  
-      if (user) {
-      setUserID(
-        sessionResponse.data.user.id
-      );  
-        //console.log("Session data:", user);
-      } else {
-        console.warn("No user found in session.");
-      }
-     
+      if (user) setUserID(user.id);
     } catch (err) {
-     
       console.error("Failed to fetch session info:", err);
     }
   }
+
+  useEffect(() => {
+    fetchFavoriteOfferList();
+    setOffset(0);
+    fetchOffers(false, 0);
+  }, []);
+
   async function fetchFavoriteOfferList() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`, {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/FavoriteOffers`,
+        { withCredentials: true }
+      );
       setFavoriteOffersList(response.data);
     } catch (error) {
-    
-      console.error("Error fetching favorite offer:", error);
+      console.error("Error fetching favorite offers:", error);
     }
   }
 
+  useEffect(() => {
+    const ids = favoriteOffersList.map((fav) => fav.id);
+    setLikedOffers(ids);
+  }, [favoriteOffersList]);
+
   const fetchOffers = async (append = false, newOffset = 0) => {
+    setIsLoading(true);
     try {
       const params = new URLSearchParams();
       if (searchTerm) params.append("search", searchTerm);
@@ -86,19 +85,10 @@ useEffect(()=>{
       }
     } catch (error) {
       console.error("Error fetching offers:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchFavoriteOfferList();
-    setOffset(0);
-    fetchOffers(false, 0);
-  }, []);
-
-  useEffect(() => {
-    const ids = favoriteOffersList.map(fav => fav.id) 
-    setLikedOffers(ids);
-  }, [favoriteOffersList]);
 
   const handleSearchOrFilter = () => {
     setOffset(0);
@@ -110,9 +100,16 @@ useEffect(()=>{
     setOffset(newOffset);
     fetchOffers(true, newOffset);
   };
-console.log("Outside use effect :",useID);
+
+  const handleClear = () => {
+    setCity("");
+    setPeriod("");
+    setSpace("");
+    setOffset(0);
+    fetchOffers(false, 0);
+  };
+
   return (
-   
     <div className="offers-section">
       <h2 className="section-title">Available Offers</h2>
 
@@ -123,9 +120,7 @@ console.log("Outside use effect :",useID);
           className="search-input"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSearchOrFilter();
-          }}
+          onKeyDown={(e) => e.key === "Enter" && handleSearchOrFilter()}
         />
         <button className="search-button" onClick={handleSearchOrFilter}>
           Search
@@ -134,18 +129,17 @@ console.log("Outside use effect :",useID);
 
       <div className="filters-container">
         <div className="filter-group">
-          <label htmlFor="cityFilter" className="filter-label">City</label>
+          <label htmlFor="cityFilter" className="filter-label">
+            City
+          </label>
           <select
             id="cityFilter"
             className="filter-select"
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleSearchOrFilter();
-              }
-            }}
+            onKeyDown={(e) =>
+              e.key === "Enter" && (e.preventDefault(), handleSearchOrFilter())
+            }
           >
             <option value="">All Cities</option>
             <option value="Amman">Amman</option>
@@ -164,18 +158,17 @@ console.log("Outside use effect :",useID);
         </div>
 
         <div className="filter-group">
-          <label htmlFor="periodFilter" className="filter-label">Period</label>
+          <label htmlFor="periodFilter" className="filter-label">
+            Period
+          </label>
           <select
             id="periodFilter"
             className="filter-select"
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleSearchOrFilter();
-              }
-            }}
+            onKeyDown={(e) =>
+              e.key === "Enter" && (e.preventDefault(), handleSearchOrFilter())
+            }
           >
             <option value="">All</option>
             <option value="monthly">Monthly</option>
@@ -184,7 +177,9 @@ console.log("Outside use effect :",useID);
         </div>
 
         <div className="filter-group">
-          <label htmlFor="spaceFilter" className="filter-label">Land Space</label>
+          <label htmlFor="spaceFilter" className="filter-label">
+            Land Space
+          </label>
           <input
             type="text"
             id="spaceFilter"
@@ -192,12 +187,9 @@ console.log("Outside use effect :",useID);
             className="filter-input"
             value={space}
             onChange={(e) => setSpace(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                handleSearchOrFilter();
-              }
-            }}
+            onKeyDown={(e) =>
+              e.key === "Enter" && (e.preventDefault(), handleSearchOrFilter())
+            }
           />
         </div>
 
@@ -209,102 +201,125 @@ console.log("Outside use effect :",useID);
         </button>
       </div>
 
-      <div className="offers-list">
-        {offers.map((offer, idx) => (
-          !offer.isreserved &&
-          <motion.div
-            key={offer.id}
-            className="offer-item"
-            onClick={() => navigate(`/OfferDetails/${offer.id}`)}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: idx * 0.12, ease: "easeOut" }}
-          >
-            <div className="offer-image-container">
-              <img src={offer.image} alt={offer.name} className="offer-image" />
-            </div>
-            <div className="offer-details">
-              <div className="offer-header">
-                <h3 className="offer-title">{offer.landtitle}</h3>
-                <span className="offer-price">
-                  {parseFloat(offer.landleaseprice).toFixed(2)} JOD
-                </span>
-              </div>
-              <p className="offer-subtitle">
-                Land area: {parseFloat(offer.landsize).toFixed(2)} m<sup>2</sup>, location: {offer.landlocation}
-              </p>
-              {useID !== offer.ownerid && (
-                <div className="offer-actions">
-                  <button
-                    className="action-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      window.location.href = `tel:${offer.PhoneNumber}`;
+      {isLoading ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 8 }}>
+          <ClipLoader color="green" size={50} />
+        </Box>
+      ) : (
+        <>
+          <div className="offers-list">
+            {offers.map(
+              (offer, idx) =>
+                !offer.isreserved && (
+                  <motion.div
+                    key={offer.id}
+                    className="offer-item"
+                    onClick={() => navigate(`/OfferDetails/${offer.id}`)}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: idx * 0.12,
+                      ease: "easeOut",
                     }}
                   >
-                    <FaPhone />
-                  </button>
-                  <button
-                    className="action-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/chat/${offer.id}/${offer.ownerid}`);
-                    }}
-                  >
-                    <FaComments />
-                  </button>
-                  <button
-                    className="action-button favorite-button"
-                    onClick={async (e) => {
-                      e.stopPropagation();
-                      const isLiked = likedOffers.includes(offer.id);
-                      setLikedOffers((prev) =>
-                        isLiked
-                          ? prev.filter((id) => id !== offer.id)
-                          : [...prev, offer.id]
-                      );
-                      try {
-                        if (!isLiked) {
-                          await axios.post(
-                            `${process.env.REACT_APP_SERVER_URL}/AddFavoriteOffers`,
-                            { offerID: offer.id },
-                            { withCredentials: true }
-                          );
-                        } else {
-                          await axios.delete(
-                            `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
-                            {
-                              data: { offerID: offer.id },
-                              withCredentials: true,
-                            }
-                          );
-                        }
-                      } catch (err) {
-                        if (err.status === 401) {
-                          window.location.href = '/login';
-                        }
-                        console.error("Favorite toggle error:", err);
-                      }
-                      if (toggleFavorite) toggleFavorite(offer.id);
-                    }}
-                  >
-                    {likedOffers.includes(offer.id) ? <FaHeart /> : <FaRegHeart />}
-                  </button>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        ))}
-      </div>
+                    <div className="offer-image-container">
+                      <img
+                        src={offer.image}
+                        alt={offer.name}
+                        className="offer-image"
+                      />
+                    </div>
+                    <div className="offer-details">
+                      <div className="offer-header">
+                        <h3 className="offer-title">{offer.landtitle}</h3>
+                        <span className="offer-price">
+                          {parseFloat(offer.landleaseprice).toFixed(2)} JOD
+                        </span>
+                      </div>
+                      <p className="offer-subtitle">
+                        Land area:{" "}
+                        {parseFloat(offer.landsize).toFixed(2)} m<sup>2</sup>,{" "}
+                        location: {offer.landlocation}
+                      </p>
+                      {useID !== offer.ownerid && (
+                        <div className="offer-actions">
+                          <button
+                            className="action-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.location.href = `tel:${offer.PhoneNumber}`;
+                            }}
+                          >
+                            <FaPhone />
+                          </button>
+                          <button
+                            className="action-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/chat/${offer.id}/${offer.ownerid}`);
+                            }}
+                          >
+                            <FaComments />
+                          </button>
+                          <button
+                            className="action-button favorite-button"
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              const isLiked = likedOffers.includes(offer.id);
+                              setLikedOffers((prev) =>
+                                isLiked
+                                  ? prev.filter((id) => id !== offer.id)
+                                  : [...prev, offer.id]
+                              );
+                              try {
+                                if (!isLiked) {
+                                  await axios.post(
+                                    `${process.env.REACT_APP_SERVER_URL}/AddFavoriteOffers`,
+                                    { offerID: offer.id },
+                                    { withCredentials: true }
+                                  );
+                                } else {
+                                  await axios.delete(
+                                    `${process.env.REACT_APP_SERVER_URL}/DeleteFavoriteOffer`,
+                                    {
+                                      data: { offerID: offer.id },
+                                      withCredentials: true,
+                                    }
+                                  );
+                                }
+                              } catch (err) {
+                                if (err.response?.status === 401) {
+                                  window.location.href = "/login";
+                                }
+                                console.error("Favorite toggle error:", err);
+                              }
+                              if (toggleFavorite) toggleFavorite(offer.id);
+                            }}
+                          >
+                            {likedOffers.includes(offer.id) ? (
+                              <FaHeart />
+                            ) : (
+                              <FaRegHeart />
+                            )}
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </motion.div>
+                )
+            )}
+          </div>
 
-      <div className="more-button-container">
-        <button className="more-button" onClick={handleMore}>
-          More
-        </button>
-      </div>
+          <div className="more-button-container">
+            <button className="more-button" onClick={handleMore}>
+              More
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
 export default OffersSection;
-

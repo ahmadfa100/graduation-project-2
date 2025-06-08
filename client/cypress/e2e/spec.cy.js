@@ -39,7 +39,20 @@ describe("template spec", () => {
     cy.get(".User-Avatar-Header > svg").click();
     cy.get(".MuiBackdrop-root").click();
   });
+  it('offer buttons and logout', function() {
+    login();
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get(':nth-child(2) > .action-content > .action-button').click();
+    cy.get('.nav-links > [href="/"]').click();
+    cy.get(':nth-child(3) > .offer-details > .offer-actions > .favorite-button').first().click();
+    cy.get(':nth-child(3) > .offer-details > .offer-actions > .favorite-button').first().click();
 
+    /* ==== End Cypress Studio ==== */
+    /* ==== Generated with Cypress Studio ==== */
+    cy.get('.User-Avatar-Header > svg > path').click();
+    cy.get('#Logout > .MuiListItemText-root > .MuiTypography-root').click();
+    /* ==== End Cypress Studio ==== */
+  })
   it("login", function () {
     cy.visit("http://localhost:3000/login");
 
@@ -118,7 +131,23 @@ describe("template spec", () => {
     cy.get(".profile-offer-img").first().click();
   });
 
-  it("Dashboard ", function () {
+ 
+  it("offer detail", function () {
+    login();
+    cy.wait(1000);
+    cy.visit("http://localhost:3000/");
+    cy.get(
+      ":nth-child(1) > .offer-details > .offer-header > .offer-title"
+    ).click();
+    cy.get(".swiper-button-next").click();
+    cy.get(".swiper-button-next").click();
+    cy.get(".swiper-button-prev").click();
+    cy.get(".swiper-button-prev").click();
+    cy.get(".swiper-pagination > :nth-child(2)").click();
+    cy.get(".swiper-pagination > :nth-child(3)").click();
+    cy.get(":nth-child(4) > .thumb-wrapper > .thumb-image").click();
+  });
+ it("Dashboard ", function () {
     login();
     cy.get(".User-Avatar-Header > h3").click();
     cy.get("#LandownerDashboard").click();
@@ -138,7 +167,7 @@ describe("template spec", () => {
       ":nth-child(4) > .MuiAccordion-heading > .MuiButtonBase-root > .MuiAccordionSummary-content"
     ).click();
 
-    cy.get(".offer-actions > :nth-child(1)").click();
+    cy.get(".offer-actions > :nth-child(1)").first().click();
     cy.get(".User-Avatar-Header > h3").click();
     cy.get(
       "#LandownerDashboard > .MuiListItemText-root > .MuiTypography-root"
@@ -159,7 +188,6 @@ describe("template spec", () => {
     ).click();
     cy.get(".request-actions > .MuiButtonBase-root").click();
   });
-
   it("add/ update offer", function () {
     login();
     cy.get(".User-Avatar-Header > h3").click();
@@ -251,21 +279,7 @@ describe("template spec", () => {
     cy.get(".notification").click();
   });
 
-  it("offer detail", function () {
-    login();
-    cy.wait(1000);
-    cy.visit("http://localhost:3000/");
-    cy.get(
-      ":nth-child(1) > .offer-details > .offer-header > .offer-title"
-    ).click();
-    cy.get(".swiper-button-next").click();
-    cy.get(".swiper-button-next").click();
-    cy.get(".swiper-button-prev").click();
-    cy.get(".swiper-button-prev").click();
-    cy.get(".swiper-pagination > :nth-child(2)").click();
-    cy.get(".swiper-pagination > :nth-child(3)").click();
-    cy.get(":nth-child(4) > .thumb-wrapper > .thumb-image").click();
-  });
+ 
   it("contact", function () {
     cy.visit("http://localhost:3000/");
     cy.get('.nav-links > [href="/contact"]').click();
@@ -296,7 +310,7 @@ describe("template spec", () => {
     cy.get('.chat-owner > h4').click();
     /* ==== End Cypress Studio ==== */
   })
-  
+
   it("account info", function () {
     cy.visit("http://localhost:3000/login");
     cy.get(":nth-child(1) > input").clear("test1@gmail.com");
@@ -392,16 +406,6 @@ describe("template spec", () => {
     cy.get('input[type="file"]').attachFile("user.jpg");
     cy.get(".delete-btn").click();
   });
-  it.only('offer buttons and logout', function() {
-    login();
-    /* ==== Generated with Cypress Studio ==== */
-    cy.get(':nth-child(2) > .action-content > .action-button').click();
-    cy.get('.nav-links > [href="/"]').click();
-    cy.get('.favorite-button > svg').click();
-    cy.get('.favorite-button > svg').click();
-    cy.get(':nth-child(2) > svg > path').click();
-    /* ==== End Cypress Studio ==== */
-  })
 });
  
 

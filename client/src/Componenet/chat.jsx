@@ -97,7 +97,7 @@ const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
           {item.offerTitle}
         </Typography> 
-        <Typography variant="body2" color="gray"sx={{ textTransform: 'none' }}>
+        <Typography variant="body2" color="gray"sx={{ textTransform: 'none',width:'fit-content'} }>
        
         {item.otherParticipantName}
         </Typography>

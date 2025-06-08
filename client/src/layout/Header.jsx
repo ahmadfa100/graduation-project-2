@@ -249,6 +249,7 @@ const Header = () => {
                   {slidebarContent.map((item, i) => (
                     <React.Fragment key={i}>
                       <ListItem
+                      id={item.title.replace(/\s+/g, '')}
                         button
                         onClick={item.onClick}
                         sx={{

@@ -8,7 +8,6 @@ import Button from "@mui/material/Button";
 import {
   FaPlus,
   FaChartLine,
-  FaHistory,
   FaHandshake,
   FaCalendarCheck,
   FaComments,
@@ -25,12 +24,10 @@ import OfferCard from "./offerCard";
 
 export default function Dashboard() {
   const [myOffers, setMyOffers] = useState([]);
-  const [pastLands, setPastLands] = useState([]);
   const [requests, setRequests] = useState([]);
   const [activeRentals, setActiveRentals] = useState([]);
   const [loading, setLoading] = useState({
     offers: true,
-    past: true,
     requests: true,
     rentals: true,
   });
@@ -44,14 +41,6 @@ export default function Dashboard() {
       .then((res) => setMyOffers(res.data))
       .catch(() => setMyOffers([]))
       .finally(() => setLoading((prev) => ({ ...prev, offers: false })));
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/dashboard/past-lands`, { withCredentials: true })
-      .then((res) => setPastLands(res.data))
-      .catch(() => setPastLands([]))
-      .finally(() => setLoading((prev) => ({ ...prev, past: false })));
   }, []);
 
   useEffect(() => {
@@ -101,7 +90,6 @@ export default function Dashboard() {
 
   const stats = {
     totalOffers: myOffers.length,
-    pastLands: pastLands.length,
     pendingRequests: requests.length,
     activeRentals: activeRentals.length,
   };
@@ -147,7 +135,6 @@ export default function Dashboard() {
 
       <div className="stats-grid">
         <StatCard icon={FaChartLine} title="My Offers" value={stats.totalOffers} />
-        <StatCard icon={FaHistory} title="Past Lands" value={stats.pastLands} />
         <StatCard icon={FaHandshake} title="Requests" value={stats.pendingRequests} />
         <StatCard icon={FaCalendarCheck} title="Active Rentals" value={stats.activeRentals} />
       </div>
@@ -179,48 +166,6 @@ export default function Dashboard() {
                   onEdit={(id) => navigate(`/updateOffer/${id}`)}
                   onDelete={handleDeleteOffer}
                 />
-              ))}
-            </div>
-          )}
-        </AccordionDetails>
-      </Accordion>
-
-      <div className="spacer" />
-
-      <Accordion
-        expanded={expandedSection === "past"}
-        onChange={handleAccordionChange("past")}
-        className="dashboard-section"
-      >
-        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-          <Badge badgeContent={stats.pastLands} color="secondary">
-            Past Lands
-          </Badge>
-        </AccordionSummary>
-        <AccordionDetails>
-          {loading.past ? (
-            renderLoading()
-          ) : pastLands.length === 0 ? (
-            renderEmpty("No past lands.")
-          ) : (
-            <div className="offers-list">
-              {pastLands.map((land) => (
-                <div key={land.dealID} className="request-card">
-                  <div className="request-content">
-                    <h4 className="request-title">{land.landTitle}</h4>
-                    <p>
-                      <strong>Location:</strong> {land.landLocation}
-                    </p>
-                    <p>
-                      <strong>Worked on until:</strong>{" "}
-                      {new Date(land.endDate).toLocaleDateString()}
-                    </p>
-                    <p>
-                      <strong>Farmer:</strong> {land.farmerFirstName}{" "}
-                      {land.farmerLastName}
-                    </p>
-                  </div>
-                </div>
               ))}
             </div>
           )}

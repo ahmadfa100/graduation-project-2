@@ -9,15 +9,7 @@ import { motion } from "framer-motion";
 
 function HomePage() {
   const navigate = useNavigate();
-  const [favoriteOffers, setFavoriteOffers] = useState([]);
-
-  const toggleFavorite = (offerId) => {
-    setFavoriteOffers((prevFavorites) =>
-      prevFavorites.includes(offerId)
-        ? prevFavorites.filter((id) => id !== offerId)
-        : [...prevFavorites, offerId]
-    );
-  };
+ 
 
   const handleScrollToOffers = () => {
     const offersSection = document.getElementById("offers-section");
@@ -79,10 +71,7 @@ function HomePage() {
       <Divider />
 
       <div id="offers-section">
-         <OffersSection
-     favoriteOffers={favoriteOffers}
-     toggleFavorite={toggleFavorite}
-      />
+      <OffersSection />
       </div>
     </div>
   );

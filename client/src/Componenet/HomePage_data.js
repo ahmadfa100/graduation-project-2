@@ -1,5 +1,3 @@
-
-
 export const monthlySeasons = {
   January: ["Cauliflower", "Carrots", "Tomatoes", "Pepper", "Cucumber", "Eggplants"],
   February: ["Blueberry", "Carrots", "Tomatoes", "Pepper", "Cucumber", "Eggplants"],

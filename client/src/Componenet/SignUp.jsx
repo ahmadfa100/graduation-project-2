@@ -199,6 +199,9 @@ function SignUp() {
           <div className="login-link">
             Already have an account? <Link to="/login">Log In</Link>
           </div>
+      {/* <h3 style={{color:"rgb(78, 176, 82)"}} onClick={() => navigate('/')}>
+      Go to Home
+    </h3> */}
         </form>
         
       </div>

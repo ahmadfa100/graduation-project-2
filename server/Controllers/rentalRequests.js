@@ -17,7 +17,7 @@ export async function getRequests(req, res) {
         u.lastname                       AS "farmerLastName",
         u.age                            AS "farmerAge",
         u.phonenumber                    AS "farmerPhone",
-        u.address                        AS "farmerAddress",  -- added address
+        u.address                        AS "farmerAddress",  
 
         COALESCE(
           ('data:image/jpeg;base64,' || encode(lp.picture, 'base64')),
@@ -74,7 +74,21 @@ export async function acceptRequest(req, res) {
       `,
       [id, ownerID]
     );
-    res.json({ message: "Request accepted" });
+
+    await db.query(
+      `
+      UPDATE offers
+      SET isreserved = TRUE
+      WHERE id = (
+        SELECT offerid
+        FROM rentaldeals
+        WHERE id = $1
+      );
+      `,
+      [id]
+    );
+
+    res.json({ message: "Request accepted and land reserved" });
   } catch (err) {
     console.error("Error accepting request:", err);
     res.status(500).json({ error: "DB error" });

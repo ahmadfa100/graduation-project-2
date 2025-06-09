@@ -91,7 +91,6 @@ export async function getFarmerRequests(req, res) {
       [farmerID]
     );
 
-    // simply pass rows through now that aliases match your JSX
     res.json(rows);
   } catch (err) {
     console.error("Error fetching farmer requests:", err);

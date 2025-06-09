@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "../style/HomePage.css";
 import "../style/offers-section.css";
 import Divider from "../layout/leaf";
-import { offers } from "./HomePage_data";
 import Season from "./Season";
 import OffersSection from "./OffersSection ";
 import { useNavigate } from "react-router-dom";
@@ -80,11 +79,10 @@ function HomePage() {
       <Divider />
 
       <div id="offers-section">
-        <OffersSection
-          offers={offers}
-          favoriteOffers={favoriteOffers}
-          toggleFavorite={toggleFavorite}
-        />
+         <OffersSection
+     favoriteOffers={favoriteOffers}
+     toggleFavorite={toggleFavorite}
+      />
       </div>
     </div>
   );

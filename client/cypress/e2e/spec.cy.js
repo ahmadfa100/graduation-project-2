@@ -332,7 +332,7 @@ describe("template spec", () => {
     cy.get(":nth-child(2) > .input-container > .full-width-input").clear("Z");
     cy.get(":nth-child(2) > .input-container > .full-width-input").type("Z");
     cy.get(":nth-child(2) > .input-container > .edit-btn").click();
-    cy.get(":nth-child(2) > .input-container > .full-width-input").clear("Za");
+    cy.get(":nth-child(2) > .input-container > .full-width-input").type('{moveToStart}{del}{del}');;
     cy.get(":nth-child(2) > .input-container > .full-width-input").type(
       "Zaidone"
     );

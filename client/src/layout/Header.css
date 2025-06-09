@@ -97,6 +97,9 @@ body {
 }
 
 .notification-popup {
+  overflow-y: auto;
+  max-height: 500px;
+   scroll-behavior: smooth;
   position: absolute;
   top: 2.8rem;
   right: 0;
@@ -108,7 +111,18 @@ body {
   padding: 1rem;
   z-index: 999;
 }
+.notification-popup::-webkit-scrollbar {
+  width: 7px;
+}
 
+.notification-popup::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.notification-popup::-webkit-scrollbar-thumb {
+  background-color: rgb(78, 176, 82);
+  border-radius: 4px;
+}
 .notification-popup::before {
   content: "";
   position: absolute;

@@ -27,7 +27,7 @@ export default function AddOffer() {
   const [images, setImages] = useState([]);
   const [hoveredImage, setHoveredImage] = useState(null);
   const navigate = useNavigate();
-
+  const [disabled, setDisabled] = useState(false);
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     const previews = files.map(file => ({
@@ -46,6 +46,8 @@ export default function AddOffer() {
 
   const addOfferSubmit = async (event) => {
     event.preventDefault();
+    if (disabled) return; 
+    setDisabled(true);
     const formData = new FormData(event.target);
     images.forEach(({ file }) => formData.append("images", file));
 
@@ -55,11 +57,16 @@ export default function AddOffer() {
         formData,
         { withCredentials: true }   
       );
-     
-      notifications.show(<>Offer saved successfully! <div className="notification" onClick={()=>{ navigate(`/OfferDetails/${response.data.offerId}`)}}>[Click here to preview it]</div></>, {
-        severity: "success",
-        autoHideDuration: 3000,
-      });
+       navigate(`/DashBoard`);
+      
+      // notifications.show(<>Offer saved successfully! <div className="notification" onClick={()=>{ navigate(`/OfferDetails/${response.data.offerId}`)}}>[Click here to preview it]</div></>, {
+      //   severity: "success",
+      //   autoHideDuration: 3000,
+      // })
+      // setTimeout(() => {
+        
+      //    navigate(`/DashBoard`);
+      // }, 3200);
     } catch (error) {
       if (error.response && error.response.status === 401) {
         console.log("Not authenticated! Redirecting to login...");
@@ -208,7 +215,7 @@ export default function AddOffer() {
               )}
             </div>
 
-            <button type="submit" className="submit">
+            <button type="submit" className="submit" disabled={disabled} style={disabled? {cursor:"not-allowed"}:{}} >
               Publish Offer
             </button>
           </div>

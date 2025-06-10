@@ -42,7 +42,7 @@ function Policy() {
             <p>Landowners must provide accurate information about their properties and maintain transparency in all dealings with farmers.</p>
             
             <h3>2. Farmer Guidelines</h3>
-            <p>Farmers must demonstrate their qualifications and experience in agricultural management when applying for land use.</p>
+            <p>Farmers are advised to utilize their land strictly for agricultural purposes. The land should be dedicated to farming activities.</p>
             
             <h3>3. Communication Standards</h3>
             <p>All users must maintain professional and respectful communication when interacting through our platform.</p>

@@ -1,6 +1,6 @@
 import express from "express";
 import { checkSeasonAlerts } from "../Services/seasonAlert.js";
-import { getWeatherAlertsWB  } from "../Services/weatherAlertsWeatherbit.js";
+import { getWeatherAlerts  } from "../Services/weatherAlerts.js";
 const router = express.Router();
 
 router.get("/api/notifications", async (req, res) => {
@@ -11,7 +11,7 @@ router.get("/api/notifications", async (req, res) => {
       message: `Season alert: ${season.crop} is in its growing window (${season.start}–${season.end}).`
     }));
 
-    const weatherMsg = await getWeatherAlertsWB();
+    const weatherMsg = await getWeatherAlerts();
     notifications.push({
       type: "weather",
       message: weatherMsg

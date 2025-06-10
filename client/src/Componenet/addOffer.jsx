@@ -1,5 +1,5 @@
 import "../style/addOffer.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaTrash, FaImage } from "react-icons/fa";
 import axios from "axios";
@@ -28,6 +28,34 @@ export default function AddOffer() {
   const [hoveredImage, setHoveredImage] = useState(null);
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(false);
+
+useEffect(() => {
+fetchSession();
+});
+ async function fetchSession() {
+    try {
+      const sessionResponse = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}/sessionInfo`,
+        { withCredentials: true }
+      );
+      ;
+      if (!sessionResponse.data.user) {
+       
+            console.log("Not authenticated! Redirecting to login...");
+            window.location.href = "/login";
+            return;
+          
+      }
+    } catch (err) {
+      console.error("Failed to fetch session info:", err);
+       if (err.response && err.response.status === 401) {
+            console.log("Not authenticated! Redirecting to login...");
+            window.location.href = "/login";
+            return;
+          }
+    }
+  }
+
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     const previews = files.map(file => ({

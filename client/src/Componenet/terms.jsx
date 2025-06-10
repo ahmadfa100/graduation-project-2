@@ -41,7 +41,7 @@ function Terms() {
           <h2>4. Payment Terms</h2>
           <div className="terms-content">
             <h3>4.1 Service Fees</h3>
-            <p>Green Bridge charges a service fee for facilitating land rentals. All fees are clearly stated before any transaction is completed.</p>
+            <p>Green Bridge offers a completely free platform for land rentals, with no service fees or hidden costs. It enables farmers and landowners to connect and collaborate at no charge</p>
             
             <h3>4.2 Payment Processing</h3>
             <p>Our platform does not process or store any payment information. Payments are arranged directly
